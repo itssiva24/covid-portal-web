@@ -12,67 +12,35 @@ import AssignmentIcon from "@material-ui/icons/Assignment"
 import PostAddIcon from "@material-ui/icons/PostAdd"
 import AccountCircleIcon from "@material-ui/icons/AccountCircle"
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import {  useTheme } from '@material-ui/core/styles';
 
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  appBar: {
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-    },
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-}));
-
+import {useHistory} from "react-router-dom"
+import useStyles from "./styles"
+import * as ROUTES from "../../constants/routes"
 const navLinks = [
   {
     icon:AssignmentIcon,
     label:"Requests",
-    link:"/"
+    link:ROUTES.HOME
   },
   {
     icon:PostAddIcon,
     label:"New Request",
-    link:"/newRequest"
+    link:ROUTES.NEW_REQUEST
   },
   {
     icon:MonetizationOnIcon,
     label:"Donations",
-    link:"/donations"
+    link:ROUTES.DONATIONS
   },
   {
     icon:AccountCircleIcon,
     label:"Account",
-    link:"/me"
+    link:ROUTES.ME
   }
 ]
 
-const drawer = (classes)=>(
+const drawer = (classes, history)=>(
   <> 
   <header>
   <div className={classes.toolbar} />
@@ -80,7 +48,10 @@ const drawer = (classes)=>(
   <Divider />
   <List>
     {navLinks.map((navLink) => (
-      <ListItem button key={navLink.label}>
+      <ListItem button key={navLink.label} onClick={()=>{
+        console.log(navLink.link)
+        history.push(navLink.link)
+      }}>
         <ListItemIcon>
           <navLink.icon></navLink.icon>
         </ListItemIcon>
@@ -91,32 +62,15 @@ const drawer = (classes)=>(
   <Divider />
   </>
 );
-/* <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Responsive drawer
-          </Typography>
-        </Toolbar>
-      </AppBar> */
+
 function Navbar(props) {
+  const history = useHistory()
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const {mobileOpen, handleDrawerToggle} = props;
-  // const [mobileOpen, setMobileOpen] = React.useState(false);
   const container = window !== undefined ? () => window().document.body : undefined;
-  // const handleDrawerToggle = () => {
-  //   setMobileOpen(!mobileOpen);
-  // };
+
   return (
     <nav>
       <Hidden smUp implementation="css">
@@ -133,7 +87,7 @@ function Navbar(props) {
             keepMounted: true, // Better open performance on mobile.
           }}
         >
-          {drawer(classes)}
+          {drawer(classes, history)}
         </Drawer>
       </Hidden>
       <Hidden xsDown implementation="css">
@@ -144,7 +98,7 @@ function Navbar(props) {
           variant="permanent"
           open
         >
-          {drawer(classes)}
+          {drawer(classes, history)}
         </Drawer>
       </Hidden>
     </nav>
