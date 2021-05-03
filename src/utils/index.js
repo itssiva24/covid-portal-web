@@ -1,5 +1,5 @@
-export const UserRole  = {
-    Litsec  : 'LITSEC',
-    Admin   : 'ADMIN',
-    Student : 'STUDENT'
-  }
+export const UserRole = {
+    Admin: "ADMIN",
+    Volunteer: "VOLUNTEER",
+    Student: "STUDENT",
+};

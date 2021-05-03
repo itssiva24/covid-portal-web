@@ -1,11 +1,3 @@
-import React from 'react'
+import Request from "./Request";
 
-function Requests({requests}) {
-  return (
-    <div>
-      
-    </div>
-  )
-}
-
-export default Requests
+export { Request };

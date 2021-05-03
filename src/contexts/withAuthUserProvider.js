@@ -1,24 +1,27 @@
-import React, { useEffect, useState } from "react"
-import AuthUserContext from "./authUserContext"
-import { auth } from "./firebase"
+import React, { useEffect, useState } from "react";
+import AuthUserContext from "./authUserContext";
+import { auth, getUser } from "./firebase";
 
 export default (Component) => (props) => {
-
-    const [authUser, setAuthUser] = useState()
-    const [loading, setLoading] = useState(true)
+    const [authUser, setAuthUser] = useState();
+    const [me, setMe] = useState();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            setAuthUser(user)
-            setLoading(false)
-        })
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            setAuthUser(user);
+            if (user) {
+                setMe(await getUser(user.uid));
+            }
+            setLoading(false);
+        });
 
-        return unsubscribe
-    }, [])
+        return unsubscribe;
+    }, []);
 
-
-
-    return <AuthUserContext.Provider value={{authUser}}>
-        {!loading && <Component {...props} />}
-    </AuthUserContext.Provider>
-} 
+    return (
+        <AuthUserContext.Provider value={{ authUser, me }}>
+            {!loading && <Component {...props} />}
+        </AuthUserContext.Provider>
+    );
+};

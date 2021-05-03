@@ -1,7 +1,7 @@
-import firebase from "firebase/app"
-import "firebase/auth"
+import firebase from "firebase/app";
+import "firebase/auth";
 import "firebase/firestore";
-import {UserRole} from "../utils"
+import { UserRole } from "../utils";
 
 const config = {
     apiKey: "AIzaSyDv_S89GRCA5D3d304dZVEBTJPm8Ssj8h0",
@@ -9,31 +9,28 @@ const config = {
     projectId: "covid-portal-b0e50",
     storageBucket: "covid-portal-b0e50.appspot.com",
     messagingSenderId: "877577916438",
-    appId: "1:877577916438:web:f2b4320ad3e87f16ba2537"
-  }
+    appId: "1:877577916438:web:f2b4320ad3e87f16ba2537",
+};
 
-firebase.initializeApp(config)
-export const auth = firebase.auth()
-export const firestore = firebase.firestore()
-
+firebase.initializeApp(config);
+export const auth = firebase.auth();
+export const firestore = firebase.firestore();
 
 export const signInWithGoogle = () => {
-    const provider = new firebase.auth.GoogleAuthProvider()
+    const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({
-        hd: "smail.iitm.ac.in"
-    })
-    return auth.signInWithPopup(provider)
-}
-
+        hd: "smail.iitm.ac.in",
+    });
+    return auth.signInWithPopup(provider);
+};
 
 export const createUser = async (cred) => {
-    const {user} = cred
+    const { user } = cred;
 
-  const userRef = firestore.doc(`users/${user.uid}`);
-  const snapshot = await userRef.get();
+    const userRef = firestore.doc(`users/${user.uid}`);
+    const snapshot = await userRef.get();
+    if (snapshot.exists) return;
 
-    if (snapshot.exists) return
-    
     const { email, displayName, photoURL } = user;
     try {
         await userRef.set({
@@ -45,36 +42,39 @@ export const createUser = async (cred) => {
     } catch (error) {
         console.error("Error creating user document", error);
     }
-//     await firestore.collection("users").doc(cred.user.uid).set({
-//         name: cred.user.displayName,
-//         email: cred.user.email,
-//         
-//         profilePic: cred.user.photoURL
-//     })
-}
+    //     await firestore.collection("users").doc(cred.user.uid).set({
+    //         name: cred.user.displayName,
+    //         email: cred.user.email,
+    //
+    //         profilePic: cred.user.photoURL
+    //     })
+};
 
 export const getUser = async (uid) => {
-  if (!uid) return null;
-  try {
-    return await firestore.doc(`users/${uid}`).get();
-  } catch (error) {
-    console.error("Error fetching user", error);
-  }
-}
-
+    if (!uid) return null;
+    try {
+        const userRef = await firestore.doc(`users/${uid}`).get();
+        return userRef.data();
+    } catch (error) {
+        console.error("Error fetching user", error);
+    }
+};
 
 export const getRequests = async () => {
-    const requestsRef =  await firestore.collection("requests").orderBy("createdAt").limit(10).get()
+    const requestsRef = await firestore
+        .collection("requests")
+        .orderBy("createdAt")
+        .limit(10)
+        .get();
 
-    return requestsRef.docs.map(req => req.data())
-
-}
+    return requestsRef.docs.map((req) => req.data());
+};
 
 // export const getMoreRequests = async ()=>{
 
 // }
 export const signOut = () => {
-    return auth.signOut()
-}
+    return auth.signOut();
+};
 
-export default firebase
+export default firebase;
