@@ -10,8 +10,9 @@ import { CallMade } from "@material-ui/icons";
 const useStyles = makeStyles({
     root: {
         backgroundColor: "white",
-        borderBottom: "1px solid black",
         padding: "16px",
+        margin: "16px auto",
+        boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
     },
     header: {
         display: "flex",
@@ -24,10 +25,12 @@ const useStyles = makeStyles({
     },
     name: {
         flex: "1",
+        fontSize: 16,
     },
     messageBox: {
-        padding: "16px",
+        padding: "16px 0 24px",
     },
+
     footer: {
         display: "flex",
         alignItems: "center",
@@ -43,7 +46,6 @@ function toDateTime(secs) {
 
 function Request({ request }) {
     const classes = useStyles();
-    console.log(request);
     return (
         <Container maxWidth="sm" className={classes.root}>
             <Box className={classes.header}>
@@ -52,7 +54,7 @@ function Request({ request }) {
                     alt={`${request.createdBy}`}
                     src={request.imageUrl}
                 ></Avatar>
-                <Typography variant="h6" className={classes.name}>
+                <Typography variant="p" className={classes.name}>
                     {request.createdBy}
                 </Typography>
                 <Typography variant="body1">
@@ -60,8 +62,10 @@ function Request({ request }) {
                 </Typography>
             </Box>
             <Box className={classes.messageBox}>
-                <Typography variant="h5">{request.title}</Typography>
-                <Typography variant="body1">{request.description}</Typography>
+                <Typography variant="h6">{request.title}</Typography>
+                <Typography variant="body2">
+                    {`${request.description.slice(0, 64)}...`}
+                </Typography>
             </Box>
             <Box className={classes.footer}>
                 {/* FIXME: change label */}
