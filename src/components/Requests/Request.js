@@ -4,7 +4,6 @@ import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
-import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { CallMade } from "@material-ui/icons";
