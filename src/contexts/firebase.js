@@ -69,6 +69,22 @@ export const getUser = async (uid) => {
 
 //     return requestsRef.docs.map((req) => req.data());
 // };
+// =======
+// let latestReq = null //Contains the last request that was fetched
+
+// export const getRequests = async () => {
+//     const requestsRef = await firestore
+//         .collection("requests")
+//         .orderBy("createdAt")
+//         .startAfter(latestReq || 0)
+//         .limit(10)
+//         .get();
+    
+//     latestReq = requestsRef.docs[requestsRef.docs.length -1]
+
+//     return requestsRef.docs.map((req) => req.data());
+// };
+// >>>>>>> master
 
 export const signOut = () => {
     return auth.signOut();

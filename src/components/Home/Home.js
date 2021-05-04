@@ -94,7 +94,25 @@ export default withAuthorization(
                 {currentRequests.map((req) => (
                     <Request request={req}></Request>
                 ))}
-            </InfiniteScroll>
+
+                {
+                    showEnd
+                    ? <Container maxWidth="sm">
+                        <Typography variant="h6">
+                            You've reached the end
+                        </Typography>
+                      </Container>
+                    : <Button color="primary" variant="contained" onClick={async() => {
+                    const data = await getRequests()
+                    setRequests((prev) => {
+                        return [...prev, ...data]
+                    })
+                    if(data.length === 0){
+                        setShowEnd(true)
+                }
+
+                }}>Load more</Button>
+                }
         </>
     );
 });
