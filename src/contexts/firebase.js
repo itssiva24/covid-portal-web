@@ -60,19 +60,20 @@ export const getUser = async (uid) => {
     }
 };
 
+let latestReq = null //Contains the last request that was fetched
+
 export const getRequests = async () => {
     const requestsRef = await firestore
         .collection("requests")
         .orderBy("createdAt")
+        .startAfter(latestReq || 0)
         .limit(10)
         .get();
+    
+    latestReq = requestsRef.docs[requestsRef.docs.length -1]
 
     return requestsRef.docs.map((req) => req.data());
 };
-
-// export const getMoreRequests = async ()=>{
-
-// }
 
 export const signOut = () => {
     return auth.signOut();
