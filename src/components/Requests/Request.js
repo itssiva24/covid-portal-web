@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
@@ -58,7 +59,7 @@ function Request({ request }) {
                     {request.createdBy}
                 </Typography>
                 <Typography variant="body1">
-                    {toDateTime(request.createdAt.seconds)}
+                    {toDateTime(request.createdAt)}
                 </Typography>
             </Box>
             <Box className={classes.messageBox}>
@@ -68,9 +69,8 @@ function Request({ request }) {
                 </Typography>
             </Box>
             <Box className={classes.footer}>
-                {/* FIXME: change label */}
                 <Button variant="outlined" color="primary" size="small">
-                    Maharastra
+                    {request.state == '' ? 'State N/A' : request.state}
                 </Button>
                 <Button
                     variant="outlined"
@@ -85,7 +85,7 @@ function Request({ request }) {
                     size="small"
                     endIcon={<CallMade />}
                 >
-                    View Details
+                    <Link style={{color: "#fff", textDecoration: "none"}} to={`/${request.id}`}>View Details</Link>
                 </Button>
             </Box>
         </Container>
