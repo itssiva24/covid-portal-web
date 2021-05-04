@@ -5,7 +5,11 @@ import Avatar from "@material-ui/core/Avatar"
 import Typography from "@material-ui/core/Typography"
 import Chip from "@material-ui/core/Chip"
 import Button from "@material-ui/core/Button"
+import Link from "@material-ui/core/Link"
 import { makeStyles } from '@material-ui/core/styles';
+import {useHistory} from "react-router-dom";
+import * as ROUTES from "../../constants/routes"
+
 const useStyles = makeStyles({
   root:{
     backgroundColor: "white",
@@ -43,14 +47,16 @@ function toDateTime(secs) {
 }
 
 function Request({request}) {
+  const history = useHistory()
   const classes = useStyles();
+  console.log(`${ROUTES.HOME}${request.id}`)
   console.log(request);
   return (
     <Container maxWidth="sm" className={classes.root}>
       <Box className={classes.header}>
         <Avatar className={classes.avatar} alt={`${request.createdBy}`} src={request.imageUrl}></Avatar>
         <Typography variant="h6" className={classes.name}>{request.createdBy}</Typography>
-        <Typography variant="body1">{toDateTime(request.createdAt.seconds)}</Typography>
+        <Typography variant="body1">{toDateTime(request.createdAt)}</Typography>
       </Box>
       <Box className={classes.messageBox}>
         <Typography variant="h5">{request.title}</Typography>
@@ -60,7 +66,9 @@ function Request({request}) {
         {/* FIXME: change label */}
         <Chip label={request.type || "Type:Resource"} size="small"></Chip>
         <Chip label={request.resolved ? "Satus:Resolved":"Status:Live"} size="small"></Chip>
-        <Button variant="contained" color="primary" size="small">View Details</Button>
+        <Button variant="contained" color="primary" size="small" onClick={()=>{ 
+          history.push(`${ROUTES.REQUEST_FEED===ROUTES.HOME?"":ROUTES.REQUEST_FEED}/${request.id}`)
+        }}>View Details</Button> 
       </Box>
     </Container>
   )

@@ -6,6 +6,7 @@ import * as ROUTES from "../constants/routes"
 import {withAuthUserProvider} from "../contexts"
 import {RootLayout} from "../components/layouts"
 import NewRequest from "../components/newRequest"
+import RequestDetail from "../components/RequestDetail"
 export default withAuthUserProvider(({ Component, pageProps }) => {
     // const { authUser } = useContext(AuthUserContext)
 
@@ -13,12 +14,13 @@ export default withAuthUserProvider(({ Component, pageProps }) => {
     return (
         <Router>
             <Switch>
-
-                <Route path={ROUTES.SIGNIN} component={SignIn} />
+                <Route exact path={ROUTES.SIGNIN} component={SignIn} />
                 <RootLayout>
-                    <Route exact path={ROUTES.HOME} component={Home}></Route>
-                    {/* newRoutes go here */}
-                    <Route exact path="/newRequest" component={NewRequest}></Route>
+                    <Switch>
+                        <Route exact path={ROUTES.HOME} component={Home}></Route>
+                        <Route exact path={ROUTES.NEW_REQUEST} component={NewRequest}></Route>
+                        <Route exact path={ROUTES.REQUEST_DETAIL} component={RequestDetail}></Route>
+                    </Switch>
                 </RootLayout>
             </Switch>
         </Router>
