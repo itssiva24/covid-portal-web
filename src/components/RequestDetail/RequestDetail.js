@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import Container from "@material-ui/core/Container"
 import { Box } from '@material-ui/core';
 import useStyles from "./styles"
-import tempdb from "../Home/_tempDB"
 import {firestore} from "../../contexts/firebase";
 
 const RequestDetail = () => {
