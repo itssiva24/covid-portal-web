@@ -60,19 +60,15 @@ export const getUser = async (uid) => {
     }
 };
 
-export const getRequests = async () => {
-    const requestsRef = await firestore
-        .collection("requests")
-        .orderBy("createdAt")
-        .limit(10)
-        .get();
+// export const getRequests = async () => {
+//     const requestsRef = await firestore
+//         .collection("requests")
+//         .orderBy("createdAt")
+//         .limit(10)
+//         .get();
 
-    return requestsRef.docs.map((req) => req.data());
-};
-
-// export const getMoreRequests = async ()=>{
-
-// }
+//     return requestsRef.docs.map((req) => req.data());
+// };
 
 export const signOut = () => {
     return auth.signOut();

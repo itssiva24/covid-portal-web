@@ -1,47 +1,75 @@
 import React, { useEffect, useState } from "react";
 import { withAuthorization } from "../../contexts";
-import { getRequests } from "../../contexts/firebase";
+import { firestore } from "../../contexts/firebase";
 import Request from "../Requests/Request";
 import * as ROUTES from "../../constants/routes";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import tempdb from "./_tempDB";
-
 const condition = (authUser) => authUser !== null;
+
+const getRequests = async (pagesize) => {
+    const requestsRef = await firestore
+        .collection("requests")
+        .orderBy("createdAt", "desc")
+        .limit(pagesize)
+        .get();
+
+    return requestsRef.docs;
+}
+
+const getMoreRequests = async (pagesize, lastDoc) =>{
+    const requestsRef = await firestore
+        .collection("requests")
+        .orderBy("createdAt", "desc")
+        .startAfter(lastDoc)
+        .limit(pagesize)
+        .get();
+    return  requestsRef.docs;
+}
 
 export default withAuthorization(
     condition,
     ROUTES.SIGNIN
 )(() => {
-    const [requests, setRequests] = useState([])
+    const pageSize = 5;
+    const [currentRequests, setCurrentRequests] = useState([])
+    const [page, setPage] = useState(0);
+    const [isDone, setIsDone] = useState(false)
+    const [nextRequests, setNextRequests] = useState([])
+    const [lastDoc, setLastDoc] = useState(null);
+    useEffect(()=>{
+        console.log({page})
+        updateState()
+    }, [page])
 
-    useEffect(() => {
-        const getRequestsData = async () => {
-            const data = await getRequests()
-            setRequests(data)
+    const updateState = async ()=>{
+        if(page===0){
+            const requestRefs = await getRequests(pageSize)
+            setCurrentRequests(requestRefs.map(req=>req.data()));
+            const nextRequestRefs = await getMoreRequests(pageSize, requestRefs[requestRefs.length - 1])
+            setIsDone(!(nextRequestRefs.length>0));
+            setLastDoc(nextRequestRefs[nextRequestRefs.length -1])
+            setNextRequests(nextRequestRefs.map(ref=>ref.data()))
+        }else{
+            setCurrentRequests([...currentRequests, ...nextRequests])
+            const nextRequestRefs = await getMoreRequests(pageSize, lastDoc)
+            setIsDone(!(nextRequestRefs.length>0));
+            setLastDoc(nextRequestRefs[nextRequestRefs.length -1])
+            setNextRequests(nextRequestRefs.map(ref=>ref.data()))
         }
-        getRequestsData()
+    }
 
-    }, [])
+    const updateAndFetch = ()=>{
+        setPage(page+1)
+    }
+    const refresh = () => {
+        setPage(0);
+    };
 
-    // const [requests, setRequests] = useState(tempdb.slice(0, 3));
-    console.log(requests);
-    const [page, setPage] = useState(1);
-
-    // const fetchData = () => {
-    //     setRequests([...requests, ...tempdb.slice(page, page + 3)]);
-    //     setPage(page + 1);
-    //     console.log(requests);
-    // };
-    const refresh = () => {};
-    const hasMore = () => {};
     return (
         <>
-            {/* {requests.length && requests.map(req=>(
-            <Request request={req}></Request>
-        ))} */}
             <InfiniteScroll
-                dataLength={requests.length}
+                dataLength={currentRequests.length}
                 pullDownToRefresh
                 pullDownToRefreshContent={
                     <h3 style={{ textAlign: "center" }}>
@@ -54,16 +82,16 @@ export default withAuthorization(
                     </h3>
                 }
                 refreshFunction={refresh}
-                // next={fetchData}
-                // hasMore={tempdb.length >= page * 3}
-                loader={<h4>Loading...</h4>}
+                next={updateAndFetch}
+                hasMore={!isDone}
+                loader={<h4 style={{ textAlign: "center" }}>Loading...</h4>}
                 endMessage={
                     <p style={{ textAlign: "center" }}>
                         <b>You have reached the end of List</b>
                     </p>
                 }
             >
-                {requests.map((req) => (
+                {currentRequests.map((req) => (
                     <Request request={req}></Request>
                 ))}
             </InfiniteScroll>
