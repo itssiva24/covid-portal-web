@@ -30,16 +30,6 @@ const navLinks = [
         label: "New Request",
         link: ROUTES.NEW_REQUEST,
     },
-    {
-        icon: AccountCircleIcon,
-        label: "Account",
-        link: ROUTES.ME,
-    },
-    {
-        icon: MonetizationOnIcon,
-        label: "Donations",
-        link: ROUTES.DONATIONS,
-    },
 ];
 
 const drawer = (classes, history, me) => (
@@ -88,17 +78,20 @@ const drawer = (classes, history, me) => (
             {me && me.role === UserRole.Student && (
                 <ListItem
                     button
-                    key="Requests assigned"
+                    key="Become a volunteer"
+                    color="primary"
                     onClick={() => {
                         {
-                            history.push(ROUTES.REQUESTS_ASSIGNED);
+                            history.push(ROUTES.BECOME_A_VOLUNTEER);
                         }
                     }}
                 >
-                    <ListItemIcon>
-                        <AssignmentIndIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Requests Assigned" />
+                    <ListItemText
+                        primary="Want to be a volunteer?"
+                        style={{
+                            color: "#04009a",
+                        }}
+                    />
                 </ListItem>
             )}
         </List>

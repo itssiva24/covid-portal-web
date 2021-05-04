@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { withAuthorization } from "../../contexts";
 import { getRequests } from "../../contexts/firebase";
-import Request from "../Requests/";
+import { Request } from "../Requests";
 import * as ROUTES from "../../constants/routes";
 import InfiniteScroll from "react-infinite-scroll-component";
 

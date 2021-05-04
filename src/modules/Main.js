@@ -15,28 +15,34 @@ export default withAuthUserProvider(({ Component, pageProps }) => {
             <Switch>
                 <Route path={ROUTES.SIGNIN} component={SignIn} />
                 <RootLayout>
-                    <Route exact path={ROUTES.HOME} component={Home}></Route>
-                    {/* newRoutes go here */}
-                    <Route
-                        exact
-                        path={ROUTES.NEW_REQUEST}
-                        component={NewRequest}
-                    ></Route>
-                    <Route
-                        exact
-                        path={ROUTES.BECOME_A_VOLUNTEER}
-                        component={() => <h2>Become a volunteer</h2>}
-                    ></Route>
-                    <Route
-                        exact
-                        path={ROUTES.REQUESTS_ASSIGNED}
-                        component={() => <h2>Requests Assigned</h2>}
-                    ></Route>
-                    <Route
-                        exact
-                        path={ROUTES.REQUEST_DETAIL}
-                        component={RequestDetail}
-                    ></Route>
+                    <Switch>
+                        <Route
+                            exact
+                            path={ROUTES.HOME}
+                            component={Home}
+                        ></Route>
+                        {/* newRoutes go here */}
+                        <Route
+                            exact
+                            path={ROUTES.NEW_REQUEST}
+                            component={NewRequest}
+                        ></Route>
+                        <Route
+                            exact
+                            path={ROUTES.BECOME_A_VOLUNTEER}
+                            component={() => <h2>Become a volunteer</h2>}
+                        ></Route>
+                        <Route
+                            exact
+                            path={ROUTES.REQUESTS_ASSIGNED}
+                            component={() => <h2>Requests Assigned</h2>}
+                        ></Route>
+                        <Route
+                            exact
+                            path={ROUTES.REQUEST_DETAIL}
+                            component={RequestDetail}
+                        ></Route>
+                    </Switch>
                 </RootLayout>
             </Switch>
         </Router>
