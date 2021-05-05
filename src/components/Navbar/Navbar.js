@@ -38,7 +38,7 @@ const drawer = (classes, history, authUser) => {
             <header>
                 <div className={classes.toolbar}>
                     <Typography variant="h6" component="h6">
-                        {authUser && authUser.name}
+                        {authUser && authUser.displayName}
                     </Typography>
                     <Typography component="p" variant="caption">
                         {authUser && authUser.role}

@@ -77,12 +77,11 @@ export default withAuthorization(
 
     useEffect(() => {
         const getRequestData = async (id) => {
-            const data = await getRequest(id);
-            setRequest(data);
+            await getRequest(id, setRequest);
         };
 
         getRequestData(id);
-    }, []);
+    }, [id]);
 
     function toDateTime(secs) {
         var t = new Date(0); // Epoch

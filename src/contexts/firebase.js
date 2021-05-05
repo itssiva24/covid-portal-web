@@ -60,46 +60,30 @@ export const getUser = async (uid) => {
     }
 };
 
-export const getRequests = async (pagesize) => {
-    const requestsRef = await firestore
-        .collection("requests")
-        .where("resolved", "==", false)
-        .orderBy("createdAt", "desc")
-        .limit(pagesize)
-        .get();
-
-    return requestsRef.docs;
-};
-
-export const getMoreRequests = async (pagesize, lastDoc) => {
-    const requestsRef = await firestore
-        .collection("requests")
-        .where("resolved", "==", false)
-        .orderBy("createdAt", "desc")
-        .startAfter(lastDoc)
-        .limit(pagesize)
-        .get();
-    return requestsRef.docs;
-};
-
-export const getRequest = async (id) => {
-    return await firestore
+export const getRequest = async (id, setRequest) => {
+    const suscriber = firestore
         .collection("requests")
         .doc(id)
-        .get()
-        .then((snapshot) => snapshot.data());
+        .onSnapshot((snapshot) => {
+            if (snapshot.exists) {
+                setRequest(snapshot.data());
+            }
+        });
 };
 
-export const getRequestsAssigned = async (id) => {
+export const getRequestsAssigned = async (id, setRequestsAssigned) => {
     const requestsRef = firestore
         .collection("requests")
-        .where("assignedTo", "==", id);
+        .where("assignedTo", "==", id)
+        .onSnapshot((snapshot) => {
+            const data = [];
 
-    return await requestsRef.get().then((querySnapshot) => {
-        const temp = [];
-        querySnapshot.docs.forEach((doc) => temp.push(doc.data()));
-        return temp;
-    });
+            snapshot.forEach((doc) => {
+                doc.exists && data.push(doc.data());
+            });
+
+            setRequestsAssigned(data);
+        });
 };
 
 export const getMyRequests = async (id) => {

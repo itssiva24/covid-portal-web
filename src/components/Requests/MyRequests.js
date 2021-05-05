@@ -15,8 +15,6 @@ export default withAuthorization(
 
     const { authUser } = useContext(AuthUserContext);
 
-    console.log(authUser);
-
     useEffect(() => {
         const getMyRequestsData = async () => {
             if (authUser) {
@@ -26,9 +24,9 @@ export default withAuthorization(
         };
 
         getMyRequestsData();
-    }, []);
+    }, [authUser]);
 
-    return typeof myRequests !== "undefined" && myRequests ? (
+    return typeof myRequests !== "undefined" && myRequests.length > 0 ? (
         myRequests.map((req) => <Request request={req} key={req.id} />)
     ) : (
         <Typography component="h4" variant="h6" align="center">

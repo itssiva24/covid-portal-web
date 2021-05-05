@@ -17,20 +17,17 @@ export default withAuthorization(
 
     const { authUser } = useContext(AuthUserContext);
 
-    console.log(authUser);
     useEffect(() => {
         const getRequestsAssignedData = async () => {
             if (authUser) {
-                const data = await getRequestsAssigned(authUser.uid);
-                setRequestsAssigned(data);
+                await getRequestsAssigned(authUser.uid, setRequestsAssigned);
             }
         };
         getRequestsAssignedData();
-    }, []);
+    }, [authUser]);
 
-    console.log(requestsAssigned);
-
-    return typeof requestsAssigned !== "undefined" && requestsAssigned ? (
+    return typeof requestsAssigned !== "undefined" &&
+        requestsAssigned.length > 0 ? (
         requestsAssigned.map((req) => <Request request={req} key={req.id} />)
     ) : (
         <Typography component="h4" variant="h6" align="center">
