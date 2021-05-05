@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     toolbar: {
         ...theme.mixins.toolbar,
-        padding: "2px 6px",
+        padding: "10px 5px",
     },
     drawerPaper: {
         width: drawerWidth,
