@@ -109,24 +109,35 @@ export const addVolunteer = async (email) => {
     }
 };
 
-export const assignVolunteer = async (email, requestId) => {
-    if (!email) return null;
+export const assignVolunteer = async (id, requestId) => {
+    if (!id) return null;
 
     try {
-        const userSnapshot = await firestore
-            .doc("users")
-            .where("email", "==", email)
-            .get();
+        const userSnapshot = await firestore.doc(`users/${id}`).get();
 
         if (!userSnapshot.exists) return;
 
         const requestRef = firestore.doc(`requests/${requestId}`);
-        return requestRef.update({
-            assignedTo: userSnapshot.data().uid,
-        });
+        return await requestRef.set(
+            {
+                assignedTo: id,
+            },
+            { merge: true }
+        );
     } catch (error) {
         console.log(error);
     }
+};
+
+export const getVolunteers = async () => {
+    const volunteersSnapShot = await firestore
+        .collection("users")
+        .where("role", "==", UserRole.Volunteer)
+        .get();
+
+    return volunteersSnapShot.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+    });
 };
 
 // export const getRequests = async () => {

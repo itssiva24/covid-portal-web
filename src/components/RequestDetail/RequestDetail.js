@@ -14,6 +14,7 @@ import { getRequest } from "../../contexts/firebase";
 import AuthUserContext, { withAuthorization } from "../../contexts";
 import { UserRole } from "../../utils";
 import * as ROUTES from "../../constants/routes";
+import AssignVolunteerDialog from "../AssignVolunteer";
 
 const useStyles = makeStyles({
     root: {
@@ -60,11 +61,14 @@ const condition = (authUser) => !!authUser;
 export default withAuthorization(
     condition,
     ROUTES.SIGNIN
-)(() => {
+)((props) => {
     const { id } = useParams();
     const classes = useStyles();
     const [request, setRequest] = useState({});
     const { authUser, me } = useContext(AuthUserContext);
+    const [openAssignVolunteerModal, setOpenAssignVolnteerModal] = useState(
+        false
+    );
 
     useEffect(() => {
         const getRequestData = async (id) => {
@@ -80,7 +84,10 @@ export default withAuthorization(
         t.setMilliseconds(secs);
         return t.toLocaleString();
     }
-    console.log(request);
+
+    const handleClose = () => {
+        setOpenAssignVolnteerModal(false);
+    };
 
     return request ? (
         <Container maxWidth="sm" className={classes.root}>
@@ -120,24 +127,34 @@ export default withAuthorization(
                     {request.resolved ? "Resolved" : "Not Resolved"}
                 </Button>
                 {!request.assignedTo && me.role === UserRole.Admin && (
-                    <Button variant="contained" color="secondary" size="small">
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        onClick={() => setOpenAssignVolnteerModal(true)}
+                    >
                         Assign Volunteer
                     </Button>
                 )}
                 {request.assignedTo &&
-                    !request.resolved &&
-                    request.assignedTo === me.uid && (
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="small"
-                        >
-                            Resolve request
-                        </Button>
-                    )}
+                !request.resolved &&
+                request.assignedTo === me.uid ? (
+                    <Button variant="contained" color="primary" size="small">
+                        Resolve request
+                    </Button>
+                ) : (
+                    <Button variant="outlined" color="success" size="small">
+                        ASSIGNED
+                    </Button>
+                )}
+                <AssignVolunteerDialog
+                    id={id}
+                    open={openAssignVolunteerModal}
+                    handleClose={handleClose}
+                />
             </Box>
         </Container>
     ) : (
-        <CircularProgress />
+        <CircularProgress color="secondary" />
     );
 });

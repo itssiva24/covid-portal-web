@@ -89,7 +89,6 @@ const drawer = (classes, history, me) => (
                 </ListItem>
             )}
         </List>
-        <Divider />
     </>
 );
 
