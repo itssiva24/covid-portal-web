@@ -11,13 +11,13 @@ import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import AddIcon from "@material-ui/icons/Add";
 import { useTheme } from "@material-ui/core/styles";
-
 import { useHistory } from "react-router-dom";
 import useStyles from "./styles";
 import * as ROUTES from "../../constants/routes";
 import AuthUserContext from "../../contexts";
 import { UserRole } from "../../utils";
 import { Typography } from "@material-ui/core";
+
 const navLinks = [
     {
         icon: AssignmentIcon,
@@ -31,67 +31,69 @@ const navLinks = [
     },
 ];
 
-const drawer = (classes, history, me) => (
-    <>
-        <header>
-            <div className={classes.toolbar}>
-                <Typography variant="h6" component="h6">
-                    {me && me.name}
-                </Typography>
-                <Typography component="p" variant="caption">
-                    {me && me.role}
-                </Typography>
-            </div>
-        </header>
-        <Divider />
-        <List>
-            {navLinks.map((navLink) => (
-                <ListItem
-                    button
-                    key={navLink.label}
-                    onClick={() => {
-                        history.push(navLink.link);
-                    }}
-                >
-                    <ListItemIcon>
-                        <navLink.icon></navLink.icon>
-                    </ListItemIcon>
-                    <ListItemText primary={navLink.label} />
-                </ListItem>
-            ))}
+const drawer = (classes, history, me) => {
+    return (
+        <>
+            <header>
+                <div className={classes.toolbar}>
+                    <Typography variant="h6" component="h6">
+                        {me && me.displayName}
+                    </Typography>
+                    <Typography component="p" variant="caption">
+                        {me && me.role}
+                    </Typography>
+                </div>
+            </header>
+            <Divider />
+            <List>
+                {navLinks.map((navLink) => (
+                    <ListItem
+                        button
+                        key={navLink.label}
+                        onClick={() => {
+                            history.push(navLink.link);
+                        }}
+                    >
+                        <ListItemIcon>
+                            <navLink.icon></navLink.icon>
+                        </ListItemIcon>
+                        <ListItemText primary={navLink.label} />
+                    </ListItem>
+                ))}
 
-            {me && me.role === UserRole.Volunteer && (
-                <ListItem
-                    button
-                    key="Requests assigned"
-                    onClick={() => {
-                        history.push(ROUTES.REQUESTS_ASSIGNED);
-                    }}
-                >
-                    <ListItemIcon>
-                        <AssignmentIndIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Requests Assigned" />
-                </ListItem>
-            )}
-            {me && me.role === UserRole.Admin && (
-                <ListItem
-                    button
-                    key="Add Volunteer"
-                    onClick={() => {
-                        history.push(ROUTES.ADD_VOLUNTEER);
-                    }}
-                >
-                    <ListItemIcon>
-                        <AddIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Add Volunteer" />
-                </ListItem>
-            )}
-        </List>
-        <Divider />
-    </>
-);
+                {me && me.role === UserRole.Volunteer && (
+                    <ListItem
+                        button
+                        key="Requests assigned"
+                        onClick={() => {
+                            history.push(ROUTES.REQUESTS_ASSIGNED);
+                        }}
+                    >
+                        <ListItemIcon>
+                            <AssignmentIndIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Requests Assigned" />
+                    </ListItem>
+                )}
+                {me && me.role === UserRole.Admin && (
+                    <ListItem
+                        button
+                        key="Add Volunteer"
+                        onClick={() => {
+                            history.push(ROUTES.ADD_VOLUNTEER);
+                        }}
+                    >
+                        <ListItemIcon>
+                            <AddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Add Volunteer" />
+                    </ListItem>
+                )}
+            </List>
+            <Divider />
+        </>
+    );
+};
 
 function Navbar(props) {
     const history = useHistory();
