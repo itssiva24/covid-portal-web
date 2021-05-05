@@ -15,6 +15,8 @@ import AuthUserContext, { withAuthorization } from "../../contexts";
 import { UserRole } from "../../utils";
 import * as ROUTES from "../../constants/routes";
 import AssignVolunteerDialog from "../AssignVolunteer";
+import Loader from "../Loader";
+import { ResolveRequestDialog } from "../Requests";
 
 const useStyles = makeStyles({
     root: {
@@ -65,8 +67,11 @@ export default withAuthorization(
     const { id } = useParams();
     const classes = useStyles();
     const [request, setRequest] = useState({});
-    const { authUser, me } = useContext(AuthUserContext);
+    const { authUser } = useContext(AuthUserContext);
     const [openAssignVolunteerModal, setOpenAssignVolnteerModal] = useState(
+        false
+    );
+    const [openResolveRequestModal, setOpenResolveRequestModal] = useState(
         false
     );
 
@@ -87,9 +92,12 @@ export default withAuthorization(
 
     const handleClose = () => {
         setOpenAssignVolnteerModal(false);
+        setOpenResolveRequestModal(false);
     };
 
-    return request ? (
+    console.log(request);
+
+    return Object.keys(request).length !== 0 ? (
         <Container maxWidth="sm" className={classes.root}>
             <Box className={classes.header}>
                 <Avatar
@@ -126,7 +134,7 @@ export default withAuthorization(
                 >
                     {request.resolved ? "Resolved" : "Not Resolved"}
                 </Button>
-                {!request.assignedTo && me.role === UserRole.Admin && (
+                {!request.assignedTo && authUser.role === UserRole.Admin && (
                     <Button
                         variant="contained"
                         color="secondary"
@@ -136,25 +144,38 @@ export default withAuthorization(
                         Assign Volunteer
                     </Button>
                 )}
-                {request.assignedTo &&
-                !request.resolved &&
-                request.assignedTo === me.uid ? (
-                    <Button variant="contained" color="primary" size="small">
-                        Resolve request
-                    </Button>
-                ) : (
-                    <Button variant="outlined" color="success" size="small">
-                        ASSIGNED
-                    </Button>
-                )}
+                {!request.resolved &&
+                    request.assignedTo &&
+                    request.assignedTo === authUser.uid && (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                            onClick={() => setOpenResolveRequestModal(true)}
+                        >
+                            Resolve request
+                        </Button>
+                    )}
+                {!request.resolved &&
+                    request.assignedTo &&
+                    request.assignedTo !== authUser.uid && (
+                        <Button variant="outlined" color="success" size="small">
+                            ASSIGNED
+                        </Button>
+                    )}
                 <AssignVolunteerDialog
                     id={id}
                     open={openAssignVolunteerModal}
                     handleClose={handleClose}
                 />
+                <ResolveRequestDialog
+                    id={id}
+                    open={openResolveRequestModal}
+                    handleClose={handleClose}
+                />
             </Box>
         </Container>
     ) : (
-        <CircularProgress color="secondary" />
+        <Loader />
     );
 });

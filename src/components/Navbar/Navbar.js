@@ -9,6 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import PostAddIcon from "@material-ui/icons/PostAdd";
+import SubjectIcon from "@material-ui/icons/Subject";
 import AddIcon from "@material-ui/icons/Add";
 import { useTheme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
@@ -31,16 +32,16 @@ const navLinks = [
     },
 ];
 
-const drawer = (classes, history, me) => {
+const drawer = (classes, history, authUser) => {
     return (
         <>
             <header>
                 <div className={classes.toolbar}>
                     <Typography variant="h6" component="h6">
-                        {me && me.displayName}
+                        {authUser && authUser.name}
                     </Typography>
                     <Typography component="p" variant="caption">
-                        {me && me.role}
+                        {authUser && authUser.role}
                     </Typography>
                 </div>
             </header>
@@ -61,37 +62,52 @@ const drawer = (classes, history, me) => {
                     </ListItem>
                 ))}
 
-            {me && me.role === UserRole.Volunteer && (
-                <ListItem
-                    button
-                    key="Requests assigned"
-                    onClick={() => {
-                        history.push(ROUTES.REQUESTS_ASSIGNED);
-                    }}
-                >
-                    <ListItemIcon>
-                        <AssignmentIndIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Requests Assigned" />
-                </ListItem>
-            )}
-            {me && me.role === UserRole.Admin && (
-                <ListItem
-                    button
-                    key="Add Volunteer"
-                    onClick={() => {
-                        history.push(ROUTES.ADD_VOLUNTEER);
-                    }}
-                >
-                    <ListItemIcon>
-                        <AddIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Add Volunteer" />
-                </ListItem>
-            )}
-        </List>
-    </>
-);
+                {authUser && (
+                    <ListItem
+                        button
+                        key="Requests assigned"
+                        onClick={() => {
+                            history.push(ROUTES.MY_REQUESTS);
+                        }}
+                    >
+                        <ListItemIcon>
+                            <SubjectIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="My Requests" />
+                    </ListItem>
+                )}
+                {authUser && authUser.role === UserRole.Volunteer && (
+                    <ListItem
+                        button
+                        key="Requests assigned"
+                        onClick={() => {
+                            history.push(ROUTES.REQUESTS_ASSIGNED);
+                        }}
+                    >
+                        <ListItemIcon>
+                            <AssignmentIndIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Requests Assigned" />
+                    </ListItem>
+                )}
+                {authUser && authUser.role === UserRole.Admin && (
+                    <ListItem
+                        button
+                        key="Add Volunteer"
+                        onClick={() => {
+                            history.push(ROUTES.ADD_VOLUNTEER);
+                        }}
+                    >
+                        <ListItemIcon>
+                            <AddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Add Volunteer" />
+                    </ListItem>
+                )}
+            </List>
+        </>
+    );
+};
 
 function Navbar(props) {
     const history = useHistory();
@@ -102,7 +118,7 @@ function Navbar(props) {
     const container =
         window !== undefined ? () => window().document.body : undefined;
 
-    const { me } = useContext(AuthUserContext);
+    const { authUser } = useContext(AuthUserContext);
 
     return (
         <nav>
@@ -120,7 +136,7 @@ function Navbar(props) {
                         keepMounted: true, // Better open performance on mobile.
                     }}
                 >
-                    {drawer(classes, history, me)}
+                    {drawer(classes, history, authUser)}
                 </Drawer>
             </Hidden>
             <Hidden xsDown implementation="css">
@@ -131,7 +147,7 @@ function Navbar(props) {
                     variant="permanent"
                     open
                 >
-                    {drawer(classes, history, me)}
+                    {drawer(classes, history, authUser)}
                 </Drawer>
             </Hidden>
         </nav>

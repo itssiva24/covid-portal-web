@@ -11,6 +11,7 @@ const useFetchRequests = () => {
         try {
             const subscriber = firestore
                 .collection("requests")
+                .where("resolved", "==", false)
                 .orderBy("createdAt", "desc")
                 .limit(10)
                 .onSnapshot((querySnapshot) => {
@@ -39,6 +40,7 @@ const useFetchRequests = () => {
                 if (lastDoc) {
                     const nextDocuments = firestore
                         .collection("requests")
+                        .where("resolved", "==", false)
                         .orderBy("createdAt", "desc")
                         .startAfter(lastDoc)
                         .limit(5)

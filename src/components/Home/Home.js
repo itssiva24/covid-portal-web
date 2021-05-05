@@ -7,6 +7,7 @@ import useFetchRequests from "../../hooks/useFetchRequest";
 import { useState } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
+import Loader from "../Loader";
 
 const condition = (authUser) => !!authUser;
 
@@ -30,7 +31,7 @@ export default withAuthorization(
     if (!fetched)
         return (
             <div className={classes.root}>
-                <CircularProgress disableShrink />;
+                <Loader />;
             </div>
         );
     else

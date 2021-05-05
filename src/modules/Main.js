@@ -7,6 +7,7 @@ import { withAuthUserProvider } from "../contexts";
 import { RootLayout } from "../components/layouts";
 import NewRequest from "../components/newRequest";
 import RequestDetail from "../components/RequestDetail";
+import { MyRequests, RequestsAssigned } from "../components/Requests";
 export default withAuthUserProvider(({ Component, pageProps }) => {
     // const { authUser } = useContext(AuthUserContext)
 
@@ -25,7 +26,7 @@ export default withAuthUserProvider(({ Component, pageProps }) => {
                     <Route
                         exact
                         path={ROUTES.REQUESTS_ASSIGNED}
-                        component={() => <h2>Requests Assigned</h2>}
+                        component={RequestsAssigned}
                     ></Route>
                     <Route
                         exact
@@ -36,6 +37,11 @@ export default withAuthUserProvider(({ Component, pageProps }) => {
                         exact
                         path={ROUTES.ADD_VOLUNTEER}
                         component={AddVolunteer}
+                    ></Route>
+                    <Route
+                        exact
+                        path={ROUTES.MY_REQUESTS}
+                        component={MyRequests}
                     ></Route>
                 </RootLayout>
             </Switch>

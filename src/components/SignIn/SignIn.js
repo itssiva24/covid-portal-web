@@ -98,13 +98,14 @@ export default withAuthorization(
             >
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar} src={Logo} />
-                    <Typography component="h1" variant="h5">
-                        A portal for seeking medical help
+                    <Typography component="h1" variant="h5" align="center">
+                        A portal for seeking covid related help
                     </Typography>
                     <Button
                         variant="contained"
                         color="primary"
                         onClick={googleSignIn}
+                        style={{ marginTop: 8 }}
                     >
                         Login with smail
                     </Button>
