@@ -8,7 +8,6 @@ import {
     TextField,
     Button,
     Typography,
-    Alert,
 } from "@material-ui/core";
 import { addVolunteer } from "../../contexts/firebase";
 import { UserRole } from "../../utils";

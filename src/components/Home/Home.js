@@ -1,81 +1,66 @@
-import React, { useContext, useEffect, useState } from "react";
-import AuthUserContext, { withAuthorization } from "../../contexts";
-import { getRequests, getMoreRequests } from "../../contexts/firebase";
+import React from "react";
+import { withAuthorization } from "../../contexts";
 import Request from "../Requests/Request";
 import * as ROUTES from "../../constants/routes";
 import InfiniteScroll from "react-infinite-scroll-component";
+import useFetchRequests from "../../hooks/useFetchRequest";
+import { useState } from "react";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { makeStyles } from "@material-ui/core/styles";
 
 const condition = (authUser) => !!authUser;
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(3, 2),
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+}));
 
 export default withAuthorization(
     condition,
     ROUTES.SIGNIN
 )(() => {
-    const pageSize = 5;
-    const [currentRequests, setCurrentRequests] = useState([]);
-    const [page, setPage] = useState(0);
-    const [isDone, setIsDone] = useState(false);
-    const [nextRequests, setNextRequests] = useState([]);
-    const [lastDoc, setLastDoc] = useState(null);
-    const { authUser } = useContext(AuthUserContext);
+    const classes = useStyles();
+    const [refresh, setRefresh] = useState(false);
+    const { request, loadMore, lastDoc, fetched } = useFetchRequests();
 
-    const updateState = async () => {
-        if (page === 0) {
-            const requestRefs = await getRequests(pageSize);
-            setCurrentRequests(requestRefs.map((req) => req.data()));
-            const nextRequestRefs = await getMoreRequests(
-                pageSize,
-                requestRefs[requestRefs.length - 1]
-            );
-            setIsDone(!(nextRequestRefs.length > 0));
-            setLastDoc(nextRequestRefs[nextRequestRefs.length - 1]);
-            setNextRequests(nextRequestRefs.map((ref) => ref.data()));
-        } else {
-            setCurrentRequests([...currentRequests, ...nextRequests]);
-            const nextRequestRefs = await getMoreRequests(pageSize, lastDoc);
-            setIsDone(!(nextRequestRefs.length > 0));
-            setLastDoc(nextRequestRefs[nextRequestRefs.length - 1]);
-            setNextRequests(nextRequestRefs.map((ref) => ref.data()));
-        }
-    };
-    useEffect(() => {
-        updateState();
-    }, [page]);
-
-    const updateAndFetch = () => {
-        setPage(page + 1);
-    };
-    const refresh = () => {
-        setPage(0);
-    };
-
-    return (
-        <InfiniteScroll
-            dataLength={currentRequests.length}
-            pullDownToRefresh
-            pullDownToRefreshContent={
-                <h3 style={{ textAlign: "center" }}>
-                    &#8595; Pull down to refresh
-                </h3>
-            }
-            releaseToRefreshContent={
-                <h3 style={{ textAlign: "center" }}>
-                    &#8593; Release to refresh
-                </h3>
-            }
-            refreshFunction={refresh}
-            next={updateAndFetch}
-            hasMore={!isDone}
-            loader={<h4 style={{ textAlign: "center" }}>Loading...</h4>}
-            endMessage={
-                <p style={{ textAlign: "center" }}>
-                    <b>You have reached the end of List</b>
-                </p>
-            }
-        >
-            {currentRequests.map((req) => (
-                <Request request={req} key={req.id}></Request>
-            ))}
-        </InfiniteScroll>
-    );
+    if (!fetched)
+        return (
+            <div className={classes.root}>
+                <CircularProgress disableShrink />;
+            </div>
+        );
+    else
+        return (
+            <InfiniteScroll
+                dataLength={request.length}
+                refreshFunction={() => setRefresh(!refresh)}
+                pullDownToRefresh
+                pullDownToRefreshContent={
+                    <h3 style={{ textAlign: "center" }}>
+                        &#8595; Pull down to refresh
+                    </h3>
+                }
+                releaseToRefreshContent={
+                    <h3 style={{ textAlign: "center" }}>
+                        &#8593; Release to refresh
+                    </h3>
+                }
+                next={loadMore}
+                hasMore={lastDoc ? true : false}
+                loader={<h4 style={{ textAlign: "center" }}>Loading...</h4>}
+                endMessage={
+                    <h3 style={{ textAlign: "center" }}>
+                        <b>No More Requests!!</b>
+                    </h3>
+                }
+            >
+                {request.map((req) => (
+                    <Request request={req} key={req.createdAt}></Request>
+                ))}
+            </InfiniteScroll>
+        );
 });
