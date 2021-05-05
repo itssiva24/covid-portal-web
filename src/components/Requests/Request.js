@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { CallMade } from "@material-ui/icons";
+import * as ROUTES from "../../constants/routes";
+
 const useStyles = makeStyles({
     root: {
         backgroundColor: "white",
@@ -34,13 +36,14 @@ const useStyles = makeStyles({
     footer: {
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
+        gap: 8,
+        flexWrap: "wrap",
     },
 });
 
 function toDateTime(secs) {
-    var t = new Date(1970, 0, 1); // Epoch
-    t.setSeconds(secs);
+    var t = new Date(0); // Epoch
+    t.setMilliseconds(secs);
     return t.toLocaleString();
 }
 
@@ -69,7 +72,7 @@ function Request({ request }) {
             </Box>
             <Box className={classes.footer}>
                 <Button variant="outlined" color="primary" size="small">
-                    {request.state == '' ? 'State N/A' : request.state}
+                    {request.state == "" ? "State N/A" : request.state}
                 </Button>
                 <Button
                     variant="outlined"
@@ -84,7 +87,12 @@ function Request({ request }) {
                     size="small"
                     endIcon={<CallMade />}
                 >
-                    <Link style={{color: "#fff", textDecoration: "none"}} to={`/${request.id}`}>View Details</Link>
+                    <Link
+                        style={{ color: "#fff", textDecoration: "none" }}
+                        to={`/request/${request.id}`}
+                    >
+                        View Details
+                    </Link>
                 </Button>
             </Box>
         </Container>

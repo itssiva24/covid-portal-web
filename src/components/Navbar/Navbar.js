@@ -9,8 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import PostAddIcon from "@material-ui/icons/PostAdd";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import AddIcon from "@material-ui/icons/Add";
 import { useTheme } from "@material-ui/core/styles";
 
 import { useHistory } from "react-router-dom";
@@ -37,10 +36,10 @@ const drawer = (classes, history, me) => (
         <header>
             <div className={classes.toolbar}>
                 <Typography variant="h6" component="h6">
-                    {me.name}
+                    {me && me.name}
                 </Typography>
                 <Typography component="p" variant="caption">
-                    {me.role}
+                    {me && me.role}
                 </Typography>
             </div>
         </header>
@@ -75,23 +74,18 @@ const drawer = (classes, history, me) => (
                     <ListItemText primary="Requests Assigned" />
                 </ListItem>
             )}
-            {me && me.role === UserRole.Student && (
+            {me && me.role === UserRole.Admin && (
                 <ListItem
                     button
-                    key="Become a volunteer"
-                    color="primary"
+                    key="Add Volunteer"
                     onClick={() => {
-                        {
-                            history.push(ROUTES.BECOME_A_VOLUNTEER);
-                        }
+                        history.push(ROUTES.ADD_VOLUNTEER);
                     }}
                 >
-                    <ListItemText
-                        primary="Want to be a volunteer?"
-                        style={{
-                            color: "#04009a",
-                        }}
-                    />
+                    <ListItemIcon>
+                        <AddIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Add Volunteer" />
                 </ListItem>
             )}
         </List>

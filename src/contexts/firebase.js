@@ -53,10 +53,79 @@ export const createUser = async (cred) => {
 export const getUser = async (uid) => {
     if (!uid) return null;
     try {
-        const userRef = await firestore.doc(`users/${uid}`).get();
-        return userRef.data();
+        const userSnapshot = await firestore.doc(`users/${uid}`).get();
+        return userSnapshot.data();
     } catch (error) {
         console.error("Error fetching user", error);
+    }
+};
+
+export const getRequests = async (pagesize) => {
+    const requestsRef = await firestore
+        .collection("requests")
+        .orderBy("createdAt", "desc")
+        .limit(pagesize)
+        .get();
+
+    return requestsRef.docs;
+};
+
+export const getMoreRequests = async (pagesize, lastDoc) => {
+    const requestsRef = await firestore
+        .collection("requests")
+        .orderBy("createdAt", "desc")
+        .startAfter(lastDoc)
+        .limit(pagesize)
+        .get();
+    return requestsRef.docs;
+};
+
+export const getRequest = async (id) => {
+    return await firestore
+        .collection("requests")
+        .doc(id)
+        .get()
+        .then((snapshot) => snapshot.data());
+};
+
+export const addVolunteer = async (email) => {
+    if (!email) return null;
+
+    try {
+        await firestore
+            .collection("users")
+            .where("email", "==", email)
+            .get()
+            .then((snapshot) => {
+                snapshot.docs.forEach(async (doc) => {
+                    const userRef = firestore.doc(`users/${doc.id}`);
+                    await userRef.update({
+                        role: UserRole.Volunteer,
+                    });
+                });
+            });
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export const assignVolunteer = async (email, requestId) => {
+    if (!email) return null;
+
+    try {
+        const userSnapshot = await firestore
+            .doc("users")
+            .where("email", "==", email)
+            .get();
+
+        if (!userSnapshot.exists) return;
+
+        const requestRef = firestore.doc(`requests/${requestId}`);
+        return requestRef.update({
+            assignedTo: userSnapshot.data().uid,
+        });
+    } catch (error) {
+        console.log(error);
     }
 };
 
@@ -79,15 +148,15 @@ export const getUser = async (uid) => {
 //         .startAfter(latestReq || 0)
 //         .limit(10)
 //         .get();
-    
+
 //     latestReq = requestsRef.docs[requestsRef.docs.length -1]
 
 //     return requestsRef.docs.map((req) => req.data());
 // };
 // >>>>>>> master
 
-export const signOut = () => {
-    return auth.signOut();
+export const signOut = async () => {
+    return await auth.signOut();
 };
 
 export default firebase;

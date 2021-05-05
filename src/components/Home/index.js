@@ -1,3 +1,5 @@
 import Home from "./Home";
+import AddVolunteer from "./AddVolunteer";
 
-export default Home
+export { AddVolunteer };
+export default Home;
