@@ -65,7 +65,7 @@ const drawer = (classes, history, authUser) => {
                 {authUser && (
                     <ListItem
                         button
-                        key="Requests assigned"
+                        key="My Requests"
                         onClick={() => {
                             history.push(ROUTES.MY_REQUESTS);
                         }}

@@ -99,7 +99,7 @@ const useUploadRequest = (authUser) => {
             file: url,
             createdAt: Date.now(),
             resolved: false,
-            createdBy: authUser.name,
+            createdBy: authUser.displayName,
             createdById: authUser.uid,
             email: authUser.email,
         });
