@@ -8,8 +8,9 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { CallMade } from "@material-ui/icons";
 import * as ROUTES from "../../constants/routes";
+import { useMediaQuery } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: "white",
         padding: "16px",
@@ -39,7 +40,12 @@ const useStyles = makeStyles({
         gap: 8,
         flexWrap: "wrap",
     },
-});
+    viewDetailsButton: {
+        [theme.breakpoints.down("xs")]: {
+            width: "100%",
+        },
+    },
+}));
 
 function toDateTime(secs) {
     var t = new Date(0); // Epoch
@@ -86,6 +92,7 @@ function Request({ request }) {
                     color="primary"
                     size="small"
                     endIcon={<CallMade />}
+                    className={classes.viewDetailsButton}
                 >
                     <Link
                         style={{ color: "#fff", textDecoration: "none" }}

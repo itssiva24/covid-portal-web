@@ -18,7 +18,7 @@ import AssignVolunteerDialog from "../AssignVolunteer";
 import Loader from "../Loader";
 import { ResolveRequestDialog } from "../Requests";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: "white",
         padding: "16px",
@@ -29,6 +29,7 @@ const useStyles = makeStyles({
         display: "flex",
         alignItems: "center",
         gap: "1em",
+        flexWrap: "wrap",
     },
     avatar: {
         height: "32px",
@@ -37,6 +38,9 @@ const useStyles = makeStyles({
     name: {
         flex: "1",
         fontSize: 16,
+        [theme.breakpoints.down("xs")]: {
+            flex: "2",
+        },
     },
     messageBox: {
         padding: "16px 0 24px",
@@ -48,6 +52,9 @@ const useStyles = makeStyles({
     image: {
         maxWidth: 480,
         height: "auto",
+        [theme.breakpoints.down("xs")]: {
+            maxWidth: 270,
+        },
     },
 
     footer: {
@@ -56,7 +63,7 @@ const useStyles = makeStyles({
         gap: 8,
         flexWrap: "wrap",
     },
-});
+}));
 
 const condition = (authUser) => !!authUser;
 
