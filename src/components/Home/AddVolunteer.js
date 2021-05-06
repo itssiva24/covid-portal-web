@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { withAuthorization } from "../../contexts";
 import * as ROUTES from "../../constants/routes";
 import {
@@ -9,8 +9,8 @@ import {
     Button,
     Typography,
 } from "@material-ui/core";
-import { addVolunteer } from "../../contexts/firebase";
 import { UserRole } from "../../utils";
+import useAddVolunteer from "../../hooks/useAddVolunteer";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,26 +29,13 @@ export default withAuthorization(
     ROUTES.HOME
 )(() => {
     const classes = useStyles();
-
-    const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
-    const [loading, setLoading] = useState(false);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        if (!email) {
-            return;
-        }
-        try {
-            await addVolunteer(email.toLowerCase());
-        } catch (error) {
-            console.error(error);
-        }
-        setLoading(false);
-        setMessage("Added Successfully!");
-        setEmail("");
-    };
+    const {
+        loading,
+        handleSubmit,
+        email,
+        message,
+        setEmail,
+    } = useAddVolunteer();
 
     return (
         <Container maxWidth="sm" className={classes.root}>

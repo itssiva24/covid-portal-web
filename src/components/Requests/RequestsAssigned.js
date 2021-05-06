@@ -1,37 +1,49 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Request } from ".";
 import AuthUserContext, { withAuthorization } from "../../contexts";
 import * as ROUTES from "../../constants/routes";
-import { getRequestsAssigned } from "../../contexts/firebase";
 import { Typography } from "@material-ui/core";
 import { UserRole } from "../../utils";
-import { useHistory } from "react-router";
+import useGetRequestAssigned from "../../hooks/useGetRequestAssigned";
+import Loader from "../Loader";
+import { makeStyles } from "@material-ui/core/styles";
+
 const condition = (authUser) =>
     !!authUser && authUser.role === UserRole.Volunteer;
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(3, 2),
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+}));
 
 export default withAuthorization(
     condition,
     ROUTES.SIGNIN
 )(() => {
-    const [requestsAssigned, setRequestsAssigned] = useState();
-
     const { authUser } = useContext(AuthUserContext);
+    const classes = useStyles();
 
-    useEffect(() => {
-        const getRequestsAssignedData = async () => {
-            if (authUser) {
-                await getRequestsAssigned(authUser.uid, setRequestsAssigned);
-            }
-        };
-        getRequestsAssignedData();
-    }, [authUser]);
+    const { requestsAssigned, fetched } = useGetRequestAssigned(authUser.uid);
 
-    return typeof requestsAssigned !== "undefined" &&
-        requestsAssigned.length > 0 ? (
-        requestsAssigned.map((req) => <Request request={req} key={req.id} />)
-    ) : (
-        <Typography component="h4" variant="h6" align="center">
-            No requests assigned yet
-        </Typography>
-    );
+    if (!fetched)
+        return (
+            <div className={classes.root}>
+                <Loader />;
+            </div>
+        );
+    else {
+        if (requestsAssigned.length > 0) {
+            return requestsAssigned.map((req) => (
+                <Request request={req} key={req.id} />
+            ));
+        } else {
+            <Typography component="h4" variant="h6" align="center">
+                No requests assigned yet
+            </Typography>;
+        }
+    }
 });

@@ -35,36 +35,40 @@ const useFetchRequests = () => {
     }, []);
 
     const loadMore = useCallback(
-        debounce(async () => {
-            try {
-                if (lastDoc) {
-                    const nextDocuments = firestore
-                        .collection("requests")
-                        .where("resolved", "==", false)
-                        .orderBy("createdAt", "desc")
-                        .startAfter(lastDoc)
-                        .limit(5)
-                        .onSnapshot((querySnapshot) => {
-                            const localRequest = [];
+        () =>
+            debounce(async () => {
+                try {
+                    if (lastDoc) {
+                        const nextDocuments = firestore
+                            .collection("requests")
+                            .where("resolved", "==", false)
+                            .orderBy("createdAt", "desc")
+                            .startAfter(lastDoc)
+                            .limit(5)
+                            .onSnapshot((querySnapshot) => {
+                                const localRequest = [];
 
-                            for (const doc of querySnapshot.docs) {
-                                doc.exists && localRequest.push(doc.data());
-                            }
+                                for (const doc of querySnapshot.docs) {
+                                    doc.exists && localRequest.push(doc.data());
+                                }
 
-                            setLastDoc(
-                                querySnapshot.docs[
-                                    querySnapshot.docs.length - 1
-                                ]
-                            );
-                            setRequest((prev) => [...prev, ...localRequest]);
-                        });
+                                setLastDoc(
+                                    querySnapshot.docs[
+                                        querySnapshot.docs.length - 1
+                                    ]
+                                );
+                                setRequest((prev) => [
+                                    ...prev,
+                                    ...localRequest,
+                                ]);
+                            });
 
-                    return () => nextDocuments();
+                        return () => nextDocuments();
+                    }
+                } catch (error) {
+                    console.log("error next page", error);
                 }
-            } catch (error) {
-                console.log("error next page", error);
-            }
-        }, 40),
+            }, 40),
         [lastDoc]
     );
 

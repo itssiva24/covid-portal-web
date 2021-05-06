@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home, { AddVolunteer } from "../components/Home";
 import SignIn from "../components/SignIn";
@@ -9,8 +9,6 @@ import NewRequest from "../components/newRequest";
 import RequestDetail from "../components/RequestDetail";
 import { MyRequests, RequestsAssigned } from "../components/Requests";
 export default withAuthUserProvider(({ Component, pageProps }) => {
-    // const { authUser } = useContext(AuthUserContext)
-
     return (
         <Router>
             <Switch>

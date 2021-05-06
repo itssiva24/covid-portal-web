@@ -8,7 +8,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import AuthUserContext from "../../contexts";
 import Typography from "@material-ui/core/Typography";
-import { useTheme } from "@material-ui/core/styles";
 import { signOut } from "../../contexts/firebase";
 import useStyles from "./styles";
 import { useHistory } from "react-router";
@@ -16,9 +15,8 @@ import * as ROUTES from "../../constants/routes";
 
 function Root(props) {
     const history = useHistory();
-    const { window } = props;
+    // const { window } = props;
     const classes = useStyles();
-    const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const { authUser } = useContext(AuthUserContext);
@@ -35,8 +33,8 @@ function Root(props) {
         setMobileOpen(!mobileOpen);
     };
 
-    const container =
-        window !== undefined ? () => window().document.body : undefined;
+    // const container =
+    //     window !== undefined ? () => window().document.body : undefined;
 
     return (
         <div>
