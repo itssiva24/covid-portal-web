@@ -5,7 +5,6 @@ import * as ROUTES from "../../constants/routes";
 import InfiniteScroll from "react-infinite-scroll-component";
 import useFetchRequests from "../../hooks/useFetchRequest";
 import { useState } from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../Loader";
 

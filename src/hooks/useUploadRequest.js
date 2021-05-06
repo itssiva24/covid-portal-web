@@ -27,7 +27,6 @@ const useUploadRequest = (authUser) => {
         try {
             setUploading(true);
             evt.preventDefault();
-            var fileURL = "";
             if (requestForm.file) {
                 const uploadTask = firebase
                     .storage()
@@ -68,7 +67,7 @@ const useUploadRequest = (authUser) => {
                             });
                     }
                 );
-            } else await createRequest("");
+            } else await createRequest();
 
             setRequestForm({
                 title: "",
@@ -85,10 +84,8 @@ const useUploadRequest = (authUser) => {
     };
 
     const createRequest = async (url) => {
-        const date = new Date();
         const requestRef = firestore.collection("requests").doc();
 
-        console.log(authUser.uid);
         await requestRef.set({
             id: requestRef.id,
             title: requestForm.title,
@@ -99,8 +96,7 @@ const useUploadRequest = (authUser) => {
             file: url,
             createdAt: Date.now(),
             resolved: false,
-            createdBy: authUser.name,
-            createdById: authUser.uid,
+            createdBy: authUser.displayName,
             email: authUser.email,
         });
     };

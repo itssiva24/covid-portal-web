@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import * as ROUTES from "../../constants/routes";
 import { createUser, signInWithGoogle } from "../../contexts/firebase";
-import AuthUserContext, { withAuthorization } from "../../contexts";
+import { withAuthorization } from "../../contexts";
 import { useHistory } from "react-router";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -14,7 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Deer from "../../assets/images/deer.jpg";
 import Logo from "../../assets/images/logo.png";
 
-const condition = (authUser) => authUser == undefined;
+const condition = (authUser) => authUser === undefined;
 
 function Copyright() {
     return (

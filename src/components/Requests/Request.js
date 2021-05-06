@@ -72,13 +72,15 @@ function Request({ request }) {
             </Box>
             <Box className={classes.messageBox}>
                 <Typography variant="h6">{request.title}</Typography>
-                <Typography variant="body2">
-                    {`${request.description.slice(0, 64)}...`}
-                </Typography>
+                {request.description && (
+                    <Typography variant="body2">
+                        {`${request.description.slice(0, 64)}...`}
+                    </Typography>
+                )}
             </Box>
             <Box className={classes.footer}>
                 <Button variant="outlined" color="primary" size="small">
-                    {request.state == "" ? "State N/A" : request.state}
+                    {request.state === "" ? "State N/A" : request.state}
                 </Button>
                 <Button
                     variant="outlined"

@@ -10,10 +10,9 @@ export default (Component) => (props) => {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            setAuthUser(user);
             if (user) {
                 setAuthUser({ ...(await getUser(user.uid)), uid: user.uid });
-            }
+            } else setAuthUser(user);
             setLoading(false);
         });
 
