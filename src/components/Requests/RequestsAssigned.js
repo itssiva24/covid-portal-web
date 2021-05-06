@@ -73,10 +73,11 @@ export default withAuthorization(
                     ))}
                 </InfiniteScroll>
             );
-        } else {
-            <Typography component="h4" variant="h6" align="center">
-                No requests assigned yet
-            </Typography>;
-        }
+        } else
+            return (
+                <Typography component="h4" variant="h6" align="center">
+                    No requests assigned yet
+                </Typography>
+            );
     }
 });

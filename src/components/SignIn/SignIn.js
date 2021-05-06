@@ -14,20 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Deer from "../../assets/images/deer.jpg";
 import Logo from "../../assets/images/logo.png";
 
-const condition = (authUser) => authUser === undefined;
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {"Copyright © "}
-            <Link color="inherit" href="https://material-ui.com/">
-                IIT Madras
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
-    );
-}
+const condition = (authUser) => !authUser;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -109,9 +96,6 @@ export default withAuthorization(
                     >
                         Login with smail
                     </Button>
-                    <Box mt={5}>
-                        <Copyright />
-                    </Box>
                 </div>
             </Grid>
         </Grid>

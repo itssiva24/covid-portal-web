@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { withAuthorization } from "../../contexts";
 import Request from "../Requests/Request";
 import * as ROUTES from "../../constants/routes";
@@ -7,6 +7,7 @@ import useFetchRequests from "../../hooks/useFetchRequest";
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../Loader";
+import { signOut } from "../../contexts/firebase";
 
 const condition = (authUser) => !!authUser;
 

@@ -72,10 +72,11 @@ export default withAuthorization(
             // return myRequests.map((req) => (
             //     <Request request={req} key={req.id} />
             // ));
-        } else {
-            <Typography component="h4" variant="h6" align="center">
-                No requests made yet!
-            </Typography>;
-        }
+        } else
+            return (
+                <Typography component="h4" variant="h6" align="center">
+                    No requests made yet!
+                </Typography>
+            );
     }
 });

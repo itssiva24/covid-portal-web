@@ -5,14 +5,15 @@ import { auth, getUser } from "./firebase";
 
 export default (Component) => (props) => {
     const [authUser, setAuthUser] = useState();
-    const [me, setMe] = useState();
+    // const [me, setMe] = useState();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            setAuthUser(user);
             if (user) {
                 setAuthUser({ ...(await getUser(user.uid)), uid: user.uid });
-            } else setAuthUser(user);
+            }
             setLoading(false);
         });
 

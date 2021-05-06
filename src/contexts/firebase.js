@@ -4,12 +4,12 @@ import "firebase/firestore";
 import { UserRole } from "../utils";
 
 const config = {
-    apiKey: "AIzaSyDv_S89GRCA5D3d304dZVEBTJPm8Ssj8h0",
-    authDomain: "covid-portal-b0e50.firebaseapp.com",
-    projectId: "covid-portal-b0e50",
-    storageBucket: "covid-portal-b0e50.appspot.com",
-    messagingSenderId: "877577916438",
-    appId: "1:877577916438:web:f2b4320ad3e87f16ba2537",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
 firebase.initializeApp(config);
