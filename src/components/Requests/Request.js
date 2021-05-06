@@ -20,7 +20,9 @@ const useStyles = makeStyles((theme) => ({
     header: {
         display: "flex",
         alignItems: "center",
-        gap: "1em",
+        gap: "0 1em",
+        flexWrap: "wrap",
+        justifyContent: "flex-end",
     },
     avatar: {
         height: "32px",

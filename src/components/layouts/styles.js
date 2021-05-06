@@ -22,8 +22,16 @@ const useStyles = makeStyles((theme) => ({
             display: "none",
         },
     },
+    title: {
+        [theme.breakpoints.down("xs")]: {
+            fontSize: 16,
+        },
+    },
     signOutButton: {
         marginLeft: "auto",
+        [theme.breakpoints.down("xs")]: {
+            fontSize: 12,
+        },
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,

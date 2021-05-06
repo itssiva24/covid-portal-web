@@ -50,7 +50,7 @@ function Root(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap>
+                    <Typography variant="h6" noWrap className={classes.title}>
                         IITM COVID PORTAL
                     </Typography>
                     {authUser && (

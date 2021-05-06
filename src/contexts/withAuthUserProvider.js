@@ -21,7 +21,7 @@ export default (Component) => (props) => {
     }, []);
 
     return (
-        <AuthUserContext.Provider value={{ authUser, me }}>
+        <AuthUserContext.Provider value={{ authUser }}>
             {!loading ? (
                 <Component {...props} />
             ) : (
