@@ -9,6 +9,9 @@ import {
 } from "@material-ui/core";
 import AuthUserContext from "../../contexts/authUserContext";
 import useUploadRequest from "../../hooks/useUploadRequest";
+import InputLabel from "@material-ui/core/InputLabel"
+import Select from "@material-ui/core/Select"
+import MenuItem from "@material-ui/core/MenuItem"
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -94,6 +97,7 @@ function NewRequest() {
                     <TextField
                         label="Description"
                         id="outlined-basic"
+                        required
                         multiline
                         rows={10}
                         variant="outlined"
@@ -124,6 +128,40 @@ function NewRequest() {
                             style={{ display: "flex", flex: 1, marginLeft: 10 }}
                         />
                     </div>
+                    <InputLabel id="demo-simple-select-label" style={
+                        {marginTop:"1em"}
+                    }>Type</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="requestType"
+                        value={requestForm.requestType}
+                        onChange={handleInput}
+                    >
+                        <MenuItem value="Oxygen">Oxygen</MenuItem>
+                        <MenuItem value="Plasma">Plasma</MenuItem>
+                        <MenuItem value="Monetary">Monetary</MenuItem>
+                    </Select>
+                    {
+                        requestForm.requestType === "Monetary" && <>
+                            <TextField id="standard-basic" name="recipientUPIID" className={classes.textField}
+                            label="Recipient UPI ID" required />
+                            <TextField id="standard-basic" name="recipientUPIName" className={classes.textField}
+                            label="Recipient Name " required />
+                            <div>
+                                <label>
+                                    UPI QRcode Image
+                                    <input
+                                    type="file"
+                                    name="QRCodeImage"
+                                    required
+                                    onChange={handleFile}
+                                    className={classes.chooseFile}
+                                />
+                                </label>
+                            </div>
+                        </>
+                    }
                     <div
                         style={{
                             display: "flex",
@@ -135,7 +173,9 @@ function NewRequest() {
                         <h4>Images to support your request: </h4>
                         <input
                             type="file"
-                            onChange={(e) => handleFile(e.target.files)}
+                            name="proofImage"
+                            required
+                            onChange={handleFile}
                             className={classes.chooseFile}
                         />
                     </div>
