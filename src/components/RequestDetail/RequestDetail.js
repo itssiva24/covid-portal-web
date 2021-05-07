@@ -33,7 +33,6 @@ export const useStyles = makeStyles((theme) => ({
         gap: "0.2em 1em",
         flexWrap: "wrap",
         justifyContent: "space-around",
-        color: "grey",
     },
     avatar: {
         height: "32px",
@@ -48,6 +47,9 @@ export const useStyles = makeStyles((theme) => ({
     },
     messageBox: {
         padding: "16px 0 24px",
+    },
+    title: {
+        color: theme.palette.grey[200],
     },
     imageBox: {
         textAlign: "center",
@@ -118,7 +120,9 @@ export default withAuthorization(
                     </div>
                 </Box>
                 <Box className={classes.messageBox}>
-                    <Typography variant="h6">{request.title}</Typography>
+                    <Typography variant="h6" className={classes.title}>
+                        {request.title}
+                    </Typography>
                     <Typography variant="body2">
                         {request.description ? `${request.description}` : ""}
                     </Typography>

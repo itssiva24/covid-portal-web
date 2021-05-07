@@ -43,7 +43,9 @@ function Request({ request }) {
                 </div>
             </Box>
             <Box className={classes.messageBox}>
-                <Typography variant="h6">{request.title}</Typography>
+                <Typography variant="h6" className={classes.title}>
+                    {request.title}
+                </Typography>
                 {request.description && (
                     <Typography variant="body2">
                         {`${request.description.slice(0, 64)}...`}
