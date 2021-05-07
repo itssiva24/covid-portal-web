@@ -10,6 +10,7 @@ const initialRequestFormState = {
     state: "",
     proofImage: "",
     requestType:"",
+<<<<<<< HEAD
     recipientUPIID:"",
     recipientUPIName:"",
     QRCodeImage:""
@@ -17,6 +18,13 @@ const initialRequestFormState = {
 
 
 
+=======
+    recipentUPIID:"",
+    recipentUPIName:"",
+    QRCodeImage:""
+}
+
+>>>>>>> upstream/master
 const useUploadRequest = (authUser) => {
     const [requestForm, setRequestForm] = useReducer(
         (state, newState) => ({ ...state, ...newState }),
@@ -94,10 +102,13 @@ const useUploadRequest = (authUser) => {
             setUploading(true);
             evt.preventDefault();
 
+<<<<<<< HEAD
             const promises = getUploadPromises(requestForm)
             Promise.all(promises).then(()=>{
                 createRequest()
             })
+=======
+>>>>>>> upstream/master
             setRequestForm(initialRequestFormState);
             setUploading(false);
         } catch (err) {
@@ -106,7 +117,11 @@ const useUploadRequest = (authUser) => {
         }
     };
 
+<<<<<<< HEAD
     const createRequest = async () => {
+=======
+    const createRequest = async (proof, qr) => {
+>>>>>>> upstream/master
         const requestRef = firestore.collection("requests").doc();
 
         await requestRef.set({
@@ -115,12 +130,20 @@ const useUploadRequest = (authUser) => {
             ...(requestForm.description,
             { description: requestForm.description }),
             type:requestForm.requestType,
+<<<<<<< HEAD
             QRCodeURL: qrcodeImageDownloadURL,
             recipientUPIID:requestForm.recipientUPIID,
             recipientUPIName:requestForm.recipientUPIName,
             city: requestForm.city,
             state: requestForm.state,
             proofImageURL: proofImageDownloadURL,
+=======
+            QRCodeURL: qr,
+            UPIID:requestForm.UPIID,
+            city: requestForm.city,
+            state: requestForm.state,
+            proofImageURL: proof,
+>>>>>>> upstream/master
             createdAt: Date.now(),
             resolved: false,
             createdBy: authUser.displayName,

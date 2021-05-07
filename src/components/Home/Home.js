@@ -7,7 +7,6 @@ import useFetchRequests from "../../hooks/useFetchRequest";
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../Loader";
-import { GridList } from "@material-ui/core";
 
 const condition = (authUser) => !!authUser;
 
@@ -59,14 +58,9 @@ export default withAuthorization(
                     </h3>
                 }
             >
-                <GridList cellHeight={360} className={classes.root} cols={1}>
-                    {request.map((req) => (
-                        <Request request={req} key={req.createdAt}></Request>
-                    ))}
-                </GridList>
-                {/* {request.map((req) => (
+                {request.map((req) => (
                     <Request request={req} key={req.createdAt}></Request>
-                ))} */}
+                ))}
             </InfiniteScroll>
         );
 });

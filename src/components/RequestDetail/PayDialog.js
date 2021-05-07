@@ -8,7 +8,7 @@ import { Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 export default function PayDialog({ request, open, handleClose }) {
-    console.log(request)
+
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
@@ -17,7 +17,7 @@ export default function PayDialog({ request, open, handleClose }) {
                     <Typography component="h5">UPI ID : {request.recipientUPIID}</Typography>
                     <Typography component="h5">Name : {request.recipientUPIName}</Typography>
                     <img src={request.QRCodeURL}  style={{
-                      width:"300px"
+                        width:"300px"
                     }}/>
                 </DialogContent>
                 <DialogActions>
