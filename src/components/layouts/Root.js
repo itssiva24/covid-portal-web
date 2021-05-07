@@ -56,7 +56,7 @@ function Root(props) {
                     {authUser && (
                         <Button
                             variant="contained"
-                            color="secondary"
+                            color="primary"
                             onClick={handleSignOut}
                             className={classes.signOutButton}
                         >

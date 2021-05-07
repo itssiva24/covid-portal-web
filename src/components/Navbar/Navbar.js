@@ -12,7 +12,7 @@ import PostAddIcon from "@material-ui/icons/PostAdd";
 import SubjectIcon from "@material-ui/icons/Subject";
 import AddIcon from "@material-ui/icons/Add";
 import { useTheme } from "@material-ui/core/styles";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import useStyles from "./styles";
 import * as ROUTES from "../../constants/routes";
 import AuthUserContext from "../../contexts";
@@ -32,6 +32,14 @@ const navLinks = [
     },
 ];
 
+const CustomListIcon = ({ NavIcon, color = "primary" }) => {
+    return (
+        <ListItemIcon>
+            <NavIcon color={color}></NavIcon>
+        </ListItemIcon>
+    );
+};
+
 const drawer = (classes, history, authUser) => {
     return (
         <>
@@ -45,19 +53,17 @@ const drawer = (classes, history, authUser) => {
                     </Typography>
                 </div>
             </header>
-            <Divider />
-            <List>
+            <List style={{ padding: 0 }}>
                 {navLinks.map((navLink) => (
                     <ListItem
                         button
                         key={navLink.label}
+                        selected={history.location.pathname === navLink.link}
                         onClick={() => {
                             history.push(navLink.link);
                         }}
                     >
-                        <ListItemIcon>
-                            <navLink.icon></navLink.icon>
-                        </ListItemIcon>
+                        <CustomListIcon NavIcon={navLink.icon} />
                         <ListItemText primary={navLink.label} />
                     </ListItem>
                 ))}
@@ -66,27 +72,31 @@ const drawer = (classes, history, authUser) => {
                     <ListItem
                         button
                         key="My Requests"
+                        selected={
+                            history.location.pathname === ROUTES.MY_REQUESTS
+                        }
+                        className={classes.listItem}
                         onClick={() => {
                             history.push(ROUTES.MY_REQUESTS);
                         }}
                     >
-                        <ListItemIcon>
-                            <SubjectIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="My Requests" />
+                        <CustomListIcon NavIcon={SubjectIcon} />
+                        <ListItemText primary="My Requests" color="primary" />
                     </ListItem>
                 )}
                 {authUser && authUser.role === UserRole.Volunteer && (
                     <ListItem
                         button
                         key="Requests assigned"
+                        selected={
+                            history.location.pathname ===
+                            ROUTES.REQUESTS_ASSIGNED
+                        }
                         onClick={() => {
                             history.push(ROUTES.REQUESTS_ASSIGNED);
                         }}
                     >
-                        <ListItemIcon>
-                            <AssignmentIndIcon />
-                        </ListItemIcon>
+                        <CustomListIcon NavIcon={AssignmentIcon} />
                         <ListItemText primary="Requests Assigned" />
                     </ListItem>
                 )}
@@ -94,13 +104,14 @@ const drawer = (classes, history, authUser) => {
                     <ListItem
                         button
                         key="Add Volunteer"
+                        selected={
+                            history.location.pathname === ROUTES.ADD_VOLUNTEER
+                        }
                         onClick={() => {
                             history.push(ROUTES.ADD_VOLUNTEER);
                         }}
                     >
-                        <ListItemIcon>
-                            <AddIcon />
-                        </ListItemIcon>
+                        <CustomListIcon NavIcon={AddIcon} />
                         <ListItemText primary="Add Volunteer" />
                     </ListItem>
                 )}
@@ -114,6 +125,7 @@ function Navbar(props) {
     const { window } = props;
     const classes = useStyles();
     const theme = useTheme();
+    const location = useLocation();
     const { mobileOpen, handleDrawerToggle } = props;
     const container =
         window !== undefined ? () => window().document.body : undefined;

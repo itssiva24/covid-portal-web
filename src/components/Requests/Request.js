@@ -12,10 +12,14 @@ import { useMediaQuery } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        backgroundColor: "white",
+        background: theme.palette.grey[800],
         padding: "16px",
         margin: "16px auto",
-        boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+        borderRadius: 8,
+
+        "&:hover": {
+            background: theme.palette.grey[700],
+        },
     },
     header: {
         display: "flex",
@@ -23,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
         gap: "0 1em",
         flexWrap: "wrap",
         justifyContent: "flex-end",
+        padding: "4px 0 18px",
     },
     avatar: {
         height: "32px",
@@ -33,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 16,
     },
     messageBox: {
-        padding: "16px 0 24px",
+        padding: "8px 0 40px",
     },
 
     footer: {
@@ -42,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
         gap: 8,
         flexWrap: "wrap",
     },
-    viewDetailsButton: {
+    button: {
         [theme.breakpoints.down("xs")]: {
             width: "100%",
         },
@@ -50,9 +55,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function toDateTime(secs) {
-    var t = new Date(0); // Epoch
+    const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    };
+    const t = new Date(0); // Epoch
     t.setMilliseconds(secs);
-    return t.toLocaleString();
+    return t.toLocaleString("en-UK", options);
 }
 
 function Request({ request }) {
@@ -81,13 +94,19 @@ function Request({ request }) {
                 )}
             </Box>
             <Box className={classes.footer}>
-                <Button variant="outlined" color="primary" size="small">
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    className={classes.button}
+                >
                     {request.state === "" ? "State N/A" : request.state}
                 </Button>
                 <Button
                     variant="outlined"
-                    color={request.resolved ? "primary" : "secondary"}
+                    color={request.resolved ? "primary" : "grey"}
                     size="small"
+                    className={classes.button}
                 >
                     {request.resolved ? "Resolved" : "Not Resolved"}
                 </Button>
@@ -95,8 +114,7 @@ function Request({ request }) {
                     variant="contained"
                     color="primary"
                     size="small"
-                    endIcon={<CallMade />}
-                    className={classes.viewDetailsButton}
+                    className={classes.button}
                 >
                     <Link
                         style={{ color: "#fff", textDecoration: "none" }}

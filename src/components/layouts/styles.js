@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     appBar: {
+        backgroundColor: theme.palette.grey[800],
         [theme.breakpoints.up("sm")]: {
             width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
@@ -43,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(3),
         [theme.breakpoints.up("sm")]: {
             marginLeft: drawerWidth,
+        },
+        [theme.breakpoints.down("xs")]: {
+            padding: theme.spacing(1),
         },
     },
 }));

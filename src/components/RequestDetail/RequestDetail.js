@@ -18,10 +18,14 @@ import useGetRquestDetails from "../../hooks/useGetRequestDetails";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        backgroundColor: "white",
+        background: theme.palette.grey[800],
         padding: "16px",
         margin: "16px auto",
-        boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+        borderRadius: 8,
+
+        "&:hover": {
+            background: theme.palette.grey[700],
+        },
     },
     header: {
         display: "flex",
@@ -86,8 +90,8 @@ export default withAuthorization(
 
     if (!fetched)
         return (
-            <div className={classes.root}>
-                <Loader />;
+            <div>
+                <Loader />
             </div>
         );
     else
@@ -127,7 +131,7 @@ export default withAuthorization(
                     </Button>
                     <Button
                         variant="outlined"
-                        color={request.resolved ? "primary" : "secondary"}
+                        color={request.resolved ? "success" : "grey"}
                         size="small"
                     >
                         {request.resolved ? "Resolved" : "Not Resolved"}
@@ -159,7 +163,7 @@ export default withAuthorization(
                         request.assignedTo !== authUser.uid && (
                             <Button
                                 variant="outlined"
-                                color="success"
+                                color="secondary"
                                 size="small"
                             >
                                 ASSIGNED

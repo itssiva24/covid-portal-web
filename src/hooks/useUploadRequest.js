@@ -1,6 +1,6 @@
 import firebase from "firebase";
 import { useReducer, useState } from "react";
-import { firestore } from "../contexts/firebase";
+import { auth, firestore } from "../contexts/firebase";
 
 const useUploadRequest = (authUser) => {
     const [requestForm, setRequestForm] = useReducer(
@@ -67,7 +67,7 @@ const useUploadRequest = (authUser) => {
                             });
                     }
                 );
-            } else await createRequest();
+            } else await createRequest("");
 
             setRequestForm({
                 title: "",
@@ -97,6 +97,7 @@ const useUploadRequest = (authUser) => {
             createdAt: Date.now(),
             resolved: false,
             createdBy: authUser.displayName,
+            createdByUd: authUser.uid,
             email: authUser.email,
         });
     };

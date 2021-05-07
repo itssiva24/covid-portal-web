@@ -24,6 +24,12 @@ const useStyles = makeStyles((theme) => ({
             display: "none",
         },
     },
+    listItem: {
+        "&$selected": {
+            backgroundColor: "red",
+            color: "white",
+        },
+    },
     // necessary for content to be below app bar
     toolbar: {
         ...theme.mixins.toolbar,
@@ -31,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerPaper: {
         width: drawerWidth,
+        background: theme.palette.grey[800],
+        border: "none",
     },
     content: {
         flexGrow: 1,

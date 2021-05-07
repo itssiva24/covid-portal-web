@@ -34,7 +34,7 @@ export default withAuthorization(
     if (!fetched)
         return (
             <div className={classes.root}>
-                <Loader />;
+                <Loader />
             </div>
         );
     else {
