@@ -1,6 +1,6 @@
 import firebase from "firebase";
 import { useReducer, useState } from "react";
-import { auth, firestore } from "../contexts/firebase";
+import { firestore } from "../contexts/firebase";
 
 const useUploadRequest = (authUser) => {
     const [requestForm, setRequestForm] = useReducer(
@@ -99,6 +99,7 @@ const useUploadRequest = (authUser) => {
             createdBy: authUser.displayName,
             createdByUd: authUser.uid,
             email: authUser.email,
+            imageUrl: authUser.photoURL,
         });
     };
 

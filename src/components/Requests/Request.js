@@ -5,10 +5,6 @@ import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
-import { CallMade } from "@material-ui/icons";
-import * as ROUTES from "../../constants/routes";
-import { useMediaQuery } from "@material-ui/core";
 import { useStyles } from "../RequestDetail/RequestDetail";
 
 function toDateTime(secs) {

@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
@@ -7,12 +6,11 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import SubjectIcon from "@material-ui/icons/Subject";
 import AddIcon from "@material-ui/icons/Add";
 import { useTheme } from "@material-ui/core/styles";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import useStyles from "./styles";
 import * as ROUTES from "../../constants/routes";
 import AuthUserContext from "../../contexts";
@@ -125,7 +123,6 @@ function Navbar(props) {
     const { window } = props;
     const classes = useStyles();
     const theme = useTheme();
-    const location = useLocation();
     const { mobileOpen, handleDrawerToggle } = props;
     const container =
         window !== undefined ? () => window().document.body : undefined;

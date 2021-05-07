@@ -32,13 +32,21 @@ const useStyles = makeStyles((theme) => ({
     form: {
         display: "flex",
         flexDirection: "column",
-        padding: 10,
+        padding: 50,
+        backgroundColor:
+            theme.palette.type === "light"
+                ? theme.palette.grey[50]
+                : theme.palette.grey[900],
         [theme.breakpoints.up("xs")]: {
+            padding: 30,
             width: "100%",
         },
         [theme.breakpoints.up("lg") && theme.breakpoints.up("md")]: {
+            padding: 50,
             width: "auto",
         },
+        borderRadius: 30,
+        marginTop: 20,
     },
     address: {
         display: "flex",
@@ -57,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 function NewRequest() {
     const classes = useStyles();
     const { authUser } = useContext(AuthUserContext);
+
     const {
         handleFile,
         requestForm,

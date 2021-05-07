@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { withAuthorization } from "../../contexts";
 import Request from "../Requests/Request";
 import * as ROUTES from "../../constants/routes";
@@ -7,7 +7,7 @@ import useFetchRequests from "../../hooks/useFetchRequest";
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../Loader";
-import { signOut } from "../../contexts/firebase";
+import { GridList } from "@material-ui/core";
 
 const condition = (authUser) => !!authUser;
 
@@ -59,9 +59,14 @@ export default withAuthorization(
                     </h3>
                 }
             >
-                {request.map((req) => (
+                <GridList cellHeight={360} className={classes.root} cols={1}>
+                    {request.map((req) => (
+                        <Request request={req} key={req.createdAt}></Request>
+                    ))}
+                </GridList>
+                {/* {request.map((req) => (
                     <Request request={req} key={req.createdAt}></Request>
-                ))}
+                ))} */}
             </InfiniteScroll>
         );
 });

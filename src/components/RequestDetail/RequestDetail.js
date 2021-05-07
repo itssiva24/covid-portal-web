@@ -19,13 +19,15 @@ import useGetRquestDetails from "../../hooks/useGetRequestDetails";
 export const useStyles = makeStyles((theme) => ({
     root: {
         background: theme.palette.grey[800],
-        padding: "16px",
+        padding: "20px",
         margin: "16px auto",
-        borderRadius: 8,
+        borderRadius: 20,
 
         "&:hover": {
             background: theme.palette.grey[700],
         },
+        borderWidth: 10,
+        borderColor: theme.palette.grey[100],
     },
     header: {
         display: "flex",
