@@ -123,7 +123,10 @@ export default withAuthorization(
                 </Box>
                 {request.type==="Monetary" &&
                     <Box>
-                        <Button>
+                        <Button variant="contained" color="primary"
+                            onClick={()=>{
+                                setOpenPayModal(true)
+                            }}>
                             Donate Money
                         </Button>
                     </Box>
