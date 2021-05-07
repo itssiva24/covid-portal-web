@@ -3,9 +3,8 @@ import { firestore } from "../contexts/firebase";
 
 const useGetRquestDetails = (id) => {
     const [request, setRequest] = useState({});
-    const [openAssignVolunteerModal, setOpenAssignVolnteerModal] = useState(
-        false
-    );
+    const [openAssignVolunteerModal, setOpenAssignVolnteerModal] = useState(false);
+    const [openPayModal, setOpenPayModal] = useState(false);
     const [openResolveRequestModal, setOpenResolveRequestModal] = useState(
         false
     );
@@ -40,6 +39,7 @@ const useGetRquestDetails = (id) => {
     const handleClose = () => {
         setOpenAssignVolnteerModal(false);
         setOpenResolveRequestModal(false);
+        setOpenPayModal(false);
     };
 
     return {
@@ -49,8 +49,10 @@ const useGetRquestDetails = (id) => {
         toDateTime,
         openAssignVolunteerModal,
         openResolveRequestModal,
+        openPayModal,
         setOpenAssignVolnteerModal,
         setOpenResolveRequestModal,
+        setOpenPayModal,
     };
 };
 

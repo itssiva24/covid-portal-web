@@ -2,16 +2,23 @@ import firebase from "firebase";
 import { useReducer, useState } from "react";
 import { firestore } from "../contexts/firebase";
 
+
+const initialRequestFormState = {
+    title: "",
+    description: "",
+    city: "",
+    state: "",
+    proofImage: "",
+    requestType:"",
+    recipentUPIID:"",
+    recipentUPIName:"",
+    QRCodeImage:""
+}
+
 const useUploadRequest = (authUser) => {
     const [requestForm, setRequestForm] = useReducer(
         (state, newState) => ({ ...state, ...newState }),
-        {
-            title: "",
-            description: "",
-            city: "",
-            state: "",
-            file: "",
-        }
+        initialRequestFormState
     );
 
     const [uploading, setUploading] = useState(false);
@@ -20,6 +27,7 @@ const useUploadRequest = (authUser) => {
     const handleInput = (evt) => {
         const name = evt.target.name;
         const newValue = evt.target.value;
+        console.log({[name]:newValue})
         setRequestForm({ [name]: newValue });
     };
 
@@ -69,13 +77,7 @@ const useUploadRequest = (authUser) => {
                 );
             } else await createRequest();
 
-            setRequestForm({
-                title: "",
-                description: "",
-                city: "",
-                state: "",
-                file: "",
-            });
+            setRequestForm(initialRequestFormState);
             setUploading(false);
         } catch (err) {
             setUploading(false);
@@ -83,7 +85,7 @@ const useUploadRequest = (authUser) => {
         }
     };
 
-    const createRequest = async (url) => {
+    const createRequest = async (proof, qr) => {
         const requestRef = firestore.collection("requests").doc();
 
         await requestRef.set({
@@ -91,9 +93,12 @@ const useUploadRequest = (authUser) => {
             title: requestForm.title,
             ...(requestForm.description,
             { description: requestForm.description }),
+            type:requestForm.requestType,
+            QRCodeURL: qr,
+            UPIID:requestForm.UPIID,
             city: requestForm.city,
             state: requestForm.state,
-            file: url,
+            proofImageURL: proof,
             createdAt: Date.now(),
             resolved: false,
             createdBy: authUser.displayName,
@@ -101,8 +106,10 @@ const useUploadRequest = (authUser) => {
         });
     };
 
-    const handleFile = (files) => {
-        setRequestForm({ file: files[0] });
+    const handleFile = (evt) => {
+        const name = evt.target.name;
+        const newValue = evt.target.files[0];
+        setRequestForm({ [name]: newValue });
     };
 
     return {
