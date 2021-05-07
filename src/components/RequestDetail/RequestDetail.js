@@ -16,7 +16,7 @@ import Loader from "../Loader";
 import { ResolveRequestDialog } from "../Requests";
 import useGetRquestDetails from "../../hooks/useGetRequestDetails";
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
     root: {
         background: theme.palette.grey[800],
         padding: "16px",
@@ -30,18 +30,20 @@ const useStyles = makeStyles((theme) => ({
     header: {
         display: "flex",
         alignItems: "center",
-        gap: "1em",
+        gap: "0.2em 1em",
         flexWrap: "wrap",
+        justifyContent: "space-around",
+        color: "grey",
     },
     avatar: {
         height: "32px",
         width: "32px",
     },
-    name: {
+    headerText: {
         flex: "1",
         fontSize: 16,
         [theme.breakpoints.down("xs")]: {
-            flex: "2",
+            fontSize: 14,
         },
     },
     messageBox: {
@@ -103,12 +105,17 @@ export default withAuthorization(
                         alt={`${request.createdBy}`}
                         src={request.imageUrl}
                     ></Avatar>
-                    <Typography variant="p" className={classes.name}>
+                    <Typography variant="body3" className={classes.headerText}>
                         {request.createdBy}
                     </Typography>
-                    <Typography variant="body1">
-                        {toDateTime(request.createdAt)}
-                    </Typography>
+                    <div>
+                        <Typography
+                            variant="body3"
+                            className={classes.headerText}
+                        >
+                            {toDateTime(request.createdAt)}
+                        </Typography>
+                    </div>
                 </Box>
                 <Box className={classes.messageBox}>
                     <Typography variant="h6">{request.title}</Typography>

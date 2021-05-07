@@ -9,58 +9,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import { CallMade } from "@material-ui/icons";
 import * as ROUTES from "../../constants/routes";
 import { useMediaQuery } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        background: theme.palette.grey[800],
-        padding: "16px",
-        margin: "16px auto",
-        borderRadius: 8,
-
-        "&:hover": {
-            background: theme.palette.grey[700],
-        },
-    },
-    header: {
-        display: "flex",
-        alignItems: "center",
-        gap: "0 1em",
-        flexWrap: "wrap",
-        justifyContent: "flex-end",
-        padding: "4px 0 18px",
-    },
-    avatar: {
-        height: "32px",
-        width: "32px",
-    },
-    name: {
-        flex: "1",
-        fontSize: 16,
-    },
-    messageBox: {
-        padding: "8px 0 40px",
-    },
-
-    footer: {
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        flexWrap: "wrap",
-    },
-    button: {
-        [theme.breakpoints.down("xs")]: {
-            width: "100%",
-        },
-    },
-}));
+import { useStyles } from "../RequestDetail/RequestDetail";
 
 function toDateTime(secs) {
     const options = {
         year: "numeric",
         month: "long",
         day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
         hour12: true,
     };
     const t = new Date(0); // Epoch
@@ -78,12 +33,14 @@ function Request({ request }) {
                     alt={`${request.createdBy}`}
                     src={request.imageUrl}
                 ></Avatar>
-                <Typography variant="p" className={classes.name}>
+                <Typography variant="body3" className={classes.headerText}>
                     {request.createdBy}
                 </Typography>
-                <Typography variant="body1">
-                    {toDateTime(request.createdAt)}
-                </Typography>
+                <div>
+                    <Typography variant="body3" className={classes.headerText}>
+                        {toDateTime(request.createdAt)}
+                    </Typography>
+                </div>
             </Box>
             <Box className={classes.messageBox}>
                 <Typography variant="h6">{request.title}</Typography>
