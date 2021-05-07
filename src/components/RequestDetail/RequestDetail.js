@@ -15,7 +15,7 @@ import AssignVolunteerDialog from "../AssignVolunteer";
 import Loader from "../Loader";
 import { ResolveRequestDialog } from "../Requests";
 import useGetRquestDetails from "../../hooks/useGetRequestDetails";
-
+import PayDialog from "./PayDialog";
 export const useStyles = makeStyles((theme) => ({
     root: {
         background: theme.palette.grey[800],
@@ -86,18 +86,20 @@ export default withAuthorization(
     const {
         request,
         openAssignVolunteerModal,
+        openPayModal,
         openResolveRequestModal,
         handleClose,
         fetched,
         toDateTime,
         setOpenAssignVolnteerModal,
         setOpenResolveRequestModal,
+        setOpenPayModal,
     } = useGetRquestDetails(id);
 
     if (!fetched)
         return (
-            <div>
-                <Loader />
+            <div className={classes.root}>
+                <Loader />;
             </div>
         );
     else
@@ -109,42 +111,47 @@ export default withAuthorization(
                         alt={`${request.createdBy}`}
                         src={request.imageUrl}
                     ></Avatar>
-                    <Typography variant="body3" className={classes.headerText}>
+                    <Typography variant="p" className={classes.name}>
                         {request.createdBy}
                     </Typography>
-                    <div>
-                        <Typography
-                            variant="body3"
-                            className={classes.headerText}
-                        >
-                            {toDateTime(request.createdAt)}
-                        </Typography>
-                    </div>
+                    <Typography variant="body1">
+                        {toDateTime(request.createdAt)}
+                    </Typography>
                 </Box>
                 <Box className={classes.messageBox}>
-                    <Typography variant="h6" className={classes.title}>
-                        {request.title}
-                    </Typography>
+                    <Typography variant="h6">{request.title}</Typography>
                     <Typography variant="body2">
                         {request.description ? `${request.description}` : ""}
                     </Typography>
                 </Box>
-                {request.file && (
-                    <Box className={classes.imageBox}>
+                <Box className={classes.imageBox}>
                         <img
-                            src={request.file}
+                            src={request.proofImageURL}
                             className={classes.image}
                             alt=""
                         />
+                </Box>
+                {request.type==="Monetary" &&
+                    <Box style={{
+                        display:"flex",
+                        justifyContent:"center",
+                        margin:"10px"
+                    }}>
+                        <Button variant="contained" color="primary"
+                            onClick={()=>{
+                                setOpenPayModal(true)
+                            }}>
+                            Donate Money
+                        </Button>
                     </Box>
-                )}
+                }
                 <Box className={classes.footer}>
                     <Button variant="outlined" color="primary" size="small">
                         {request.state === "" ? "State N/A" : request.state}
                     </Button>
                     <Button
                         variant="outlined"
-                        color={request.resolved ? "success" : "grey"}
+                        color={request.resolved ? "primary" : "secondary"}
                         size="small"
                     >
                         {request.resolved ? "Resolved" : "Not Resolved"}
@@ -176,7 +183,7 @@ export default withAuthorization(
                         request.assignedTo !== authUser.uid && (
                             <Button
                                 variant="outlined"
-                                color="secondary"
+                                color="success"
                                 size="small"
                             >
                                 ASSIGNED
@@ -192,6 +199,12 @@ export default withAuthorization(
                         open={openResolveRequestModal}
                         handleClose={handleClose}
                     />
+                    {request.type==="Monetary" &&
+                        <PayDialog
+                        request={request}
+                        open={openPayModal}
+                        handleClose={handleClose}
+                    />}
                 </Box>
             </Container>
         ) : (
