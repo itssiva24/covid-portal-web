@@ -15,6 +15,7 @@ import AssignVolunteerDialog from "../AssignVolunteer";
 import Loader from "../Loader";
 import { ResolveRequestDialog } from "../Requests";
 import useGetRquestDetails from "../../hooks/useGetRequestDetails";
+import PayDialog from "./PayDialog";
 
 export const useStyles = makeStyles((theme) => ({
     root: {
@@ -83,12 +84,14 @@ export default withAuthorization(
     const {
         request,
         openAssignVolunteerModal,
+        openPayModal,
         openResolveRequestModal,
         handleClose,
         fetched,
         toDateTime,
         setOpenAssignVolnteerModal,
         setOpenResolveRequestModal,
+        setOpenPayModal,
     } = useGetRquestDetails(id);
 
     if (!fetched)
@@ -126,15 +129,23 @@ export default withAuthorization(
                         {request.description ? `${request.description}` : ""}
                     </Typography>
                 </Box>
-                {request.file && (
-                    <Box className={classes.imageBox}>
+                <Box className={classes.imageBox}>
                         <img
-                            src={request.file}
+                            src={request.proofImageURL}
                             className={classes.image}
                             alt=""
                         />
+                </Box>
+                {request.type==="Monetary" &&
+                    <Box>
+                        <Button variant="contained" color="primary"
+                            onClick={()=>{
+                                setOpenPayModal(true)
+                            }}>
+                            Donate Money
+                        </Button>
                     </Box>
-                )}
+                }
                 <Box className={classes.footer}>
                     <Button variant="outlined" color="primary" size="small">
                         {request.state === "" ? "State N/A" : request.state}
@@ -189,6 +200,12 @@ export default withAuthorization(
                         open={openResolveRequestModal}
                         handleClose={handleClose}
                     />
+                    {request.type==="Monetary" &&
+                        <PayDialog
+                        request={request}
+                        open={openPayModal}
+                        handleClose={handleClose}
+                    />}
                 </Box>
             </Container>
         ) : (
