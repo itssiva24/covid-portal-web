@@ -10,7 +10,6 @@ const initialRequestFormState = {
     state: "",
     proofImage: "",
     requestType:"",
-<<<<<<< HEAD
     recipientUPIID:"",
     recipientUPIName:"",
     QRCodeImage:""
@@ -18,13 +17,6 @@ const initialRequestFormState = {
 
 
 
-=======
-    recipentUPIID:"",
-    recipentUPIName:"",
-    QRCodeImage:""
-}
-
->>>>>>> upstream/master
 const useUploadRequest = (authUser) => {
     const [requestForm, setRequestForm] = useReducer(
         (state, newState) => ({ ...state, ...newState }),
@@ -34,10 +26,10 @@ const useUploadRequest = (authUser) => {
     const [uploading, setUploading] = useState(false);
     const [percentageDone, setPercentageDone] = useState(0);
     
-    const [proofImageDownloadURL, setproofImageDownloadURL] = useState("")
-    const [qrcodeImageDownloadURL, setqrcodeImageDownloadURL] = useState("")
-    // const proofImageDownloadURL = "";
-    // const qrcodeImageDownloadURL = "";
+    // const [proofImageDownloadURL, setproofImageDownloadURL] = useState("")
+    // const [qrcodeImageDownloadURL, setqrcodeImageDownloadURL] = useState("")
+    let proofImageDownloadURL = "";
+    let qrcodeImageDownloadURL = "";
     const setDownloadUrl = (setFn, uploadTask)=>{
         return (snapshot) => {
             // Observe state change events such as progress, pause, and resume
@@ -74,17 +66,18 @@ const useUploadRequest = (authUser) => {
 
     const getUploadPromises = (request)=>{
 
-        const proofUploadTask = firebase.storage().ref(`requests/proof/${request.proofImage.name}`).put(request.proofImage)
+        const proofUploadTask = firebase.storage().ref().child(`requests/proof/${request.proofImage.name}`).put(request.proofImage)
         proofUploadTask.on(
             firebase.storage.TaskEvent.STATE_CHANGED,
-            setDownloadUrl(setproofImageDownloadURL, proofUploadTask)
+            setDownloadUrl((url)=>proofImageDownloadURL=url, proofUploadTask)
         );
         const promises = [proofUploadTask]
-        if(request.type==="Monetary"){
-            const qrcodeUploadTask = firebase.storage().ref(`requests/qrcode/${request.QRCodeImage.name}`).put(request.QRCodeImage)
+        if(request.requestType==="Monetary"){
+            console.log("montary request processing")
+            const qrcodeUploadTask = firebase.storage().ref().child(`requests/qrcode/${request.QRCodeImage.name}`).put(request.QRCodeImage)
             qrcodeUploadTask.on(
                 firebase.storage.TaskEvent.STATE_CHANGED,
-                setDownloadUrl(setqrcodeImageDownloadURL, qrcodeUploadTask)
+                setDownloadUrl(url=>qrcodeImageDownloadURL=url, qrcodeUploadTask)
             )
             promises.push(qrcodeUploadTask)
         } 
@@ -102,13 +95,10 @@ const useUploadRequest = (authUser) => {
             setUploading(true);
             evt.preventDefault();
 
-<<<<<<< HEAD
             const promises = getUploadPromises(requestForm)
             Promise.all(promises).then(()=>{
                 createRequest()
             })
-=======
->>>>>>> upstream/master
             setRequestForm(initialRequestFormState);
             setUploading(false);
         } catch (err) {
@@ -117,11 +107,7 @@ const useUploadRequest = (authUser) => {
         }
     };
 
-<<<<<<< HEAD
     const createRequest = async () => {
-=======
-    const createRequest = async (proof, qr) => {
->>>>>>> upstream/master
         const requestRef = firestore.collection("requests").doc();
 
         await requestRef.set({
@@ -130,20 +116,12 @@ const useUploadRequest = (authUser) => {
             ...(requestForm.description,
             { description: requestForm.description }),
             type:requestForm.requestType,
-<<<<<<< HEAD
             QRCodeURL: qrcodeImageDownloadURL,
             recipientUPIID:requestForm.recipientUPIID,
             recipientUPIName:requestForm.recipientUPIName,
             city: requestForm.city,
             state: requestForm.state,
             proofImageURL: proofImageDownloadURL,
-=======
-            QRCodeURL: qr,
-            UPIID:requestForm.UPIID,
-            city: requestForm.city,
-            state: requestForm.state,
-            proofImageURL: proof,
->>>>>>> upstream/master
             createdAt: Date.now(),
             resolved: false,
             createdBy: authUser.displayName,

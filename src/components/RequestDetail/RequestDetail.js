@@ -16,10 +16,7 @@ import Loader from "../Loader";
 import { ResolveRequestDialog } from "../Requests";
 import useGetRquestDetails from "../../hooks/useGetRequestDetails";
 import PayDialog from "./PayDialog";
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/master
 export const useStyles = makeStyles((theme) => ({
     root: {
         background: theme.palette.grey[800],
@@ -97,6 +94,7 @@ export default withAuthorization(
         setOpenPayModal,
     } = useGetRquestDetails(id);
 
+    console.log(request)
     if (!fetched)
         return (
             <div className={classes.root}>
@@ -133,15 +131,12 @@ export default withAuthorization(
                         />
                 </Box>
                 {request.type==="Monetary" &&
-<<<<<<< HEAD
                     <Box style={{
                         display:"flex",
                         justifyContent:"center",
                         margin:"10px"
                     }}>
-=======
-                    <Box>
->>>>>>> upstream/master
+
                         <Button variant="contained" color="primary"
                             onClick={()=>{
                                 setOpenPayModal(true)

@@ -11,64 +11,9 @@ import useUploadRequest from "../../hooks/useUploadRequest";
 import InputLabel from "@material-ui/core/InputLabel"
 import Select from "@material-ui/core/Select"
 import MenuItem from "@material-ui/core/MenuItem"
-<<<<<<< HEAD
 import useStyles from "./styles"; 
 import states from "../../constants/states.json";
 import cities from"../../constants/cities.json"
-=======
-
-const useStyles = makeStyles((theme) => ({
-    button: {
-        marginTop: theme.spacing(5),
-    },
-    root: {
-        padding: theme.spacing(3, 2),
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-    },
-    container: {
-        display: "flex",
-        flexWrap: "wrap",
-    },
-    textField: {
-        marginTop: 20,
-        width: "100%",
-    },
-    form: {
-        display: "flex",
-        flexDirection: "column",
-        padding: 50,
-        backgroundColor:
-            theme.palette.type === "light"
-                ? theme.palette.grey[50]
-                : theme.palette.grey[900],
-        [theme.breakpoints.up("xs")]: {
-            padding: 30,
-            width: "100%",
-        },
-        [theme.breakpoints.up("lg") && theme.breakpoints.up("md")]: {
-            padding: 50,
-            width: "auto",
-        },
-        borderRadius: 30,
-        marginTop: 20,
-    },
-    address: {
-        display: "flex",
-        marginTop: 20,
-        justifyContent: "space-between",
-    },
-    chooseFile: {
-        margin: 20,
-    },
-    progress: {
-        width: "100%",
-        marginTop: 20,
-    },
-}));
->>>>>>> upstream/master
 
 function NewRequest() {
     const classes = useStyles();
@@ -177,7 +122,6 @@ function NewRequest() {
                         <MenuItem value="Monetary">Monetary</MenuItem>
                     </Select>
                     </div>
-<<<<<<< HEAD
                     {
                         requestForm.requestType === "Monetary" && <>
                             <TextField id="standard-basic" name="recipientUPIID" style={{marginTop:10}}
@@ -194,43 +138,12 @@ function NewRequest() {
                                 >
                                     UPI QRcode Image
                                 </label>
-=======
-                    <InputLabel id="demo-simple-select-label" style={
-                        {marginTop:"1em"}
-                    }>Type</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        name="requestType"
-                        value={requestForm.requestType}
-                        onChange={handleInput}
-                    >
-                        <MenuItem value="Oxygen">Oxygen</MenuItem>
-                        <MenuItem value="Plasma">Plasma</MenuItem>
-                        <MenuItem value="Monetary">Monetary</MenuItem>
-                    </Select>
-                    {
-                        requestForm.requestType === "Monetary" && <>
-                            <TextField id="standard-basic" name="recipientUPIID" className={classes.textField}
-                            label="Recipient UPI ID" required />
-                            <TextField id="standard-basic" name="recipientUPIName" className={classes.textField}
-                            label="Recipient Name " required />
-                            <div>
-                                <label>
-                                    UPI QRcode Image
->>>>>>> upstream/master
                                     <input
                                     type="file"
                                     name="QRCodeImage"
                                     required
                                     onChange={handleFile}
-<<<<<<< HEAD
                                 />
-=======
-                                    className={classes.chooseFile}
-                                />
-                                </label>
->>>>>>> upstream/master
                             </div>
                         </>
                     }
@@ -265,6 +178,7 @@ function NewRequest() {
                             <LinearProgress />
                         </div>
                     )}
+                    
                 </form>
             </Paper>
         </div>
