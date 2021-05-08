@@ -8,12 +8,12 @@ import {
 } from "@material-ui/core";
 import AuthUserContext from "../../contexts/authUserContext";
 import useUploadRequest from "../../hooks/useUploadRequest";
-import InputLabel from "@material-ui/core/InputLabel"
-import Select from "@material-ui/core/Select"
-import MenuItem from "@material-ui/core/MenuItem"
-import useStyles from "./styles"; 
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import useStyles from "./styles";
 import states from "../../constants/states.json";
-import cities from"../../constants/cities.json"
+import cities from "../../constants/cities.json";
 import UploadResultDialog from "./UploadResultDialog";
 
 function NewRequest() {
@@ -27,7 +27,7 @@ function NewRequest() {
         uploading,
         handleClose,
         uploadResult,
-        openUploadResultModal
+        openUploadResultModal,
     } = useUploadRequest(authUser);
 
     return (
@@ -37,6 +37,13 @@ function NewRequest() {
                     New Request
                 </Typography>
                 <form className={classes.form} onSubmit={handleSubmit}>
+                    <Typography
+                        component="h5"
+                        variant="h6"
+                        className={classes.sectionHeader}
+                    >
+                        Request Details:
+                    </Typography>
                     <TextField
                         label="Title"
                         id="outlined-basic"
@@ -60,11 +67,19 @@ function NewRequest() {
                         onChange={handleInput}
                     />
                     <div className={classes.address}>
-                        <div style={{ display: "flex", flex: 1, alignItems:"center" }}>
-                            <InputLabel id="demo-simple-select-label" style={
-                                {marginRight:"10px"}
-                                }>
-                                    State
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: 1,
+                                alignItems: "center",
+                            }}
+                        >
+                            <InputLabel
+                                id="demo-simple-select-label"
+                                style={{ marginRight: "10px" }}
+                                required
+                            >
+                                State
                             </InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
@@ -73,20 +88,29 @@ function NewRequest() {
                                 required
                                 value={requestForm.state}
                                 onChange={handleInput}
-                                style={{flex:"1"}}
+                                style={{ flex: "1" }}
                             >
-                                {
-                                    Object.keys(states).map(key=>(
-                                        <MenuItem value={key}>{states[key]}</MenuItem>
-                                    ))
-                                }
+                                {Object.keys(states).map((key) => (
+                                    <MenuItem value={key}>
+                                        {states[key]}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </div>
-                        <div style={{ display: "flex", flex: 1, marginLeft: 16, alignItems:"center" }}>
-                        <InputLabel id="demo-simple-select-label" style={
-                                {marginRight:"10px"}
-                                }>
-                                    City
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: 1,
+                                marginLeft: 16,
+                                alignItems: "center",
+                            }}
+                        >
+                            <InputLabel
+                                id="demo-simple-select-label"
+                                style={{ marginRight: "10px" }}
+                                required
+                            >
+                                City
                             </InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
@@ -95,54 +119,142 @@ function NewRequest() {
                                 required
                                 value={requestForm.city}
                                 onChange={handleInput}
-                                style={{flex:"1"}}
+                                style={{ flex: "1" }}
                             >
-                                {
-                                    requestForm.state && cities[requestForm.state].map(city=>(
+                                {requestForm.state &&
+                                    cities[requestForm.state].map((city) => (
                                         <MenuItem value={city}>{city}</MenuItem>
-                                    ))
-                                }
+                                    ))}
                             </Select>
                         </div>
-                    </div >
-                    <div style={{ display: "flex", alignItems:"center", marginTop:16}}>
-
-                    <InputLabel id="demo-simple-select-label" style={{
-                        marginRight:10
-                    }}>Type</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        name="requestType"
-                        required
-                        value={requestForm.requestType}
-                        style={{
-                            flex:"1"
-                        }}
-                        onChange={handleInput}
-                        >
-                        {/* <MenuItem value="Oxygen">Oxygen</MenuItem> */}
-                        <MenuItem value="Medical Help">Medical Help</MenuItem>
-                        <MenuItem value="Monetary">Monetary</MenuItem>
-                    </Select>
                     </div>
-                    {
-                        requestForm.requestType === "Monetary" && <>
-                            <TextField id="standard-basic" name="recipientUPIID" style={{marginTop:10}}
-                            label="Recipient UPI ID" onChange={handleInput} required />
-                            <TextField id="standard-basic" name="recipientUPIName" style={{marginTop:10}}
-                            label="Recipient Name " onChange={handleInput} required />
-                            <div style={{
+                    <div
+                        style={{
                             display: "flex",
-                            flexDirection: "row",
-                            width: "100%",
-                            marginTop: 20,
-                        }}>
-                                <label
-                                >
-                                    UPI QRcode Image
-                                </label>
-                                    <input
+                            alignItems: "center",
+                            marginTop: 16,
+                        }}
+                    >
+                        <InputLabel
+                            id="demo-simple-select-label"
+                            style={{
+                                marginRight: 10,
+                            }}
+                            required
+                        >
+                            Type
+                        </InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            name="requestType"
+                            required
+                            value={requestForm.requestType}
+                            style={{
+                                flex: "1",
+                            }}
+                            onChange={handleInput}
+                        >
+                            {/* <MenuItem value="Oxygen">Oxygen</MenuItem> */}
+                            <MenuItem value="Medical Help">
+                                Medical Help
+                            </MenuItem>
+                            <MenuItem value="Monetary">Monetary</MenuItem>
+                        </Select>
+                    </div>
+                    {requestForm.requestType && (
+                        <>
+                            <Typography
+                                component="h5"
+                                variant="h6"
+                                className={classes.sectionHeader}
+                            >
+                                Patient Details:
+                            </Typography>
+                            <TextField
+                                label="Name"
+                                id="outlined-basic"
+                                required
+                                name="patientName"
+                                value={requestForm.patientName}
+                                className={classes.textField}
+                                onChange={handleInput}
+                            />
+                            <TextField
+                                label="Contact Number"
+                                id="outlined-basic"
+                                required
+                                name="pateintNumber"
+                                value={requestForm.patientNumber}
+                                className={classes.textField}
+                                onChange={handleInput}
+                            />
+                            <TextField
+                                label="SPO2 level"
+                                id="outlined-basic"
+                                required
+                                name="pateintSpo2Level"
+                                type="number"
+                                value={requestForm.patientSpo2Level}
+                                className={classes.textField}
+                                onChange={handleInput}
+                            />
+                            <Typography
+                                component="h5"
+                                variant="h6"
+                                className={classes.sectionHeader}
+                            >
+                                Caregiver Details:
+                            </Typography>
+                            <TextField
+                                label="Name"
+                                id="outlined-basic"
+                                required
+                                name="caregiverName"
+                                value={requestForm.caregiverName}
+                                className={classes.textField}
+                                onChange={handleInput}
+                            />
+                            <TextField
+                                label="Contact Number"
+                                id="outlined-basic"
+                                required
+                                name="caregiverNumber"
+                                value={requestForm.caregiverNumber}
+                                className={classes.textField}
+                                onChange={handleInput}
+                            />
+                        </>
+                    )}
+
+                    {requestForm.requestType === "Monetary" && (
+                        <>
+                            <Typography
+                                component="h5"
+                                variant="h6"
+                                className={classes.sectionHeader}
+                            >
+                                UPI Details:
+                            </Typography>
+                            <TextField
+                                id="standard-basic"
+                                name="recipientUPIID"
+                                className={classes.textField}
+                                label="Recipient UPI ID"
+                                onChange={handleInput}
+                                required
+                            />
+                            <TextField
+                                id="standard-basic"
+                                name="recipientUPIName"
+                                className={classes.textField}
+                                label="Recipient Name "
+                                onChange={handleInput}
+                                required
+                            />
+                            <div className={classes.chooseFile}>
+                                <label>UPI QR code Image: </label>
+                                <input
                                     type="file"
                                     name="QRCodeImage"
                                     required
@@ -150,22 +262,14 @@ function NewRequest() {
                                 />
                             </div>
                         </>
-                    }
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            width: "100%",
-                            marginTop: 20,
-                        }}
-                    >
-                        <h4>Images to support your request: </h4>
+                    )}
+                    <div className={classes.chooseFile}>
+                        <label>Image to support your request: </label>
                         <input
                             type="file"
                             name="proofImage"
                             required
                             onChange={handleFile}
-                            className={classes.chooseFile}
                         />
                     </div>
                     <Button
@@ -182,10 +286,13 @@ function NewRequest() {
                             <LinearProgress />
                         </div>
                     )}
-                    
                 </form>
             </Paper>
-            <UploadResultDialog result={uploadResult} open={openUploadResultModal} handleClose={handleClose}></UploadResultDialog>
+            <UploadResultDialog
+                result={uploadResult}
+                open={openUploadResultModal}
+                handleClose={handleClose}
+            ></UploadResultDialog>
         </div>
     );
 }

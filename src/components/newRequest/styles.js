@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     form: {
         display: "flex",
         flexDirection: "column",
-        padding: "8px 24px",
+        padding: "20px 32px",
         backgroundColor:
             theme.palette.type === "light"
                 ? theme.palette.grey[50]
@@ -30,13 +30,21 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 8,
         marginTop: 8,
     },
+    sectionHeader: {
+        marginTop: 16,
+        color: theme.palette.grey[300],
+    },
     address: {
         display: "flex",
         marginTop: 20,
         justifyContent: "space-between",
     },
     chooseFile: {
-        margin: 20,
+        display: "flex",
+        width: "100%",
+        alignItems: "center",
+        gap: 12,
+        marginTop: 12,
     },
     progress: {
         width: "100%",
