@@ -59,7 +59,10 @@ export default withAuthorization(
                 }
             >
                 {request.map((req) => (
-                    <Request request={req} key={req.createdAt}></Request>
+                    <Request
+                        request={req}
+                        key={req.createdAt + req.title}
+                    ></Request>
                 ))}
             </InfiniteScroll>
         );
