@@ -2,7 +2,6 @@ import firebase from "firebase";
 import { useReducer, useState } from "react";
 import { firestore } from "../contexts/firebase";
 
-
 const initialRequestFormState = {
     title: "",
     description: "",
@@ -15,8 +14,6 @@ const initialRequestFormState = {
     QRCodeImage:""
 }
 
-
-
 const useUploadRequest = (authUser) => {
     const [requestForm, setRequestForm] = useReducer(
         (state, newState) => ({ ...state, ...newState }),
@@ -26,11 +23,7 @@ const useUploadRequest = (authUser) => {
     const [uploading, setUploading] = useState(false);
     const [percentageDone, setPercentageDone] = useState(0);
     
-    // const [proofImageDownloadURL, setproofImageDownloadURL] = useState("")
-    // const [qrcodeImageDownloadURL, setqrcodeImageDownloadURL] = useState("")
-    let proofImageDownloadURL = "";
-    let qrcodeImageDownloadURL = "";
-    const setDownloadUrl = (setFn, uploadTask)=>{
+    const handleUpload = (successFn)=>{
         return (snapshot) => {
             // Observe state change events such as progress, pause, and resume
             // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
@@ -53,36 +46,11 @@ const useUploadRequest = (authUser) => {
             // Handle unsuccessful uploads
             console.log("Unsuccessful upload", error);
         },
-        () => {
-            // Handle successful uploads on complete
-            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-            uploadTask.snapshot.ref
-                .getDownloadURL()
-                .then((downloadURL) => {
-                    setFn(downloadURL);
-                });
+        async ()=>{
+            await successFn()
         }
-    }
+}
 
-    const getUploadPromises = (request)=>{
-
-        const proofUploadTask = firebase.storage().ref().child(`requests/proof/${request.proofImage.name}`).put(request.proofImage)
-        proofUploadTask.on(
-            firebase.storage.TaskEvent.STATE_CHANGED,
-            setDownloadUrl((url)=>proofImageDownloadURL=url, proofUploadTask)
-        );
-        const promises = [proofUploadTask]
-        if(request.requestType==="Monetary"){
-            console.log("montary request processing")
-            const qrcodeUploadTask = firebase.storage().ref().child(`requests/qrcode/${request.QRCodeImage.name}`).put(request.QRCodeImage)
-            qrcodeUploadTask.on(
-                firebase.storage.TaskEvent.STATE_CHANGED,
-                setDownloadUrl(url=>qrcodeImageDownloadURL=url, qrcodeUploadTask)
-            )
-            promises.push(qrcodeUploadTask)
-        } 
-        return promises;
-    }
     const handleInput = (evt) => {
         const name = evt.target.name;
         const newValue = evt.target.value;
@@ -95,10 +63,19 @@ const useUploadRequest = (authUser) => {
             setUploading(true);
             evt.preventDefault();
 
-            const promises = getUploadPromises(requestForm)
-            Promise.all(promises).then(()=>{
-                createRequest()
-            })
+            const proofUploadTask = firebase.storage().ref().child(`requests/proof/${requestForm.proofImage.name}`).put(requestForm.proofImage);
+            proofUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, handleUpload(async ()=>{
+                const proofImageDownloadURL  = await proofUploadTask.snapshot.ref.getDownloadURL()
+                    if(requestForm.requestType === "Monetary"){
+                        const qrcodeUploadTask = firebase.storage().ref().child(`requests/qrcode/${requestForm.QRCodeImage.name}`).put(requestForm.QRCodeImage)
+                        qrcodeUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, handleUpload(async ()=>{
+                            const qrcodeImageDownloadURL = await qrcodeUploadTask.snapshot.ref.getDownloadURL()
+                            await createRequest(proofImageDownloadURL, qrcodeImageDownloadURL)
+                        }))
+                    }else {
+                        await createRequest(proofImageDownloadURL);
+                    }
+            }))
             setRequestForm(initialRequestFormState);
             setUploading(false);
         } catch (err) {
@@ -107,7 +84,7 @@ const useUploadRequest = (authUser) => {
         }
     };
 
-    const createRequest = async () => {
+    const createRequest = async (proofImageDownloadURL, qrcodeImageDownloadURL="") => {
         const requestRef = firestore.collection("requests").doc();
 
         await requestRef.set({
