@@ -14,6 +14,7 @@ import MenuItem from "@material-ui/core/MenuItem"
 import useStyles from "./styles"; 
 import states from "../../constants/states.json";
 import cities from"../../constants/cities.json"
+import UploadResultDialog from "./UploadResultDialog";
 
 function NewRequest() {
     const classes = useStyles();
@@ -24,6 +25,9 @@ function NewRequest() {
         handleInput,
         handleSubmit,
         uploading,
+        handleClose,
+        uploadResult,
+        openUploadResultModal
     } = useUploadRequest(authUser);
 
     return (
@@ -181,6 +185,7 @@ function NewRequest() {
                     
                 </form>
             </Paper>
+            <UploadResultDialog result={uploadResult} open={openUploadResultModal} handleClose={handleClose}></UploadResultDialog>
         </div>
     );
 }

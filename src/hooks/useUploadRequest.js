@@ -21,8 +21,15 @@ const useUploadRequest = (authUser) => {
     );
 
     const [uploading, setUploading] = useState(false);
+    const [uploadResult, setUploadResult] = useState("");
+    const [openUploadResultModal, setOpenUploadResultModal] = useState(false);
     const [percentageDone, setPercentageDone] = useState(0);
     
+    const handleClose = () =>{
+        setOpenUploadResultModal(false)
+        setUploadResult("")
+    }
+
     const handleUpload = (successFn)=>{
         return (snapshot) => {
             // Observe state change events such as progress, pause, and resume
@@ -45,6 +52,7 @@ const useUploadRequest = (authUser) => {
         (error) => {
             // Handle unsuccessful uploads
             console.log("Unsuccessful upload", error);
+            throw Error()
         },
         async ()=>{
             await successFn()
@@ -62,25 +70,30 @@ const useUploadRequest = (authUser) => {
         try {
             setUploading(true);
             evt.preventDefault();
-
+            // console.log("submitting")
             const proofUploadTask = firebase.storage().ref().child(`requests/proof/${requestForm.proofImage.name}`).put(requestForm.proofImage);
             proofUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, handleUpload(async ()=>{
                 const proofImageDownloadURL  = await proofUploadTask.snapshot.ref.getDownloadURL()
-                    if(requestForm.requestType === "Monetary"){
-                        const qrcodeUploadTask = firebase.storage().ref().child(`requests/qrcode/${requestForm.QRCodeImage.name}`).put(requestForm.QRCodeImage)
-                        qrcodeUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, handleUpload(async ()=>{
-                            const qrcodeImageDownloadURL = await qrcodeUploadTask.snapshot.ref.getDownloadURL()
-                            await createRequest(proofImageDownloadURL, qrcodeImageDownloadURL)
-                        }))
-                    }else {
-                        await createRequest(proofImageDownloadURL);
-                    }
+
+                if(requestForm.requestType === "Monetary"){
+                    const qrcodeUploadTask = firebase.storage().ref().child(`requests/qrcode/${requestForm.QRCodeImage.name}`).put(requestForm.QRCodeImage)
+                    qrcodeUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, handleUpload(async ()=>{
+                        const qrcodeImageDownloadURL = await qrcodeUploadTask.snapshot.ref.getDownloadURL()
+                        await createRequest(proofImageDownloadURL, qrcodeImageDownloadURL)
+                    }))
+                }else {
+                    await createRequest(proofImageDownloadURL);
+                }
             }))
             setRequestForm(initialRequestFormState);
+            setUploadResult("Success")
             setUploading(false);
         } catch (err) {
+            setUploadResult("Error")
             setUploading(false);
             console.log(err);
+        } finally {
+            setOpenUploadResultModal(true)
         }
     };
 
@@ -120,6 +133,9 @@ const useUploadRequest = (authUser) => {
         handleSubmit,
         uploading,
         percentageDone,
+        handleClose,
+        uploadResult,
+        openUploadResultModal
     };
 };
 
