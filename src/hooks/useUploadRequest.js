@@ -30,8 +30,8 @@ const useUploadRequest = (authUser) => {
         setUploadResult("")
     }
 
-    const handleUpload = (successFn)=>{
-        return (snapshot) => {
+    const handleUploadParams = (successFn)=>{
+        return [(snapshot) => {
             // Observe state change events such as progress, pause, and resume
             // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
             var progress =
@@ -56,13 +56,12 @@ const useUploadRequest = (authUser) => {
         },
         async ()=>{
             await successFn()
-        }
-}
+        }]
+    }
 
     const handleInput = (evt) => {
         const name = evt.target.name;
         const newValue = evt.target.value;
-        console.log({[name]:newValue})
         setRequestForm({ [name]: newValue });
     };
 
@@ -72,12 +71,12 @@ const useUploadRequest = (authUser) => {
             evt.preventDefault();
             // console.log("submitting")
             const proofUploadTask = firebase.storage().ref().child(`requests/proof/${requestForm.proofImage.name}`).put(requestForm.proofImage);
-            proofUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, handleUpload(async ()=>{
+            proofUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, ...handleUploadParams(async ()=>{
                 const proofImageDownloadURL  = await proofUploadTask.snapshot.ref.getDownloadURL()
 
                 if(requestForm.requestType === "Monetary"){
                     const qrcodeUploadTask = firebase.storage().ref().child(`requests/qrcode/${requestForm.QRCodeImage.name}`).put(requestForm.QRCodeImage)
-                    qrcodeUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, handleUpload(async ()=>{
+                    qrcodeUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, ...handleUploadParams(async ()=>{
                         const qrcodeImageDownloadURL = await qrcodeUploadTask.snapshot.ref.getDownloadURL()
                         await createRequest(proofImageDownloadURL, qrcodeImageDownloadURL)
                     }))
