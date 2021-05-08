@@ -7,25 +7,22 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
-export default function PayDialog({ request, open, handleClose }) {
-
+export default function UploadResultDialog({ result, open, handleClose }) {
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Payment Details</DialogTitle>
+                <DialogTitle>Upload Result</DialogTitle>
                 <DialogContent>
-                    <Typography component="h5">UPI ID : {request.recipientUPIID}</Typography>
-                    <Typography component="h5">Name : {request.recipientUPIName}</Typography>
-                    <img src={request.QRCodeURL}  style={{
-                        width:"300px"
-                    }}/>
+                    <Typography component="h5"> {result}</Typography>
+                    <Typography variant="body1">{
+                      result === "Success"? "We have received your request."
+                      :"Something went wrong! Try Submitting Again"
+                    }</Typography>
+                    {/* maybe add link to the newly created request (if successful) */}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="secondary">
-                        Cancel
-                    </Button>
-                    <Button color="primary">
-                        <Link href={`upi://pay?pa=${request.recipientUPIID}&pn=${request.recipientUPIName}&cu=INR`}>Open in App</Link>
+                        Close
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -94,10 +94,11 @@ export default withAuthorization(
         setOpenPayModal,
     } = useGetRquestDetails(id);
 
+    console.log(request)
     if (!fetched)
         return (
-            <div>
-                <Loader />
+            <div className={classes.root}>
+                <Loader />;
             </div>
         );
     else
@@ -109,22 +110,15 @@ export default withAuthorization(
                         alt={`${request.createdBy}`}
                         src={request.imageUrl}
                     ></Avatar>
-                    <Typography variant="body3" className={classes.headerText}>
+                    <Typography variant="p" className={classes.name}>
                         {request.createdBy}
                     </Typography>
-                    <div>
-                        <Typography
-                            variant="body3"
-                            className={classes.headerText}
-                        >
-                            {toDateTime(request.createdAt)}
-                        </Typography>
-                    </div>
+                    <Typography variant="body1">
+                        {toDateTime(request.createdAt)}
+                    </Typography>
                 </Box>
                 <Box className={classes.messageBox}>
-                    <Typography variant="h6" className={classes.title}>
-                        {request.title}
-                    </Typography>
+                    <Typography variant="h6">{request.title}</Typography>
                     <Typography variant="body2">
                         {request.description ? `${request.description}` : ""}
                     </Typography>
@@ -137,7 +131,12 @@ export default withAuthorization(
                         />
                 </Box>
                 {request.type==="Monetary" &&
-                    <Box>
+                    <Box style={{
+                        display:"flex",
+                        justifyContent:"center",
+                        margin:"10px"
+                    }}>
+
                         <Button variant="contained" color="primary"
                             onClick={()=>{
                                 setOpenPayModal(true)
@@ -152,7 +151,7 @@ export default withAuthorization(
                     </Button>
                     <Button
                         variant="outlined"
-                        color={request.resolved ? "success" : "grey"}
+                        color={request.resolved ? "primary" : "secondary"}
                         size="small"
                     >
                         {request.resolved ? "Resolved" : "Not Resolved"}
@@ -184,7 +183,7 @@ export default withAuthorization(
                         request.assignedTo !== authUser.uid && (
                             <Button
                                 variant="outlined"
-                                color="secondary"
+                                color="success"
                                 size="small"
                             >
                                 ASSIGNED
