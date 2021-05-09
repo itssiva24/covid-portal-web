@@ -37,97 +37,6 @@ function NewRequest() {
                     New Request
                 </Typography>
                 <form className={classes.form} onSubmit={handleSubmit}>
-                    <Typography
-                        component="h5"
-                        variant="h6"
-                        className={classes.sectionHeader}
-                    >
-                        Request Details:
-                    </Typography>
-                    <TextField
-                        label="Title"
-                        id="outlined-basic"
-                        required
-                        multiline
-                        name="title"
-                        value={requestForm.title}
-                        className={classes.textField}
-                        onChange={handleInput}
-                    />
-                    <TextField
-                        label="Description"
-                        id="outlined-basic"
-                        required
-                        multiline
-                        rows={10}
-                        variant="outlined"
-                        name="description"
-                        className={classes.textField}
-                        value={requestForm.description}
-                        onChange={handleInput}
-                    />
-                    <div className={classes.address}>
-                        <div
-                            style={{
-                                display: "flex",
-                                flex: 1,
-                                alignItems: "center",
-                            }}
-                        >
-                            <InputLabel
-                                id="demo-simple-select-label"
-                                style={{ marginRight: "10px" }}
-                                required
-                            >
-                                State
-                            </InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                name="state"
-                                required
-                                value={requestForm.state}
-                                onChange={handleInput}
-                                style={{ flex: "1" }}
-                            >
-                                {Object.keys(states).map((key) => (
-                                    <MenuItem value={key}>
-                                        {states[key]}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </div>
-                        <div
-                            style={{
-                                display: "flex",
-                                flex: 1,
-                                marginLeft: 16,
-                                alignItems: "center",
-                            }}
-                        >
-                            <InputLabel
-                                id="demo-simple-select-label"
-                                style={{ marginRight: "10px" }}
-                                required
-                            >
-                                City
-                            </InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                name="city"
-                                required
-                                value={requestForm.city}
-                                onChange={handleInput}
-                                style={{ flex: "1" }}
-                            >
-                                {requestForm.state &&
-                                    cities[requestForm.state].map((city) => (
-                                        <MenuItem value={city}>{city}</MenuItem>
-                                    ))}
-                            </Select>
-                        </div>
-                    </div>
                     <div
                         style={{
                             display: "flex",
@@ -161,6 +70,84 @@ function NewRequest() {
                             </MenuItem>
                             <MenuItem value="Monetary">Monetary</MenuItem>
                         </Select>
+                    </div>
+                    <Typography
+                        component="h5"
+                        variant="h6"
+                        className={classes.sectionHeader}
+                    >
+                        Request Details:
+                    </Typography>
+                    <TextField
+                        label="Title"
+                        id="outlined-basic"
+                        required
+                        multiline
+                        name="title"
+                        value={requestForm.title}
+                        className={classes.textField}
+                        onChange={handleInput}
+                    />
+                    <TextField
+                        label="Description"
+                        id="outlined-basic"
+                        required
+                        multiline
+                        rows={10}
+                        variant="outlined"
+                        name="description"
+                        className={classes.textField}
+                        value={requestForm.description}
+                        onChange={handleInput}
+                    />
+                    <div className={classes.address}>
+                        <div className={classes.addressItem}>
+                            <InputLabel
+                                id="demo-simple-select-label"
+                                style={{ marginRight: "10px" }}
+                                required
+                            >
+                                State
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                name="state"
+                                required
+                                value={requestForm.state}
+                                onChange={handleInput}
+                                style={{ flex: "1" }}
+                            >
+                                {Object.keys(states).map((key) => (
+                                    <MenuItem value={key}>
+                                        {states[key]}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className={classes.addressItem}>
+                            <InputLabel
+                                id="demo-simple-select-label"
+                                style={{ marginRight: "10px" }}
+                                required
+                            >
+                                City
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                name="city"
+                                required
+                                value={requestForm.city}
+                                onChange={handleInput}
+                                style={{ flex: "1" }}
+                            >
+                                {requestForm.state &&
+                                    cities[requestForm.state].map((city) => (
+                                        <MenuItem value={city}>{city}</MenuItem>
+                                    ))}
+                            </Select>
+                        </div>
                     </div>
                     {requestForm.requestType && (
                         <>
@@ -264,7 +251,11 @@ function NewRequest() {
                         </>
                     )}
                     <div className={classes.chooseFile}>
-                        <label>Image to support your request: </label>
+                        <label>
+                            {requestForm.requestType !== "Monetary"
+                                ? "Image to support your request:"
+                                : "Hospital bill or other relevant document: "}
+                        </label>
                         <input
                             type="file"
                             name="proofImage"

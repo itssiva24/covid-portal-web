@@ -38,6 +38,16 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         marginTop: 20,
         justifyContent: "space-between",
+        flexWrap: "wrap",
+    },
+    addressItem: {
+        display: "flex",
+        alignItems: "center",
+        width: "40%",
+        [theme.breakpoints.down("xs")]: {
+            width: "100%",
+            marginTop: 12,
+        },
     },
     chooseFile: {
         display: "flex",
