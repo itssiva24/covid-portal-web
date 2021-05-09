@@ -35,8 +35,6 @@ const useAddVolunteer = () => {
         dispatchEmailAction({ type: "clear" });
     };
 
-    console.log(emailList);
-
     const addVolunteers = async (emailList) => {
         if (!emailList) return null;
 
