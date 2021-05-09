@@ -21,21 +21,23 @@ const useAddVolunteer = () => {
         }
     }, new Set());
 
-    const addEmail = (email) =>{
-        if(!email) return ;
-        dispatchEmailAction({type:"add", value:email})
-    }
-    const removeEmail = (email) =>{
-        dispatchEmailAction({type:"remove", value:email})
-        
-        // do not remove below line
-        setEmail(email)
-    }
-    const clearEmailList = ()=>{
-        dispatchEmailAction({type:"clear"})
-    }
+    const addEmail = (email) => {
+        if (!email) return;
+        dispatchEmailAction({ type: "add", value: email });
+    };
+    const removeEmail = (email) => {
+        dispatchEmailAction({ type: "remove", value: email });
 
-    const addVolunteer = async (emailList) => {
+        // do not remove below line
+        setEmail(email);
+    };
+    const clearEmailList = () => {
+        dispatchEmailAction({ type: "clear" });
+    };
+
+    console.log(emailList);
+
+    const addVolunteers = async (emailList) => {
         if (!emailList) return null;
 
         try {
@@ -65,24 +67,33 @@ const useAddVolunteer = () => {
         setLoading(true);
         try {
             const n = 10; // max elements in array firebase can support in one query
-            const fullEmailList =  [...emailList].map(e=>e.toLowerCase().trim());
-            (new Array(Math.ceil(fullEmailList.length / n))).fill()
-            .map(_ => fullEmailList.splice(0, n)).forEach(async (list)=>{
-                console.log(list)
-                await addVolunteer(list);
-            })
+            const fullEmailList = [...emailList].map((e) =>
+                e.toLowerCase().trim()
+            );
+            const steps = Math.ceil(fullEmailList.length / n);
+
+            const updateRole = async (fullEmailList) => {
+                for (let i = 0; i < steps; i++) {
+                    await addVolunteers(
+                        fullEmailList.splice(i * n, (i + 1) * n)
+                    );
+                }
+            };
+
+            updateRole(fullEmailList);
+
             setMessage("Added Successfully!");
         } catch (error) {
-            setMessage("Sorry something went wrong, Try adding again")
+            setMessage("Sorry something went wrong, Try adding again");
             console.error(error);
-        } finally{
-            clearEmailList()
+        } finally {
+            clearEmailList();
             setEmail("");
             setLoading(false);
         }
     };
 
-    return { 
+    return {
         handleSubmit,
         loading,
         message,
