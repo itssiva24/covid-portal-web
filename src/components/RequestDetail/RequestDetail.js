@@ -94,13 +94,8 @@ export default withAuthorization(
         setOpenPayModal,
     } = useGetRquestDetails(id);
 
-    console.log(request)
-    if (!fetched)
-        return (
-            <div className={classes.root}>
-                <Loader />;
-            </div>
-        );
+    console.log(request);
+    if (!fetched) return <Loader />;
     else
         return Object.keys(request).length !== 0 ? (
             <Container maxWidth="sm" className={classes.root}>
@@ -110,12 +105,17 @@ export default withAuthorization(
                         alt={`${request.createdBy}`}
                         src={request.imageUrl}
                     ></Avatar>
-                    <Typography variant="p" className={classes.name}>
+                    <Typography variant="body3" className={classes.headerText}>
                         {request.createdBy}
                     </Typography>
-                    <Typography variant="body1">
-                        {toDateTime(request.createdAt)}
-                    </Typography>
+                    <div>
+                        <Typography
+                            variant="body3"
+                            className={classes.headerText}
+                        >
+                            {toDateTime(request.createdAt)}
+                        </Typography>
+                    </div>
                 </Box>
                 <Box className={classes.messageBox}>
                     <Typography variant="h6">{request.title}</Typography>
@@ -124,27 +124,31 @@ export default withAuthorization(
                     </Typography>
                 </Box>
                 <Box className={classes.imageBox}>
-                        <img
-                            src={request.proofImageURL}
-                            className={classes.image}
-                            alt=""
-                        />
+                    <img
+                        src={request.proofImageURL}
+                        className={classes.image}
+                        alt=""
+                    />
                 </Box>
-                {request.type==="Monetary" &&
-                    <Box style={{
-                        display:"flex",
-                        justifyContent:"center",
-                        margin:"10px"
-                    }}>
-
-                        <Button variant="contained" color="primary"
-                            onClick={()=>{
-                                setOpenPayModal(true)
-                            }}>
+                {request.type === "Monetary" && (
+                    <Box
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            margin: "10px",
+                        }}
+                    >
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                setOpenPayModal(true);
+                            }}
+                        >
                             Donate Money
                         </Button>
                     </Box>
-                }
+                )}
                 <Box className={classes.footer}>
                     <Button variant="outlined" color="primary" size="small">
                         {request.state === "" ? "State N/A" : request.state}
@@ -199,12 +203,13 @@ export default withAuthorization(
                         open={openResolveRequestModal}
                         handleClose={handleClose}
                     />
-                    {request.type==="Monetary" &&
+                    {request.type === "Monetary" && (
                         <PayDialog
-                        request={request}
-                        open={openPayModal}
-                        handleClose={handleClose}
-                    />}
+                            request={request}
+                            open={openPayModal}
+                            handleClose={handleClose}
+                        />
+                    )}
                 </Box>
             </Container>
         ) : (
