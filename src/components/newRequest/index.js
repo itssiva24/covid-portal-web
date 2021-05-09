@@ -171,7 +171,7 @@ function NewRequest() {
                                 label="Contact Number"
                                 id="outlined-basic"
                                 required
-                                name="pateintNumber"
+                                name="patientNumber"
                                 value={requestForm.patientNumber}
                                 className={classes.textField}
                                 onChange={handleInput}
@@ -180,9 +180,27 @@ function NewRequest() {
                                 label="SPO2 level"
                                 id="outlined-basic"
                                 required
-                                name="pateintSpo2Level"
+                                name="patientSpo2Level"
                                 type="number"
                                 value={requestForm.patientSpo2Level}
+                                className={classes.textField}
+                                onChange={handleInput}
+                            />
+                            <TextField
+                                label="CT Severity or CORADS Index"
+                                id="outlined-basic"
+                                name="patientCTSeverityOrCoradsIndex"
+                                value={
+                                    requestForm.patientCTSeverityOrCoradsIndex
+                                }
+                                className={classes.textField}
+                                onChange={handleInput}
+                            />
+                            <TextField
+                                label="RT-PCR/PCR Test if any"
+                                id="outlined-basic"
+                                name="patientRTPCR"
+                                value={requestForm.patientRTPCR}
                                 className={classes.textField}
                                 onChange={handleInput}
                             />
