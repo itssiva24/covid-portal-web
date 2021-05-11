@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         alignItems: "center",
         width: "40%",
-        [theme.breakpoints.down("xs")]: {
+        [theme.breakpoints.down("sm")]: {
             width: "100%",
             marginTop: 12,
         },
