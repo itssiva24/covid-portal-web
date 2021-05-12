@@ -22,13 +22,10 @@ export const useStyles = makeStyles((theme) => ({
         background: theme.palette.grey[800],
         padding: "20px",
         margin: "16px auto",
-        borderRadius: 20,
-
+        borderRadius: 8,
         "&:hover": {
             background: theme.palette.grey[700],
         },
-        borderWidth: 10,
-        borderColor: theme.palette.grey[100],
     },
     header: {
         display: "flex",
@@ -97,12 +94,8 @@ export default withAuthorization(
         setOpenPayModal,
     } = useGetRquestDetails(id);
 
-    if (!fetched)
-        return (
-            <div>
-                <Loader />
-            </div>
-        );
+    console.log(request);
+    if (!fetched) return <Loader />;
     else
         return Object.keys(request).length !== 0 ? (
             <Container maxWidth="sm" className={classes.root}>
@@ -125,37 +118,44 @@ export default withAuthorization(
                     </div>
                 </Box>
                 <Box className={classes.messageBox}>
-                    <Typography variant="h6" className={classes.title}>
-                        {request.title}
-                    </Typography>
+                    <Typography variant="h6">{request.title}</Typography>
                     <Typography variant="body2">
                         {request.description ? `${request.description}` : ""}
                     </Typography>
                 </Box>
                 <Box className={classes.imageBox}>
-                        <img
-                            src={request.proofImageURL}
-                            className={classes.image}
-                            alt=""
-                        />
+                    <img
+                        src={request.proofImageURL}
+                        className={classes.image}
+                        alt=""
+                    />
                 </Box>
-                {request.type==="Monetary" &&
-                    <Box>
-                        <Button variant="contained" color="primary"
-                            onClick={()=>{
-                                setOpenPayModal(true)
-                            }}>
+                {request.type === "Monetary" && (
+                    <Box
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            margin: "10px",
+                        }}
+                    >
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                setOpenPayModal(true);
+                            }}
+                        >
                             Donate Money
                         </Button>
                     </Box>
-                }
+                )}
                 <Box className={classes.footer}>
                     <Button variant="outlined" color="primary" size="small">
                         {request.state === "" ? "State N/A" : request.state}
                     </Button>
                     <Button
                         variant="outlined"
-                        color={request.resolved ? "success" : "grey"}
+                        color={request.resolved ? "primary" : "secondary"}
                         size="small"
                     >
                         {request.resolved ? "Resolved" : "Not Resolved"}
@@ -187,7 +187,7 @@ export default withAuthorization(
                         request.assignedTo !== authUser.uid && (
                             <Button
                                 variant="outlined"
-                                color="secondary"
+                                color="success"
                                 size="small"
                             >
                                 ASSIGNED
@@ -203,12 +203,13 @@ export default withAuthorization(
                         open={openResolveRequestModal}
                         handleClose={handleClose}
                     />
-                    {request.type==="Monetary" &&
+                    {request.type === "Monetary" && (
                         <PayDialog
-                        request={request}
-                        open={openPayModal}
-                        handleClose={handleClose}
-                    />}
+                            request={request}
+                            open={openPayModal}
+                            handleClose={handleClose}
+                        />
+                    )}
                 </Box>
             </Container>
         ) : (

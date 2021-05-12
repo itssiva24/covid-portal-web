@@ -31,17 +31,9 @@ const useGetRquestDetails = (id) => {
     }, [id]);
 
     function toDateTime(secs) {
-        const options = {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-        };
-        const t = new Date(0); // Epoch
+        var t = new Date(0); // Epoch
         t.setMilliseconds(secs);
-        return t.toLocaleString("en-UK", options);
+        return t.toLocaleString();
     }
 
     const handleClose = () => {
