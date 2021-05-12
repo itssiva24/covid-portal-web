@@ -6,3 +6,30 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+.MuiTable-root {
+    border-collapse: separate !important;
+    border-spacing: 8px !important;
+    box-sizing: border-box;
+    text-indent: 0;
+    background-color: #121212;
+}
+
+.MuiTableCell-root {
+    border: none !important;
+    border-radius: 4px;
+    margin: 1rem !important;
+    position: relative;
+    min-width: 128px;
+}
+
+.MuiTableCell-head,
+th.MuiTableCell-root.MuiTableCell-body {
+    background-color: rgb(30, 30, 30);
+}
+tr:first-of-type th:first-of-type,
+th.MuiTableCell-root.MuiTableCell-body {
+    position: sticky;
+    left: 0;
+    z-index: 110;
+}

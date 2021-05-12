@@ -3,11 +3,11 @@ import { firestore } from "../contexts/firebase";
 import { UserRole } from "../utils";
 
 const useAssignVolunteer = (id, handleClose) => {
-    const [volunteer, setVolunteer] = useState("");
+    const [volunteer, setVolunteer] = useState({ name: "", id: "" });
     const [volunteers, setVolunteers] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const assignVolunteer = async (id, requestId) => {
+    const assignVolunteer = async (id, name, requestId) => {
         if (!id) return null;
 
         try {
@@ -19,6 +19,7 @@ const useAssignVolunteer = (id, handleClose) => {
             return await requestRef.set(
                 {
                     assignedTo: id,
+                    assignedToVolunteer: name,
                 },
                 { merge: true }
             );
@@ -50,15 +51,19 @@ const useAssignVolunteer = (id, handleClose) => {
     }, [id]);
 
     const handleChange = (event) => {
-        setVolunteer(event.target.value);
+        const vId = event.target.value;
+        const { displayName: name, id } = volunteers.filter(
+            (v) => v.id === vId
+        )[0];
+        setVolunteer({ name, id });
     };
 
     const handleSubmit = async () => {
-        if (!volunteer) return;
+        if (!volunteer.id || !volunteer.name) return;
 
         try {
             setLoading(true);
-            await assignVolunteer(volunteer, id);
+            await assignVolunteer(volunteer.id, volunteer.name, id);
         } catch (error) {
             console.error(error);
         }

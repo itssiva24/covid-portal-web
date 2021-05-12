@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
 import { firestore } from "../contexts/firebase";
 
-const useFetchRequests = () => {
+const useFetchRequests = (type) => {
     const [request, setRequest] = useState([]);
     const [fetched, setFetched] = useState(false);
     const [lastDoc, setLastDoc] = useState();
@@ -12,6 +12,7 @@ const useFetchRequests = () => {
             const subscriber = firestore
                 .collection("requests")
                 .where("resolved", "==", false)
+                .where("type", "==", type)
                 .orderBy("createdAt", "desc")
                 .limit(10)
                 .onSnapshot((querySnapshot) => {
@@ -32,7 +33,7 @@ const useFetchRequests = () => {
         } catch (err) {
             console.log("Error in Fetching Request", err);
         }
-    }, []);
+    }, [type]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadMore = useCallback(
@@ -42,6 +43,7 @@ const useFetchRequests = () => {
                     const nextDocuments = firestore
                         .collection("requests")
                         .where("resolved", "==", false)
+                        .where("type", "==", type)
                         .orderBy("createdAt", "desc")
                         .startAfter(lastDoc)
                         .limit(5)

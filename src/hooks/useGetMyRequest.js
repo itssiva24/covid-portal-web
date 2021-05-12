@@ -2,7 +2,7 @@ import { debounce } from "@material-ui/core";
 import { useState, useEffect, useCallback } from "react";
 import { firestore } from "../contexts/firebase";
 
-const useGetMyRequest = (uid) => {
+const useGetMyRequest = (uid, type) => {
     const [myRequests, setMyRequests] = useState([]);
     const [lastDoc, setLastDoc] = useState();
     const [fetched, setFetched] = useState(false);
@@ -12,6 +12,7 @@ const useGetMyRequest = (uid) => {
             const requestsRef = firestore
                 .collection("requests")
                 .where("createdById", "==", uid)
+                .where("type", "==", type)
                 .orderBy("createdAt", "desc")
                 .limit(10)
                 .onSnapshot((snapshot) => {
@@ -30,7 +31,7 @@ const useGetMyRequest = (uid) => {
             setFetched(true);
             console.log("Error in getting my request", err);
         }
-    }, [uid]);
+    }, [uid, type]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadMore = useCallback(
@@ -40,6 +41,7 @@ const useGetMyRequest = (uid) => {
                     const nextDocuments = firestore
                         .collection("requests")
                         .where("createdById", "==", uid)
+                        .where("type", "==", type)
                         .orderBy("createdAt", "desc")
                         .startAfter(lastDoc)
                         .limit(5)
