@@ -9,9 +9,9 @@ import {
 } from "@material-ui/core";
 import AuthUserContext from "../../contexts/authUserContext";
 import useUploadRequest from "../../hooks/useUploadRequest";
-import InputLabel from "@material-ui/core/InputLabel"
-import Select from "@material-ui/core/Select"
-import MenuItem from "@material-ui/core/MenuItem"
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -77,6 +77,8 @@ function NewRequest() {
         uploading,
     } = useUploadRequest(authUser);
 
+    console.log(requestForm);
+
     return (
         <div>
             <Paper className={classes.root}>
@@ -128,9 +130,12 @@ function NewRequest() {
                             style={{ display: "flex", flex: 1, marginLeft: 10 }}
                         />
                     </div>
-                    <InputLabel id="demo-simple-select-label" style={
-                        {marginTop:"1em"}
-                    }>Type</InputLabel>
+                    <InputLabel
+                        id="demo-simple-select-label"
+                        style={{ marginTop: "2em" }}
+                    >
+                        Type
+                    </InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -142,26 +147,36 @@ function NewRequest() {
                         <MenuItem value="Plasma">Plasma</MenuItem>
                         <MenuItem value="Monetary">Monetary</MenuItem>
                     </Select>
-                    {
-                        requestForm.requestType === "Monetary" && <>
-                            <TextField id="standard-basic" name="recipientUPIID" className={classes.textField}
-                            label="Recipient UPI ID" required />
-                            <TextField id="standard-basic" name="recipientUPIName" className={classes.textField}
-                            label="Recipient Name " required />
+                    {requestForm.requestType === "Monetary" && (
+                        <>
+                            <TextField
+                                id="standard-basic"
+                                name="recipientUPIID"
+                                className={classes.textField}
+                                label="Recipient UPI ID"
+                                required
+                            />
+                            <TextField
+                                id="standard-basic"
+                                name="recipientUPIName"
+                                className={classes.textField}
+                                label="Recipient Name "
+                                required
+                            />
                             <div>
                                 <label>
                                     UPI QRcode Image
                                     <input
-                                    type="file"
-                                    name="QRCodeImage"
-                                    required
-                                    onChange={handleFile}
-                                    className={classes.chooseFile}
-                                />
+                                        type="file"
+                                        name="QRCodeImage"
+                                        required
+                                        onChange={handleFile}
+                                        className={classes.chooseFile}
+                                    />
                                 </label>
                             </div>
                         </>
-                    }
+                    )}
                     <div
                         style={{
                             display: "flex",

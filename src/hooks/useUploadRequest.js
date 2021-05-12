@@ -2,18 +2,17 @@ import firebase from "firebase";
 import { useReducer, useState } from "react";
 import { firestore } from "../contexts/firebase";
 
-
 const initialRequestFormState = {
     title: "",
     description: "",
     city: "",
     state: "",
     proofImage: "",
-    requestType:"",
-    recipentUPIID:"",
-    recipentUPIName:"",
-    QRCodeImage:""
-}
+    requestType: "Oxygen",
+    recipentUPIID: "",
+    recipentUPIName: "",
+    QRCodeImage: "",
+};
 
 const useUploadRequest = (authUser) => {
     const [requestForm, setRequestForm] = useReducer(
@@ -27,7 +26,6 @@ const useUploadRequest = (authUser) => {
     const handleInput = (evt) => {
         const name = evt.target.name;
         const newValue = evt.target.value;
-        console.log({[name]:newValue})
         setRequestForm({ [name]: newValue });
     };
 
@@ -93,9 +91,9 @@ const useUploadRequest = (authUser) => {
             title: requestForm.title,
             ...(requestForm.description,
             { description: requestForm.description }),
-            type:requestForm.requestType,
+            type: requestForm.requestType,
             QRCodeURL: qr,
-            UPIID:requestForm.UPIID,
+            UPIID: requestForm.UPIID,
             city: requestForm.city,
             state: requestForm.state,
             proofImageURL: proof,
