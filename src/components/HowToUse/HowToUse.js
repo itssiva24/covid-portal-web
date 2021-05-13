@@ -14,7 +14,8 @@ const condition = (authUser) => !!authUser;
 
 const useStyles = makeStyles((theme) => ({
     link: {
-        color: theme.palette.primary,
+        color: theme.palette.primary.main,
+        textDecoration: "none",
     },
 }));
 
@@ -58,7 +59,7 @@ export default withAuthorization(
                         </Link>
                         <Typography component="span">
                             {" "}
-                            and Enter the necessary fields, upload necessary
+                            and enter the necessary fields, upload necessary
                             documents/images.
                         </Typography>
                     </ListItemText>

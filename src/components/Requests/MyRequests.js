@@ -68,6 +68,7 @@ export default withAuthorization(
                         fetched,
                         refresh,
                         setRefresh,
+                        type,
                     }}
                 />
             </Paper>

@@ -1,41 +1,61 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
+import { firestore } from "../../contexts/firebase";
 import {
     Button,
     TextField,
     Paper,
     Typography,
     LinearProgress,
+    Input,
+    CircularProgress,
 } from "@material-ui/core";
 import AuthUserContext from "../../contexts/authUserContext";
 import useUploadRequest from "../../hooks/useUploadRequest";
 import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import useStyles from "./styles";
+import useStyles from "../newRequest/styles";
 import states from "../../constants/states.json";
-import UploadResultDialog from "./UploadResultDialog";
-import { REQUEST_TYPE, REQUIREMENT } from "../../utils";
+import cities from "../../constants/cities.json";
+import UploadResultDialog from "../newRequest/UploadResultDialog";
+import { REQUEST_TYPE } from "../../utils";
 
-function NewRequest() {
+export default function EditRequest(props) {
     const classes = useStyles();
-    const { authUser } = useContext(AuthUserContext);
-    const {
-        handleFile,
-        requestForm,
-        handleInput,
-        handleSubmit,
-        uploading,
-        handleClose,
-        uploadResult,
-        openUploadResultModal,
-    } = useUploadRequest(authUser);
+
+    const initialRequestState = props.location.request;
+
+    const [recReq, setRecReq] = useState({
+        ...initialRequestState,
+        state:
+            Object.keys(states).filter(
+                (key) => states[key] === initialRequestState.state
+            )[0] || initialRequestState.state,
+        requestType: initialRequestState.type,
+    });
+    const [loading, setLoading] = useState(false);
+
+    console.log(recReq);
+
+    const handleInput = (evt) => {
+        const name = evt.target.name;
+        const newValue = evt.target.value;
+        setRecReq({ ...recReq, [name]: newValue });
+    };
+
+    const handleSubmit = async (evt) => {
+        evt.preventDefault();
+        setLoading(true);
+        const requestRef = firestore.collection("requests").doc(recReq.id);
+        await requestRef.set({ ...recReq, state: states[recReq.state] });
+        setLoading(false);
+    };
 
     return (
         <div>
             <Paper className={classes.root}>
                 <Typography variant="h5" component="h3">
-                    New Request
+                    Edit Request
                 </Typography>
                 <form className={classes.form} onSubmit={handleSubmit}>
                     <div
@@ -59,7 +79,7 @@ function NewRequest() {
                             id="demo-simple-select"
                             name="requestType"
                             required
-                            value={requestForm.requestType}
+                            value={recReq.requestType}
                             style={{
                                 flex: "1",
                             }}
@@ -73,40 +93,6 @@ function NewRequest() {
                             </MenuItem>
                         </Select>
                     </div>
-                    {requestForm.requestType===REQUEST_TYPE.Medical && (
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                marginTop: 16,
-                            }}
-                        >
-                            <InputLabel
-                                id="demo-simple-select-label"
-                                style={{
-                                    marginRight: 10,
-                                }}
-                                required
-                            >
-                                Requirement
-                            </InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                name="requirement"
-                                required
-                                value={requestForm.requirement}
-                                style={{
-                                    flex: "1",
-                                }}
-                                onChange={handleInput}
-                            >
-                                {Object.values(REQUIREMENT).map(v=>(
-                                    <MenuItem value={v}>{v}</MenuItem>
-                                ))}
-                            </Select>
-                        </div>
-                    )}
                     <Typography
                         component="h5"
                         variant="h6"
@@ -121,7 +107,7 @@ function NewRequest() {
                         required
                         multiline
                         name="title"
-                        value={requestForm.title}
+                        value={recReq.title}
                         className={classes.textField}
                         onChange={handleInput}
                     />
@@ -134,7 +120,7 @@ function NewRequest() {
                         variant="outlined"
                         name="description"
                         className={classes.textField}
-                        value={requestForm.description}
+                        value={recReq.description}
                         onChange={handleInput}
                     />
                     <div className={classes.address}>
@@ -151,7 +137,7 @@ function NewRequest() {
                                 id="demo-simple-select"
                                 name="state"
                                 required
-                                value={requestForm.state}
+                                defaultValue={recReq.state}
                                 onChange={handleInput}
                                 style={{ flex: "1" }}
                             >
@@ -187,13 +173,13 @@ function NewRequest() {
                             <Input
                                 name="city"
                                 required
-                                value={requestForm.city}
+                                value={recReq.city}
                                 onChange={handleInput}
                                 style={{ flex: "1" }}
                             ></Input>
                         </div>
                     </div>
-                    {requestForm.requestType && (
+                    {recReq.requestType && (
                         <>
                             <Typography
                                 component="h5"
@@ -207,7 +193,7 @@ function NewRequest() {
                                 id="outlined-basic"
                                 required
                                 name="patientName"
-                                value={requestForm.patientName}
+                                value={recReq.patientName}
                                 className={classes.textField}
                                 onChange={handleInput}
                             />
@@ -216,7 +202,7 @@ function NewRequest() {
                                 id="outlined-basic"
                                 required
                                 name="patientNumber"
-                                value={requestForm.patientNumber}
+                                value={recReq.patientNumber}
                                 className={classes.textField}
                                 onChange={handleInput}
                             />
@@ -226,7 +212,7 @@ function NewRequest() {
                                 required
                                 name="patientSpo2Level"
                                 type="number"
-                                value={requestForm.patientSpo2Level}
+                                value={recReq.patientSpo2Level}
                                 className={classes.textField}
                                 onChange={handleInput}
                             />
@@ -234,9 +220,7 @@ function NewRequest() {
                                 label="CT Severity or CORADS Index"
                                 id="outlined-basic"
                                 name="patientCTSeverityOrCoradsIndex"
-                                value={
-                                    requestForm.patientCTSeverityOrCoradsIndex
-                                }
+                                value={recReq.patientCTSeverityOrCoradsIndex}
                                 className={classes.textField}
                                 onChange={handleInput}
                             />
@@ -244,7 +228,7 @@ function NewRequest() {
                                 label="RT-PCR/PCR Test(if any)"
                                 id="outlined-basic"
                                 name="patientRTPCR"
-                                value={requestForm.patientRTPCR}
+                                value={recReq.patientRTPCR}
                                 className={classes.textField}
                                 onChange={handleInput}
                             />
@@ -260,7 +244,7 @@ function NewRequest() {
                                 id="outlined-basic"
                                 required
                                 name="caregiverName"
-                                value={requestForm.caregiverName}
+                                value={recReq.caregiverName}
                                 className={classes.textField}
                                 onChange={handleInput}
                             />
@@ -269,14 +253,14 @@ function NewRequest() {
                                 id="outlined-basic"
                                 required
                                 name="caregiverNumber"
-                                value={requestForm.caregiverNumber}
+                                value={recReq.caregiverNumber}
                                 className={classes.textField}
                                 onChange={handleInput}
                             />
                         </>
                     )}
 
-                    {requestForm.requestType === REQUEST_TYPE.Monetary && (
+                    {recReq.requestType === REQUEST_TYPE.Monetary && (
                         <>
                             <Typography
                                 component="h5"
@@ -290,8 +274,8 @@ function NewRequest() {
                                 name="recipientUPIID"
                                 className={classes.textField}
                                 label="Recipient UPI ID"
+                                value={recReq.recipientUPIID}
                                 onChange={handleInput}
-                                value={requestForm.recipientUPIID}
                                 required
                             />
                             <TextField
@@ -299,8 +283,8 @@ function NewRequest() {
                                 name="recipientUPIName"
                                 className={classes.textField}
                                 label="Recipient Name "
+                                value={recReq.recipientUPIName}
                                 onChange={handleInput}
-                                value={requestForm.recipientUPIName}
                                 required
                             />
                             <TextField
@@ -309,58 +293,60 @@ function NewRequest() {
                                 placeholder="in Rupees"
                                 className={classes.textField}
                                 label="Amount needed "
-                                value={requestForm.amountNeeded}
+                                value={recReq.amountNeeded}
                                 onChange={handleInput}
                                 type="number"
                                 required
                             />
-                            <div className={classes.chooseFile}>
+                            {/* <div className={classes.chooseFile}>
                                 <label>UPI QR code Image: </label>
                                 <input
                                     type="file"
                                     name="QRCodeImage"
                                     required
-                                    onChange={handleFile}
+                                    // onChange={handleFile}
                                 />
-                            </div>
+                            </div> */}
                         </>
                     )}
-                    <div className={classes.chooseFile}>
+                    {/* <div className={classes.chooseFile}>
                         <label>
-                            {requestForm.requestType !== REQUEST_TYPE.Monetary
+                            {recReq.type !== REQUEST_TYPE.Monetary
                                 ? "Image to support your request:"
                                 : "Hospital bill or other relevant document: "}
                         </label>
                         <input
                             type="file"
                             name="proofImage"
-                            required
-                            onChange={handleFile}
+                            // required
+                            // onChange={handleFile}
                         />
-                    </div>
+                    </div> */}
                     <Button
                         type="submit"
                         variant="contained"
                         color="primary"
                         className={classes.button}
                     >
-                        Submit
+                        {loading ? (
+                            <CircularProgress color="secondary" />
+                        ) : (
+                            "Submit"
+                        )}
                     </Button>
 
-                    {uploading && (
+                    {/* {uploading && (
                         <div className={classes.progress}>
                             <LinearProgress />
                         </div>
-                    )}
+                    )} */}
                 </form>
             </Paper>
-            <UploadResultDialog
+            {/* <UploadResultDialog
                 result={uploadResult}
                 open={openUploadResultModal}
                 handleClose={handleClose}
-            ></UploadResultDialog>
+            ></UploadResultDialog> */}
         </div>
     );
 }
-
-export default NewRequest;

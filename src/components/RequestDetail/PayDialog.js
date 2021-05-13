@@ -32,7 +32,11 @@ export default function PayDialog({ request, open, handleClose }) {
                     </Button>
                     <Button color="primary" variant="contained">
                         <a
+<<<<<<< HEAD
                             style={{ color: "#fff", textDecoration: "none", width:"100%", height:"100%" }}
+=======
+                            style={{ color: "#fff", textDecoration: "none" }}
+>>>>>>> upstream/master
                             href={`upi://pay?pa=${request.recipientUPIID}&pn=${request.recipientUPIName}&cu=INR`}
                         >
                             Open in App

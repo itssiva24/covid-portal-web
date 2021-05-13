@@ -9,6 +9,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import SubjectIcon from "@material-ui/icons/Subject";
 import AddIcon from "@material-ui/icons/Add";
+import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import { useTheme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import useStyles from "./styles";
@@ -16,7 +17,7 @@ import * as ROUTES from "../../constants/routes";
 import AuthUserContext from "../../contexts";
 import { UserRole } from "../../utils";
 import { Typography } from "@material-ui/core";
-import InfoOutlined from "@material-ui/icons/InfoOutlined"
+import InfoOutlined from "@material-ui/icons/InfoOutlined";
 
 const navLinks = [
     {
@@ -117,9 +118,7 @@ const drawer = (classes, history, authUser) => {
                 <ListItem
                     button
                     key="How to use"
-                    selected={
-                        history.location.pathname === ROUTES.HOW_TO_USE
-                    }
+                    selected={history.location.pathname === ROUTES.HOW_TO_USE}
                     onClick={() => {
                         history.push(ROUTES.HOW_TO_USE);
                     }}
@@ -127,15 +126,29 @@ const drawer = (classes, history, authUser) => {
                     <CustomListIcon NavIcon={InfoOutlined} />
                     <ListItemText primary="How To Use" />
                 </ListItem>
+                <ListItem
+                    button
+                    key="Contact Us"
+                    selected={history.location.pathname === ROUTES.CONTACT_US}
+                    onClick={() => {
+                        history.push(ROUTES.CONTACT_US);
+                    }}
+                >
+                    <CustomListIcon NavIcon={ContactSupportIcon} />
+                    <ListItemText primary="Contact Us" />
+                </ListItem>
             </List>
 
-            <footer style={{
-                marginTop:"auto",
-                padding:20
-            }}>
-                <Typography variant="body1" style={{
-                    textAlign:"center"
-                }}> Made with love by<br /> Institute Webops</Typography>
+            <footer
+                style={{
+                    marginTop: "auto",
+                    padding: "20px 10px",
+                    fontSize: 13,
+                }}
+            >
+                <Typography variant="p">
+                    Made with &#10084;&#65039; by Institute Webops
+                </Typography>
             </footer>
         </>
     );

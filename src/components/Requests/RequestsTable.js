@@ -11,6 +11,8 @@ import {
     TableHead,
     TableRow,
     Button,
+    LinearProgress,
+    Typography,
 } from "@material-ui/core";
 import { getDate, REQUEST_TYPE } from "../../utils";
 
@@ -27,9 +29,16 @@ const useStyles = makeStyles((theme) => ({
     title: {
         fontWeight: 600,
     },
+    mediumBox: {
+        minWidth: 178,
+        maxWidth: 196,
+    },
+    largeBox: {
+        minWidth: 240,
+    },
     button: {
         [theme.breakpoints.down("xs")]: {
-            fontSize: 10,
+            fontSize: 12,
         },
     },
 }));
@@ -42,6 +51,7 @@ export default function ({
     fetched,
     refresh,
     setRefresh,
+    type,
 }) {
     const classes = useStyles();
 
@@ -188,7 +198,9 @@ export default function ({
                                             </Button>
                                         </TableCell>
 
-                                        <TableCell>
+                                        <TableCell
+                                            className={classes.mediumBox}
+                                        >
                                             <Button
                                                 variant="outlined"
                                                 color={

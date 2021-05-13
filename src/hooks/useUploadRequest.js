@@ -76,7 +76,9 @@ const useUploadRequest = (authUser) => {
             const proofUploadTask = firebase
                 .storage()
                 .ref()
-                .child(`requests/proof/${requestForm.proofImage.name}`)
+                .child(
+                    `requests/${authUser.email}/proof/${requestForm.proofImage.name}`
+                )
                 .put(requestForm.proofImage);
 
             const handleSuccess = async () => {
@@ -88,7 +90,7 @@ const useUploadRequest = (authUser) => {
                         .storage()
                         .ref()
                         .child(
-                            `requests/qrcode/${requestForm.QRCodeImage.name}`
+                            `requests/${authUser.email}/qrcode/${requestForm.QRCodeImage.name}`
                         )
                         .put(requestForm.QRCodeImage);
                     qrcodeUploadTask.on(
@@ -153,6 +155,8 @@ const useUploadRequest = (authUser) => {
             caregiverNumber: requestForm.caregiverNumber,
             recipientUPIID: requestForm.recipientUPIID,
             recipientUPIName: requestForm.recipientUPIName,
+            amountNeeded: parseInt(requestForm.amountNeeded),
+            amountCollected: 0,
             QRCodeURL: qrcodeImageDownloadURL,
             proofImageURL: proofImageDownloadURL,
             resolved: false,

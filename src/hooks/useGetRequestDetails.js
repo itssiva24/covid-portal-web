@@ -3,11 +3,13 @@ import { firestore } from "../contexts/firebase";
 
 const useGetRquestDetails = (id) => {
     const [request, setRequest] = useState({});
-    const [openAssignVolunteerModal, setOpenAssignVolnteerModal] = useState(false);
+    const [openAssignVolunteerModal, setOpenAssignVolnteerModal] =
+        useState(false);
     const [openPayModal, setOpenPayModal] = useState(false);
-    const [openResolveRequestModal, setOpenResolveRequestModal] = useState(
-        false
-    );
+    const [openUpdateCollectedAmountModal, setOpenUpdateCollectedAmountModal] =
+        useState(false);
+    const [openResolveRequestModal, setOpenResolveRequestModal] =
+        useState(false);
     const [fetched, setFetched] = useState(false);
 
     useEffect(() => {
@@ -40,6 +42,7 @@ const useGetRquestDetails = (id) => {
         setOpenAssignVolnteerModal(false);
         setOpenResolveRequestModal(false);
         setOpenPayModal(false);
+        setOpenUpdateCollectedAmountModal(false);
     };
 
     return {
@@ -50,9 +53,11 @@ const useGetRquestDetails = (id) => {
         openAssignVolunteerModal,
         openResolveRequestModal,
         openPayModal,
+        openUpdateCollectedAmountModal,
         setOpenAssignVolnteerModal,
         setOpenResolveRequestModal,
         setOpenPayModal,
+        setOpenUpdateCollectedAmountModal,
     };
 };
 
