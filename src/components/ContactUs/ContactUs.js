@@ -10,11 +10,15 @@ const details = [
     {
         name: "Chinmayi Gajula",
         pos: `Hostel Affairs Secretary`,
-        email: "ec_hosaf@smail.iitm.ac.in",
+        email: "sec_hosaf@smail.iitm.ac.in",
     },
     {
         name: "Institute WebOps",
         email: "institutewebops@gmail.com",
+    },
+    {
+        name: "Rahul Sundar",
+        email: "",
     },
 ];
 
@@ -45,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
                 ? theme.palette.grey[50]
                 : theme.palette.grey[900],
         margin: 5,
-        height: 150,
+        height: 120,
         padding: 10,
         [theme.breakpoints.down("sm")]: {
             width: "90%",
@@ -89,15 +93,17 @@ const ContactUs = () => {
                                     {det.pos} | IIT Madras
                                 </Typography>
                             )}
-                            <Typography variant="p">
-                                Email:&nbsp;
-                                <a
-                                    href={`mailto:${det.email}`}
-                                    className={classes.link}
-                                >
-                                    {det.email}
-                                </a>
-                            </Typography>
+                            {det.email && (
+                                <Typography variant="p">
+                                    Email:&nbsp;
+                                    <a
+                                        href={`mailto:${det.email}`}
+                                        className={classes.link}
+                                    >
+                                        {det.email}
+                                    </a>
+                                </Typography>
+                            )}
                         </div>
                     );
                 })}
