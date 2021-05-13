@@ -97,8 +97,8 @@ export default withAuthorization(
                 <ListItem component="li">
                     <ListItemText>
                         <Typography component="span">
-                            6. You can contribute by donating money or by
-                            becoming a volunteer!&nbsp;
+                            6. You can contribute by donating money in Monetary
+                            section or by becoming a volunteer!&nbsp;
                         </Typography>
                         <Link className={classes.link} to={ROUTES.CONTACT_US}>
                             Contact us
