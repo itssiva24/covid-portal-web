@@ -8,7 +8,8 @@ import { RootLayout } from "../components/layouts";
 import NewRequest from "../components/newRequest";
 import RequestDetail from "../components/RequestDetail";
 import { MyRequests, RequestsAssigned } from "../components/Requests";
-import HowToUse from "../components/HowToUse"
+import HowToUse from "../components/HowToUse";
+import ContactUs from "../components/ContactUs/ContactUs";
 
 export default withAuthUserProvider(({ Component, pageProps }) => {
     return (
@@ -47,6 +48,11 @@ export default withAuthUserProvider(({ Component, pageProps }) => {
                         exact
                         path={ROUTES.HOW_TO_USE}
                         component={HowToUse}
+                    ></Route>
+                    <Route
+                        exact
+                        path={ROUTES.CONTACT_US}
+                        component={ContactUs}
                     ></Route>
                 </RootLayout>
             </Switch>

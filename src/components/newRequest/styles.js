@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
                 ? theme.palette.grey[50]
                 : theme.palette.grey[900],
         borderRadius: 8,
-        marginTop: 8,
+        marginTop: 15,
     },
     sectionHeader: {
         marginTop: 16,
