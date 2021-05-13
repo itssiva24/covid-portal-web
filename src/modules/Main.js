@@ -8,6 +8,7 @@ import { RootLayout } from "../components/layouts";
 import NewRequest from "../components/newRequest";
 import RequestDetail from "../components/RequestDetail";
 import { MyRequests, RequestsAssigned } from "../components/Requests";
+import EditRequest from "../components/EditRequest";
 import HowToUse from "../components/HowToUse"
 
 export default withAuthUserProvider(({ Component, pageProps }) => {
@@ -45,6 +46,10 @@ export default withAuthUserProvider(({ Component, pageProps }) => {
                     ></Route>
                     <Route
                         exact
+                        path={ROUTES.EDIT_REQUEST}
+                        component={EditRequest}
+                    </Route>
+                    <Route>
                         path={ROUTES.HOW_TO_USE}
                         component={HowToUse}
                     ></Route>
