@@ -1,4 +1,4 @@
-import React from "react";
+import React  from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../Loader";
@@ -136,62 +136,62 @@ export default function ({
                                             {req.title.length > 24
                                                 ? `${req.title.slice(0, 24)}..`
                                                 : req.title}
-                                        </TableCell>
-                                        <TableCell>
-                                            {`${req.description.slice(
-                                                0,
-                                                42
-                                            )}...`}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Button
-                                                variant="outlined"
-                                                color="primary"
-                                                size="small"
-                                                className={classes.button}
-                                            >
-                                                {req.state === ""
-                                                    ? "State N/A"
-                                                    : req.state}
-                                            </Button>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Button
-                                                variant="outlined"
-                                                color={
-                                                    req.assignedTo
-                                                        ? "primary"
-                                                        : "default"
-                                                }
-                                                size="small"
-                                                className={classes.button}
-                                            >
-                                                {req.assignedTo
-                                                    ? req.assignedToVolunteer
-                                                    : "Not assigned"}
-                                            </Button>
-                                        </TableCell>
+                                    </TableCell>
+                                    <TableCell>
+                                        {`${req.description.slice(
+                                            0,
+                                            42
+                                        )}...`}
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="outlined"
+                                            color="primary"
+                                            size="small"
+                                            className={classes.button}
+                                        >
+                                            {req.state === ""
+                                                ? "State N/A"
+                                                : req.state}
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="outlined"
+                                            color={
+                                                req.assignedTo
+                                                    ? "primary"
+                                                    : "default"
+                                            }
+                                            size="small"
+                                            className={classes.button}
+                                        >
+                                            {req.assignedTo
+                                                ? req.assignedToVolunteer
+                                                : "Not assigned"}
+                                        </Button>
+                                    </TableCell>
 
-                                        <TableCell>
-                                            <Button
-                                                variant="outlined"
-                                                color={
-                                                    req.resolved
-                                                        ? "primary"
-                                                        : "secondary"
-                                                }
-                                                size="small"
-                                                className={classes.button}
-                                            >
-                                                {req.resolved
-                                                    ? "Resolved"
-                                                    : "Not resolved"}
-                                            </Button>
-                                        </TableCell>
-                                        <TableCell>
-                                            {getDate(req.createdAt)}
-                                        </TableCell>
-                                    </TableRow>
+                                    <TableCell>
+                                        <Button
+                                            variant="outlined"
+                                            color={
+                                                req.resolved
+                                                    ? "primary"
+                                                    : "secondary"
+                                            }
+                                            size="small"
+                                            className={classes.button}
+                                        >
+                                            {req.resolved
+                                                ? "Resolved"
+                                                : "Not resolved"}
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell>
+                                        {getDate(req.createdAt)}
+                                    </TableCell>
+                                </TableRow>
                                 );
                             })}
                         </TableBody>
