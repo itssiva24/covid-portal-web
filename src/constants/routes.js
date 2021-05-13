@@ -7,3 +7,4 @@ export const ME = "/me";
 export const REQUESTS_ASSIGNED = "/requestsAssigned";
 export const ADD_VOLUNTEER = "/addVolunteer";
 export const MY_REQUESTS = "/myRequests";
+export const HOW_TO_USE = "/how-to-use";
