@@ -33,7 +33,7 @@ export default function PayDialog({ request, open, handleClose }) {
                     <Button color="primary" variant="contained">
                         <a
                             style={{ color: "#fff", textDecoration: "none" }}
-                            to={`upi://pay?pa=${request.recipientUPIID}&pn=${request.recipientUPIName}&cu=INR`}
+                            href={`upi://pay?pa=${request.recipientUPIID}&pn=${request.recipientUPIName}&cu=INR`}
                         >
                             Open in App
                         </a>
