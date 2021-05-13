@@ -8,6 +8,7 @@ import { RootLayout } from "../components/layouts";
 import NewRequest from "../components/newRequest";
 import RequestDetail from "../components/RequestDetail";
 import { MyRequests, RequestsAssigned } from "../components/Requests";
+import EditRequest from "../components/EditRequest";
 
 export default withAuthUserProvider(({ Component, pageProps }) => {
     return (
@@ -41,6 +42,11 @@ export default withAuthUserProvider(({ Component, pageProps }) => {
                         exact
                         path={ROUTES.MY_REQUESTS}
                         component={MyRequests}
+                    ></Route>
+                    <Route
+                        exact
+                        path={ROUTES.EDIT_REQUEST}
+                        component={EditRequest}
                     ></Route>
                 </RootLayout>
             </Switch>
