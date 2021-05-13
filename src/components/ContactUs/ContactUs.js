@@ -20,7 +20,7 @@ const details = [
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        padding: 20,
+        padding: 0,
         paddingTop: 0,
         display: "flex",
         justifyContent: "center",
@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
+        flexDirection: "column",
     },
     card: {
         display: "flex",
@@ -43,8 +44,13 @@ const useStyles = makeStyles((theme) => ({
             theme.palette.type === "light"
                 ? theme.palette.grey[50]
                 : theme.palette.grey[900],
-        padding: 10,
         margin: 5,
+        height: 150,
+        padding: 10,
+        [theme.breakpoints.down("sm")]: {
+            width: "90%",
+        },
+        width: "40%",
     },
 }));
 
@@ -62,7 +68,7 @@ const ContactUs = () => {
             >
                 Contact Us
             </Typography>
-            <GridList className={classes.gridList} cols={2}>
+            <div className={classes.gridList}>
                 {details.map((det) => {
                     return (
                         <div className={classes.card}>
@@ -85,7 +91,7 @@ const ContactUs = () => {
                         </div>
                     );
                 })}
-            </GridList>
+            </div>
         </Paper>
     );
 };
