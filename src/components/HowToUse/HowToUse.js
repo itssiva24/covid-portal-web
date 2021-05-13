@@ -45,6 +45,7 @@ export default withAuthorization(
                         <Link className={classes.link} to={ROUTES.HOME}>
                             Home Page
                         </Link>
+                        .
                     </ListItemText>
                 </ListItem>
                 <ListItem component="li">
@@ -65,17 +66,33 @@ export default withAuthorization(
                 <ListItem component="li">
                     <ListItemText>
                         <Typography component="span">
-                            3. Volunteers will be assigned for every request and
+                            3. Once you have made a request it will be visible on the 
+                        </Typography>
+                        <Link className={classes.link} to={ROUTES.MY_REQUESTS}>
+                            My Requests page
+                        </Link>
+                        <ListItem component="li">
+                        <Typography component="span">
+                            {" "}
+                            You can check the status there.
+                        </Typography>
+                </ListItem>
+                    </ListItemText>
+                </ListItem>
+                <ListItem component="li">
+                    <ListItemText>
+                        <Typography component="span">
+                            4. Volunteers will be assigned for every request and
                             they will provide all the necessary information and
-                            help with the process
+                            help with the process.
                         </Typography>
                     </ListItemText>
                 </ListItem>
                 <ListItem component="li">
                     <ListItemText>
                         <Typography component="span">
-                            4. Once the request is resolved, it'll be be removed
-                            from the Requests page
+                            5. Once the request is resolved, it'll be be removed
+                            from the Requests page.
                         </Typography>
                     </ListItemText>
                 </ListItem>
