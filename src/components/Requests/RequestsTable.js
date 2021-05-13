@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../Loader";
@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
     title: {
         fontWeight: 600,
     },
+    smallBox: {
+        maxWidth: 144,
+    },
     mediumBox: {
         minWidth: 178,
         maxWidth: 196,
@@ -44,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ({
-    type,
     request,
     loadMore,
     lastDoc,
@@ -56,18 +58,18 @@ export default function ({
     const classes = useStyles();
 
     const history = useHistory();
-    const [columns, setColumns] = useState([])
+    const [columns, setColumns] = useState([]);
     useEffect(() => {
-        setColumns(getColumns(type))
-    }, [type])
+        setColumns(getColumns(type));
+    }, [type]);
     const head = [
         {
             id: "title",
             label: "Title",
         },
         {
-            id:"requirement",
-            label:"Requirement"
+            id: "requirement",
+            label: "Requirement",
         },
         {
             id: "description",
@@ -84,9 +86,11 @@ export default function ({
             label: "Date",
         },
     ];
-    const getColumns = (type)=>{
-        return type===REQUEST_TYPE.Medical?head:head.filter((v)=>v.id!=="requirement")
-    }
+    const getColumns = (type) => {
+        return type === REQUEST_TYPE.Medical
+            ? head
+            : head.filter((v) => v.id !== "requirement");
+    };
 
     const CustomTableHead = () => (
         <TableHead>
@@ -148,7 +152,7 @@ export default function ({
                                         tabIndex={-1}
                                         key={req.name}
                                         className={classes.row}
-                                    >   
+                                    >
                                         <TableCell
                                             component="th"
                                             id={labelId}
@@ -158,15 +162,19 @@ export default function ({
                                                 ? `${req.title.slice(0, 24)}..`
                                                 : req.title}
                                         </TableCell>
-                                        {type===REQUEST_TYPE.Medical &&(
-                                            <TableCell>
-                                                {req.requirement}
+                                        {type === REQUEST_TYPE.Medical && (
+                                            <TableCell
+                                                className={classes.mediumBox}
+                                            >
+                                                <Button variant="outlined">
+                                                    {req.requirement}
+                                                </Button>
                                             </TableCell>
                                         )}
-                                        <TableCell>
+                                        <TableCell className={classes.smallBox}>
                                             {`${req.description.slice(
                                                 0,
-                                                42
+                                                32
                                             )}...`}
                                         </TableCell>
                                         <TableCell>

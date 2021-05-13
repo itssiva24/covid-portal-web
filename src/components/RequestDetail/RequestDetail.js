@@ -32,9 +32,9 @@ export const useStyles = makeStyles((theme) => ({
     header: {
         display: "flex",
         alignItems: "center",
-        gap: "0.2em 1em",
         flexWrap: "wrap",
         justifyContent: "space-around",
+        marginLeft: -8,
     },
     amountBox: {
         margin: "16px 0 0",
@@ -42,8 +42,10 @@ export const useStyles = makeStyles((theme) => ({
     avatar: {
         height: "32px",
         width: "32px",
+        marginLeft: 8,
     },
     headerText: {
+        marginLeft: 8,
         flex: "1",
         fontSize: 16,
         [theme.breakpoints.down("xs")]: {
@@ -78,8 +80,12 @@ export const useStyles = makeStyles((theme) => ({
     footer: {
         display: "flex",
         alignItems: "center",
-        gap: 8,
+        marginLeft: -8,
         flexWrap: "wrap",
+        "& button": {
+            display: "block",
+            marginLeft: 8,
+        },
     },
 }));
 

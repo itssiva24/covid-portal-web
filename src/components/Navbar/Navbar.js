@@ -142,7 +142,7 @@ const drawer = (classes, history, authUser) => {
             <footer
                 style={{
                     marginTop: "auto",
-                    padding: "20px 10px",
+                    padding: "20px 18px",
                     fontSize: 13,
                 }}
             >
