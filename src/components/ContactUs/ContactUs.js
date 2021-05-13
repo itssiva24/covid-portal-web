@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     card: {
         display: "flex",
         flexDirection: "column",
-        borderRadius: 20,
+        borderRadius: 8,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor:
@@ -51,6 +51,10 @@ const useStyles = makeStyles((theme) => ({
             width: "90%",
         },
         width: "40%",
+    },
+    link: {
+        color: theme.palette.primary.main,
+        textDecoration: "none",
     },
 }));
 
@@ -86,7 +90,13 @@ const ContactUs = () => {
                                 </Typography>
                             )}
                             <Typography variant="p">
-                                Email: {det.email}
+                                Email:&nbsp;
+                                <a
+                                    href={`mailto:${det.email}`}
+                                    className={classes.link}
+                                >
+                                    {det.email}
+                                </a>
                             </Typography>
                         </div>
                     );
