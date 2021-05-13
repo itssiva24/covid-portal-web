@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../Loader";
@@ -12,7 +12,7 @@ import {
     TableRow,
     Button,
 } from "@material-ui/core";
-import { getDate } from "../../utils";
+import { getDate, REQUEST_TYPE } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
     body: {
@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ({
+    type,
     request,
     loadMore,
     lastDoc,
@@ -45,11 +46,18 @@ export default function ({
     const classes = useStyles();
 
     const history = useHistory();
-
+    const [columns, setColumns] = useState([])
+    useEffect(() => {
+        setColumns(getColumns(type))
+    }, [type])
     const head = [
         {
             id: "title",
             label: "Title",
+        },
+        {
+            id:"requirement",
+            label:"Requirement"
         },
         {
             id: "description",
@@ -66,18 +74,21 @@ export default function ({
             label: "Date",
         },
     ];
+    const getColumns = (type)=>{
+        return type===REQUEST_TYPE.Medical?head:head.filter((v)=>v.id!=="requirement")
+    }
 
     const CustomTableHead = () => (
         <TableHead>
             <TableRow>
-                {head.map((headCell) => (
+                {columns.map((headCell) => (
                     <TableCell>{headCell.label}</TableCell>
                 ))}
             </TableRow>
         </TableHead>
     );
 
-    console.log(lastDoc);
+    console.log(type);
 
     if (!fetched)
         return (
@@ -112,7 +123,7 @@ export default function ({
             >
                 <TableContainer>
                     <Table>
-                        <CustomTableHead />
+                        <CustomTableHead type={type} />
                         <TableBody className={classes.body}>
                             {request.map((req, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -127,7 +138,7 @@ export default function ({
                                         tabIndex={-1}
                                         key={req.name}
                                         className={classes.row}
-                                    >
+                                    >   
                                         <TableCell
                                             component="th"
                                             id={labelId}
@@ -137,6 +148,11 @@ export default function ({
                                                 ? `${req.title.slice(0, 24)}..`
                                                 : req.title}
                                         </TableCell>
+                                        {type===REQUEST_TYPE.Medical &&(
+                                            <TableCell>
+                                                {req.requirement}
+                                            </TableCell>
+                                        )}
                                         <TableCell>
                                             {`${req.description.slice(
                                                 0,

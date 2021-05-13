@@ -15,7 +15,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import useStyles from "./styles";
 import states from "../../constants/states.json";
 import UploadResultDialog from "./UploadResultDialog";
-import { REQUEST_TYPE } from "../../utils";
+import { REQUEST_TYPE, REQUIREMENT } from "../../utils";
 
 function NewRequest() {
     const classes = useStyles();
@@ -65,7 +65,6 @@ function NewRequest() {
                             }}
                             onChange={handleInput}
                         >
-                            {/* <MenuItem value="Oxygen">Oxygen</MenuItem> */}
                             <MenuItem value={REQUEST_TYPE.Medical}>
                                 {REQUEST_TYPE.Medical}
                             </MenuItem>
@@ -74,6 +73,40 @@ function NewRequest() {
                             </MenuItem>
                         </Select>
                     </div>
+                    {requestForm.requestType===REQUEST_TYPE.Medical && (
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                marginTop: 16,
+                            }}
+                        >
+                            <InputLabel
+                                id="demo-simple-select-label"
+                                style={{
+                                    marginRight: 10,
+                                }}
+                                required
+                            >
+                                Requirement
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                name="requirement"
+                                required
+                                value={requestForm.requirement}
+                                style={{
+                                    flex: "1",
+                                }}
+                                onChange={handleInput}
+                            >
+                                {Object.values(REQUIREMENT).map(v=>(
+                                    <MenuItem value={v}>{v}</MenuItem>
+                                ))}
+                            </Select>
+                        </div>
+                    )}
                     <Typography
                         component="h5"
                         variant="h6"

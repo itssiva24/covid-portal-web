@@ -61,6 +61,7 @@ export default withAuthorization(
                 </div>
                 <RequestsTable
                     {...{
+                        type,
                         request: myRequests,
                         loadMore,
                         lastDoc,

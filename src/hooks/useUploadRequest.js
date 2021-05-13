@@ -13,6 +13,7 @@ const initialRequestFormState = {
     recipientUPIID: "",
     recipientUPIName: "",
     QRCodeImage: "",
+    requirement:""
 };
 
 const useUploadRequest = (authUser) => {
@@ -139,6 +140,7 @@ const useUploadRequest = (authUser) => {
             imageUrl: authUser.photoURL,
             createdAt: Date.now(),
             type: requestForm.requestType,
+            requirement: requestForm.requirement|| "",
             state: states[requestForm.state],
             city: requestForm.city,
             patientName: requestForm.patientName,
