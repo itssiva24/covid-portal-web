@@ -60,7 +60,8 @@ export default function PayDialog({
                                 style={{ fontWeight: 500 }}
                             >
                                 NOTE: Enter only the amount you are going to
-                                donate! This will be updated realtime!
+                                donate! This is anonymous and will be updated
+                                realtime!
                             </Typography>
                             <br />
                             <form

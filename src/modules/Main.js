@@ -14,7 +14,7 @@ import HowToUse from "../components/HowToUse";
 
 export default withAuthUserProvider(({ Component, pageProps }) => {
     return (
-        <Router>
+        <Router basename="/iitmhelps">
             <Switch>
                 <Route path={ROUTES.SIGNIN} component={SignIn} />
                 <RootLayout>

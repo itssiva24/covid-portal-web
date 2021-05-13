@@ -1,5 +1,6 @@
 {
   "name": "covid-portal",
+  "homepage": "https://students.iitm.ac.in/iitmhelps",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

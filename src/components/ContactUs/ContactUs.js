@@ -18,7 +18,7 @@ const details = [
     },
     {
         name: "Rahul Sundar",
-        email: "",
+        email: "rahulsundar@smail.iitm.ac.in",
     },
 ];
 
@@ -93,17 +93,15 @@ const ContactUs = () => {
                                     {det.pos} | IIT Madras
                                 </Typography>
                             )}
-                            {det.email && (
-                                <Typography variant="p">
-                                    Email:&nbsp;
-                                    <a
-                                        href={`mailto:${det.email}`}
-                                        className={classes.link}
-                                    >
-                                        {det.email}
-                                    </a>
-                                </Typography>
-                            )}
+                            <Typography variant="p">
+                                Email:&nbsp;
+                                <a
+                                    href={`mailto:${det.email}`}
+                                    className={classes.link}
+                                >
+                                    {det.email}
+                                </a>
+                            </Typography>
                         </div>
                     );
                 })}
