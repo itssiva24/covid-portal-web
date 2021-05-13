@@ -61,7 +61,9 @@ export default withAuthorization(
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            addEmail(email);
+            email.split(" ").forEach((email) => {
+                addEmail(email);
+            });
             setEmail("");
         }
     };
