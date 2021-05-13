@@ -11,8 +11,11 @@ import {
     TableHead,
     TableRow,
     Button,
+    LinearProgress,
+    Typography,
 } from "@material-ui/core";
 import { getDate } from "../../utils";
+import { REQUEST_TYPE } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
     body: {
@@ -27,9 +30,16 @@ const useStyles = makeStyles((theme) => ({
     title: {
         fontWeight: 600,
     },
+    mediumBox: {
+        minWidth: 178,
+        maxWidth: 196,
+    },
+    largeBox: {
+        minWidth: 240,
+    },
     button: {
         [theme.breakpoints.down("xs")]: {
-            fontSize: 10,
+            fontSize: 12,
         },
     },
 }));
@@ -41,12 +51,13 @@ export default function ({
     fetched,
     refresh,
     setRefresh,
+    type,
 }) {
     const classes = useStyles();
 
     const history = useHistory();
 
-    const head = [
+    const head1 = [
         {
             id: "title",
             label: "Title",
@@ -66,18 +77,40 @@ export default function ({
             label: "Date",
         },
     ];
+    const head2 = [
+        {
+            id: "title",
+            label: "Title",
+        },
+        {
+            id: "amountCollected",
+            label: "Amount Collected",
+        },
+        { id: "volunteer", label: "Volunteer" },
+        { id: "status", label: "Status" },
+        {
+            id: "date",
+            label: "Date",
+        },
+    ];
 
     const CustomTableHead = () => (
         <TableHead>
-            <TableRow>
-                {head.map((headCell) => (
-                    <TableCell>{headCell.label}</TableCell>
-                ))}
-            </TableRow>
+            {type === REQUEST_TYPE.Medical ? (
+                <TableRow>
+                    {head1.map((headCell) => (
+                        <TableCell>{headCell.label}</TableCell>
+                    ))}
+                </TableRow>
+            ) : (
+                <TableRow>
+                    {head2.map((headCell) => (
+                        <TableCell>{headCell.label}</TableCell>
+                    ))}
+                </TableRow>
+            )}
         </TableHead>
     );
-
-    console.log(lastDoc);
 
     if (!fetched)
         return (
@@ -137,25 +170,72 @@ export default function ({
                                                 ? `${req.title.slice(0, 24)}..`
                                                 : req.title}
                                         </TableCell>
-                                        <TableCell>
-                                            {`${req.description.slice(
-                                                0,
-                                                42
-                                            )}...`}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Button
-                                                variant="outlined"
-                                                color="primary"
-                                                size="small"
-                                                className={classes.button}
-                                            >
-                                                {req.state === ""
-                                                    ? "State N/A"
-                                                    : req.state}
-                                            </Button>
-                                        </TableCell>
-                                        <TableCell>
+                                        {req.type === REQUEST_TYPE.Medical ? (
+                                            <>
+                                                <TableCell
+                                                    className={
+                                                        classes.mediumBox
+                                                    }
+                                                >
+                                                    {`${req.description.slice(
+                                                        0,
+                                                        42
+                                                    )}...`}
+                                                </TableCell>
+                                                <TableCell
+                                                    className={
+                                                        classes.mediumBox
+                                                    }
+                                                >
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="primary"
+                                                        size="small"
+                                                        className={
+                                                            classes.button
+                                                        }
+                                                    >
+                                                        {req.state === ""
+                                                            ? "State N/A"
+                                                            : req.state}
+                                                    </Button>
+                                                </TableCell>
+                                            </>
+                                        ) : (
+                                            <TableCell>
+                                                <LinearProgress
+                                                    value={
+                                                        req.amountNeeded &&
+                                                        req.amountCollected
+                                                            ? (req.amountCollected /
+                                                                  req.amountNeeded) *
+                                                              100
+                                                            : 50
+                                                    }
+                                                    variant="determinate"
+                                                    style={{
+                                                        height: 6,
+                                                        borderRadius: 2,
+                                                    }}
+                                                />
+                                                <Typography
+                                                    align="right"
+                                                    style={{ fontSize: 14 }}
+                                                >
+                                                    &#x20B9;
+                                                    {req.amountNeeded &&
+                                                    req.amountCollected
+                                                        ? `${req.amountCollected.toLocaleString(
+                                                              "en-IN"
+                                                          )}/${req.amountNeeded.toLocaleString(
+                                                              "en-IN"
+                                                          )}`
+                                                        : "2,50,000/5,00,000"}
+                                                </Typography>
+                                            </TableCell>
+                                        )}
+
+                                        <TableCell className={classes.largeBox}>
                                             <Button
                                                 variant="outlined"
                                                 color={
@@ -172,7 +252,9 @@ export default function ({
                                             </Button>
                                         </TableCell>
 
-                                        <TableCell>
+                                        <TableCell
+                                            className={classes.mediumBox}
+                                        >
                                             <Button
                                                 variant="outlined"
                                                 color={

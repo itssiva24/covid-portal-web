@@ -258,6 +258,7 @@ function NewRequest() {
                                 className={classes.textField}
                                 label="Recipient UPI ID"
                                 onChange={handleInput}
+                                value={requestForm.recipientUPIID}
                                 required
                             />
                             <TextField
@@ -266,6 +267,18 @@ function NewRequest() {
                                 className={classes.textField}
                                 label="Recipient Name "
                                 onChange={handleInput}
+                                value={requestForm.recipientUPIName}
+                                required
+                            />
+                            <TextField
+                                id="standard-basic"
+                                name="amountNeeded"
+                                placeholder="in Rupees"
+                                className={classes.textField}
+                                label="Amount needed "
+                                value={requestForm.amountNeeded}
+                                onChange={handleInput}
+                                type="number"
                                 required
                             />
                             <div className={classes.chooseFile}>

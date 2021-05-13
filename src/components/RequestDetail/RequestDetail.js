@@ -7,13 +7,14 @@ import {
     Typography,
     Avatar,
     makeStyles,
+    LinearProgress,
 } from "@material-ui/core";
 import AuthUserContext, { withAuthorization } from "../../contexts";
 import { REQUEST_TYPE, UserRole } from "../../utils";
 import * as ROUTES from "../../constants/routes";
 import AssignVolunteerDialog from "../AssignVolunteer";
 import Loader from "../Loader";
-import { ResolveRequestDialog } from "../Requests";
+import { ResolveRequestDialog, UpdateCollectedAmountDialog } from "../Requests";
 import useGetRquestDetails from "../../hooks/useGetRequestDetails";
 import PayDialog from "./PayDialog";
 
@@ -34,6 +35,9 @@ export const useStyles = makeStyles((theme) => ({
         flexWrap: "wrap",
         justifyContent: "space-around",
     },
+    amountBox: {
+        margin: "16px 0 0",
+    },
     avatar: {
         height: "32px",
         width: "32px",
@@ -43,6 +47,13 @@ export const useStyles = makeStyles((theme) => ({
         fontSize: 16,
         [theme.breakpoints.down("xs")]: {
             fontSize: 14,
+        },
+    },
+    donateButton: {
+        display: "block",
+        margin: "10px auto 0",
+        [theme.breakpoints.down("xs")]: {
+            width: "100%",
         },
     },
     messageBox: {
@@ -86,178 +97,252 @@ export default withAuthorization(
         openAssignVolunteerModal,
         openPayModal,
         openResolveRequestModal,
+        openUpdateCollectedAmountModal,
         handleClose,
         fetched,
         toDateTime,
         setOpenAssignVolnteerModal,
         setOpenResolveRequestModal,
         setOpenPayModal,
+        setOpenUpdateCollectedAmountModal,
     } = useGetRquestDetails(id);
 
     if (!fetched) return <Loader />;
     else
         return Object.keys(request).length !== 0 ? (
-            <Container maxWidth="sm" className={classes.root}>
-                <Box className={classes.header}>
-                    <Avatar
-                        className={classes.avatar}
-                        alt={`${request.createdBy}`}
-                        src={request.imageUrl}
-                    ></Avatar>
-                    <Typography variant="body3" className={classes.headerText}>
-                        {request.createdBy}
-                    </Typography>
-                    <div>
+            <>
+                <Container maxWidth="sm" className={classes.root}>
+                    <Box className={classes.header}>
+                        <Avatar
+                            className={classes.avatar}
+                            alt={`${request.createdBy}`}
+                            src={request.imageUrl}
+                        ></Avatar>
                         <Typography
                             variant="body3"
                             className={classes.headerText}
                         >
-                            {toDateTime(request.createdAt)}
+                            {request.createdBy}
                         </Typography>
-                    </div>
-                </Box>
-                <Box className={classes.messageBox}>
-                    <Typography variant="h6">{request.title}</Typography>
-                    <Typography variant="body3">
-                        Patient Name:&nbsp;
-                        {request.patientName ? `${request.patientName}` : ""}
-                    </Typography>
-                    <br />
-                    <Typography variant="body3">
-                        Patient Number:&nbsp;
-                        {request.patientNumber
-                            ? `${request.patientNumber}`
-                            : ""}
-                    </Typography>
-                    <br />
-                    <Typography variant="body3">
-                        SPO2 Level:&nbsp;
-                        {request.patientSpo2Level
-                            ? `${request.patientSpo2Level}`
-                            : ""}
-                    </Typography>
-                    <br />
-                    <Typography variant="body3">
-                        RT-PCR Test:&nbsp;
-                        {request.patientRTPCR ? `${request.patientRTPCR}` : ""}
-                        <br />
-                    </Typography>
-                    <Typography variant="body3">
-                        CT Severity/CORADS Index:&nbsp;
-                        {request.patientCTSeverityOrCoradsIndex
-                            ? `${request.patientCTSeverityOrCoradsIndex}`
-                            : ""}
-                    </Typography>
-                    <br />
-                    <Typography variant="body3">
-                        Caregiver Name:&nbsp;
-                        {request.caregiverName
-                            ? `${request.caregiverName}`
-                            : ""}
-                    </Typography>
-                    <br />
-                    <Typography variant="body3">
-                        Caregiver Number:&nbsp;
-                        {request.caregiverNumber
-                            ? `${request.caregiverNumber}`
-                            : ""}
-                    </Typography>
-                    <br />
-                    <br />
-
-                    <Typography variant="body1">
-                        {request.description ? `${request.description}` : ""}
-                    </Typography>
-                </Box>
-                <Box className={classes.imageBox}>
-                    <img
-                        src={request.proofImageURL}
-                        className={classes.image}
-                        alt=""
-                    />
-                </Box>
-                {request.type === REQUEST_TYPE.Monetary && (
-                    <Box
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            margin: "10px",
-                        }}
-                    >
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                                setOpenPayModal(true);
-                            }}
-                        >
-                            Donate Money
-                        </Button>
+                        <div>
+                            <Typography
+                                variant="body3"
+                                className={classes.headerText}
+                            >
+                                {toDateTime(request.createdAt)}
+                            </Typography>
+                        </div>
                     </Box>
-                )}
-                <Box className={classes.footer}>
-                    <Button variant="outlined" color="primary" size="small">
-                        {request.state === "" ? "State N/A" : request.state}
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        color={request.resolved ? "primary" : "secondary"}
-                        size="small"
-                    >
-                        {request.resolved ? "Resolved" : "Not Resolved"}
-                    </Button>
-                    {!request.assignedTo && authUser.role === UserRole.Admin && (
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            onClick={() => setOpenAssignVolnteerModal(true)}
-                        >
-                            Assign Volunteer
-                        </Button>
-                    )}
-                    {!request.resolved &&
-                        request.assignedTo &&
-                        request.assignedTo === authUser.uid && (
+
+                    {request.type === REQUEST_TYPE.Monetary && (
+                        <Box className={classes.amountBox}>
+                            <LinearProgress
+                                value={
+                                    request.amountNeeded &&
+                                    request.amountCollected
+                                        ? (request.amountCollected /
+                                              request.amountNeeded) *
+                                          100
+                                        : 50
+                                }
+                                variant="determinate"
+                                style={{
+                                    height: 8,
+                                    borderRadius: 4,
+                                    margin: "1px 0px 1px 4px",
+                                }}
+                            />
+                            <Typography align="right">
+                                &#x20B9;
+                                {request.amountNeeded && request.amountCollected
+                                    ? `${request.amountCollected.toLocaleString(
+                                          "en-IN"
+                                      )}/${request.amountNeeded.toLocaleString(
+                                          "en-IN"
+                                      )}`
+                                    : "2,50,000/5,00,000"}
+                            </Typography>
                             <Button
                                 variant="contained"
-                                color="primary"
-                                size="small"
-                                onClick={() => setOpenResolveRequestModal(true)}
+                                color="secondary"
+                                onClick={() => {
+                                    setOpenPayModal(true);
+                                }}
+                                className={classes.donateButton}
                             >
-                                Resolve request
+                                Donate Money
                             </Button>
-                        )}
-                    {!request.resolved &&
-                        request.assignedTo &&
-                        request.assignedTo !== authUser.uid && (
-                            <Button
-                                variant="outlined"
-                                color="success"
-                                size="small"
-                            >
-                                ASSIGNED
-                            </Button>
-                        )}
-                    <AssignVolunteerDialog
-                        id={id}
-                        open={openAssignVolunteerModal}
-                        handleClose={handleClose}
-                    />
-                    <ResolveRequestDialog
-                        id={id}
-                        open={openResolveRequestModal}
-                        handleClose={handleClose}
-                    />
-                    {request.type === REQUEST_TYPE.Monetary && (
-                        <PayDialog
-                            request={request}
-                            open={openPayModal}
+                        </Box>
+                    )}
+                    <Box className={classes.messageBox}>
+                        <Typography variant="h6" style={{ marginBottom: 8 }}>
+                            {request.title}
+                        </Typography>
+
+                        <Typography variant="body3">
+                            Patient Name:&nbsp;
+                            {request.patientName
+                                ? `${request.patientName}`
+                                : ""}
+                        </Typography>
+                        <br />
+                        <Typography variant="body3">
+                            Patient Number:&nbsp;
+                            {request.patientNumber
+                                ? `${request.patientNumber}`
+                                : ""}
+                        </Typography>
+                        <br />
+                        <Typography variant="body3">
+                            City:&nbsp;
+                            {request.city ? `${request.city}` : ""}
+                        </Typography>
+                        <br />
+                        <Typography variant="body3">
+                            SPO2 Level:&nbsp;
+                            {request.patientSpo2Level
+                                ? `${request.patientSpo2Level}`
+                                : ""}
+                        </Typography>
+                        <br />
+                        <Typography variant="body3">
+                            RT-PCR Test:&nbsp;
+                            {request.patientRTPCR
+                                ? `${request.patientRTPCR}`
+                                : ""}
+                            <br />
+                        </Typography>
+                        <Typography variant="body3">
+                            CT Severity/CORADS Index:&nbsp;
+                            {request.patientCTSeverityOrCoradsIndex
+                                ? `${request.patientCTSeverityOrCoradsIndex}`
+                                : ""}
+                        </Typography>
+                        <br />
+                        <Typography variant="body3">
+                            Caregiver Name:&nbsp;
+                            {request.caregiverName
+                                ? `${request.caregiverName}`
+                                : ""}
+                        </Typography>
+                        <br />
+                        <Typography variant="body3">
+                            Caregiver Number:&nbsp;
+                            {request.caregiverNumber
+                                ? `${request.caregiverNumber}`
+                                : ""}
+                        </Typography>
+                        <br />
+                        <br />
+
+                        <Typography
+                            variant="body1"
+                            style={{ fontStyle: "italic" }}
+                        >
+                            {request.description
+                                ? `${request.description}`
+                                : ""}
+                        </Typography>
+                    </Box>
+                    <Box className={classes.imageBox}>
+                        <img
+                            src={request.proofImageURL}
+                            className={classes.image}
+                            alt=""
+                        />
+                    </Box>
+                    <Box className={classes.footer}>
+                        <Button variant="outlined" color="primary" size="small">
+                            {request.state === "" ? "State N/A" : request.state}
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color={request.resolved ? "primary" : "secondary"}
+                            size="small"
+                        >
+                            {request.resolved ? "Resolved" : "Not Resolved"}
+                        </Button>
+                        {!request.assignedTo &&
+                            authUser.role === UserRole.Admin && (
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    size="small"
+                                    onClick={() =>
+                                        setOpenAssignVolnteerModal(true)
+                                    }
+                                >
+                                    Assign Volunteer
+                                </Button>
+                            )}
+                        {!request.resolved &&
+                            request.assignedTo &&
+                            request.assignedTo === authUser.uid &&
+                            request.type === REQUEST_TYPE.Monetary && (
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                    onClick={() =>
+                                        setOpenUpdateCollectedAmountModal(true)
+                                    }
+                                >
+                                    Update Amount
+                                </Button>
+                            )}
+                        {!request.resolved &&
+                            request.assignedTo &&
+                            request.assignedTo === authUser.uid && (
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                    onClick={() =>
+                                        setOpenResolveRequestModal(true)
+                                    }
+                                >
+                                    Resolve request
+                                </Button>
+                            )}
+                        {!request.resolved &&
+                            request.assignedTo &&
+                            request.assignedTo !== authUser.uid && (
+                                <Button
+                                    variant="outlined"
+                                    color="success"
+                                    size="small"
+                                >
+                                    ASSIGNED
+                                </Button>
+                            )}
+                        <AssignVolunteerDialog
+                            id={id}
+                            open={openAssignVolunteerModal}
                             handleClose={handleClose}
                         />
-                    )}
-                </Box>
-            </Container>
+                        <ResolveRequestDialog
+                            id={id}
+                            open={openResolveRequestModal}
+                            handleClose={handleClose}
+                        />
+                        {request.type === REQUEST_TYPE.Monetary && (
+                            <>
+                                <PayDialog
+                                    request={request}
+                                    open={openPayModal}
+                                    handleClose={handleClose}
+                                />
+                                <UpdateCollectedAmountDialog
+                                    id={id}
+                                    open={openUpdateCollectedAmountModal}
+                                    amount={request.amountCollected}
+                                    handleClose={handleClose}
+                                />
+                            </>
+                        )}
+                    </Box>
+                </Container>
+            </>
         ) : (
             <Loader />
         );

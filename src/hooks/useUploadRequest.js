@@ -151,6 +151,8 @@ const useUploadRequest = (authUser) => {
             caregiverNumber: requestForm.caregiverNumber,
             recipientUPIID: requestForm.recipientUPIID,
             recipientUPIName: requestForm.recipientUPIName,
+            amountNeeded: parseInt(requestForm.amountNeeded),
+            amountCollected: 0,
             QRCodeURL: qrcodeImageDownloadURL,
             proofImageURL: proofImageDownloadURL,
             resolved: false,
