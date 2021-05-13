@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
     Box,
     Container,
@@ -107,6 +108,10 @@ export default withAuthorization(
         setOpenUpdateCollectedAmountModal,
     } = useGetRquestDetails(id);
 
+    const editRedirect = {
+        pathname: `/request/${request.id}/edit`,
+        request,
+    };
     if (!fetched) return <Loader />;
     else
         return Object.keys(request).length !== 0 ? (
@@ -262,6 +267,19 @@ export default withAuthorization(
                         >
                             {request.resolved ? "Resolved" : "Not Resolved"}
                         </Button>
+                        {request.createdById === authUser.uid ? (
+                            <Button variant="outlined" size="small">
+                                <Link
+                                    to={editRedirect}
+                                    style={{
+                                        color: "grey",
+                                        textDecoration: "none",
+                                    }}
+                                >
+                                    Edit
+                                </Link>
+                            </Button>
+                        ) : null}
                         {!request.assignedTo &&
                             authUser.role === UserRole.Admin && (
                                 <Button

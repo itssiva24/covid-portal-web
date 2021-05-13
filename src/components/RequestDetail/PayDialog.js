@@ -31,12 +31,12 @@ export default function PayDialog({ request, open, handleClose }) {
                         Cancel
                     </Button>
                     <Button color="primary" variant="contained">
-                        <Link
+                        <a
                             style={{ color: "#fff", textDecoration: "none" }}
                             to={`upi://pay?pa=${request.recipientUPIID}&pn=${request.recipientUPIName}&cu=INR`}
                         >
                             Open in App
-                        </Link>
+                        </a>
                     </Button>
                 </DialogActions>
             </Dialog>
