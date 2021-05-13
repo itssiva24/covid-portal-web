@@ -10,3 +10,4 @@ export const ADD_VOLUNTEER = "/addVolunteer";
 export const MY_REQUESTS = "/myRequests";
 export const HOW_TO_USE = "/how-to-use";
 export const CONTACT_US = "/contact-us";
+export const REGISTER_AS_A_VOLUNTEER = "/registerAsAVolunteer";

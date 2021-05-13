@@ -6,6 +6,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import AccessibilityIcon from "@material-ui/icons/Accessibility";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import SubjectIcon from "@material-ui/icons/Subject";
 import AddIcon from "@material-ui/icons/Add";
@@ -82,6 +83,22 @@ const drawer = (classes, history, authUser) => {
                     >
                         <CustomListIcon NavIcon={SubjectIcon} />
                         <ListItemText primary="My Requests" color="primary" />
+                    </ListItem>
+                )}
+                {authUser && authUser.role === UserRole.Student && (
+                    <ListItem
+                        button
+                        key="Register as a volunteer"
+                        selected={
+                            history.location.pathname ===
+                            ROUTES.REGISTER_AS_A_VOLUNTEER
+                        }
+                        onClick={() => {
+                            history.push(ROUTES.REGISTER_AS_A_VOLUNTEER);
+                        }}
+                    >
+                        <CustomListIcon NavIcon={AccessibilityIcon} />
+                        <ListItemText primary="Register as a volunteer" />
                     </ListItem>
                 )}
                 {authUser && authUser.role === UserRole.Volunteer && (

@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Home, { AddVolunteer } from "../components/Home";
+import Home, { AddVolunteer, RegisterAsAVolunteer } from "../components/Home";
 import SignIn from "../components/SignIn";
 import * as ROUTES from "../constants/routes";
 import { withAuthUserProvider } from "../contexts";
@@ -58,6 +58,11 @@ export default withAuthUserProvider(({ Component, pageProps }) => {
                         exact
                         path={ROUTES.CONTACT_US}
                         component={ContactUs}
+                    ></Route>
+                    <Route
+                        exact
+                        path={ROUTES.REGISTER_AS_A_VOLUNTEER}
+                        component={RegisterAsAVolunteer}
                     ></Route>
                 </RootLayout>
             </Switch>
