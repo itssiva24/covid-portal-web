@@ -66,17 +66,15 @@ export default withAuthorization(
                 <ListItem component="li">
                     <ListItemText>
                         <Typography component="span">
-                            3. Once you have made a request it will be visible on the 
+                            3. Once you have made a request it will be visible
+                            on the{" "}
                         </Typography>
                         <Link className={classes.link} to={ROUTES.MY_REQUESTS}>
                             My Requests page
                         </Link>
-                        <ListItem component="li">
                         <Typography component="span">
-                            {" "}
-                            You can check the status there.
+                            . You can check the status there.
                         </Typography>
-                </ListItem>
                     </ListItemText>
                 </ListItem>
                 <ListItem component="li">

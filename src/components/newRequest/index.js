@@ -14,7 +14,6 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import useStyles from "./styles";
 import states from "../../constants/states.json";
-import cities from "../../constants/cities.json";
 import UploadResultDialog from "./UploadResultDialog";
 import { REQUEST_TYPE } from "../../utils";
 
@@ -152,13 +151,13 @@ function NewRequest() {
                                         <MenuItem value={city}>{city}</MenuItem>
                                     ))}
                             </Select> */}
-                            <Input 
+                            <Input
                                 name="city"
                                 required
                                 value={requestForm.city}
                                 onChange={handleInput}
-                                style={{ flex: "1" }}>
-                            </Input>
+                                style={{ flex: "1" }}
+                            ></Input>
                         </div>
                     </div>
                     {requestForm.requestType && (
