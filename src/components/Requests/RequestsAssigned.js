@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Request } from ".";
+import { RequestsTable } from ".";
 import AuthUserContext, { withAuthorization } from "../../contexts";
 import * as ROUTES from "../../constants/routes";
 import { Typography } from "@material-ui/core";
@@ -7,7 +7,8 @@ import { UserRole } from "../../utils";
 import useGetRequestAssigned from "../../hooks/useGetRequestAssigned";
 import Loader from "../Loader";
 import { makeStyles } from "@material-ui/core/styles";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { REQUEST_TYPE } from "../../utils";
+import { Paper, Tabs, Tab } from "@material-ui/core";
 
 const condition = (authUser) =>
     !!authUser && authUser.role === UserRole.Volunteer;
@@ -15,9 +16,6 @@ const condition = (authUser) =>
 const useStyles = makeStyles((theme) => ({
     root: {
         padding: theme.spacing(3, 2),
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
     },
 }));
 
@@ -29,55 +27,50 @@ export default withAuthorization(
     const classes = useStyles();
 
     const [refresh, setRefresh] = useState(false);
-    const {
-        requestsAssigned,
-        fetched,
-        lastDoc,
-        loadMore,
-    } = useGetRequestAssigned(authUser.uid);
+    const [type, setType] = useState(REQUEST_TYPE.Medical);
+
+    const { requestsAssigned, fetched, lastDoc, loadMore } =
+        useGetRequestAssigned(authUser.uid, type);
+
+    const requestType = [REQUEST_TYPE.Medical, REQUEST_TYPE.Monetary];
+
+    const handleChange = (e, val) => {
+        setType(requestType[val]);
+    };
 
     if (!fetched)
         return (
-            <div className={classes.root}>
+            <div>
                 <Loader />
             </div>
         );
     else {
-        if (requestsAssigned.length > 0) {
-            return (
-                <InfiniteScroll
-                    dataLength={requestsAssigned.length}
-                    refreshFunction={() => setRefresh(!refresh)}
-                    pullDownToRefresh
-                    pullDownToRefreshContent={
-                        <h3 style={{ textAlign: "center" }}>
-                            &#8595; Pull down to refresh
-                        </h3>
-                    }
-                    releaseToRefreshContent={
-                        <h3 style={{ textAlign: "center" }}>
-                            &#8593; Release to refresh
-                        </h3>
-                    }
-                    next={loadMore}
-                    hasMore={lastDoc ? true : false}
-                    loader={<h4 style={{ textAlign: "center" }}>Loading...</h4>}
-                    endMessage={
-                        <h3 style={{ textAlign: "center" }}>
-                            <b>No More Requests!!</b>
-                        </h3>
-                    }
-                >
-                    {requestsAssigned.map((req) => (
-                        <Request request={req} key={req.id} />
-                    ))}
-                </InfiniteScroll>
-            );
-        } else
-            return (
-                <Typography component="h4" variant="h6" align="center">
-                    No requests assigned yet
-                </Typography>
-            );
+        return (
+            <Paper className={classes.root}>
+                <div style={{ marginBottom: 8 }}>
+                    <Tabs
+                        value={requestType.findIndex((t) => t === type)}
+                        onChange={handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="standard"
+                        centered={true}
+                    >
+                        <Tab label="Medical" />
+                        <Tab label="Monetary" />
+                    </Tabs>
+                </div>
+                <RequestsTable
+                    {...{
+                        request: requestsAssigned,
+                        loadMore,
+                        lastDoc,
+                        fetched,
+                        refresh,
+                        setRefresh,
+                    }}
+                />
+            </Paper>
+        );
     }
 });

@@ -9,7 +9,7 @@ import {
     makeStyles,
 } from "@material-ui/core";
 import AuthUserContext, { withAuthorization } from "../../contexts";
-import { UserRole } from "../../utils";
+import { REQUEST_TYPE, UserRole } from "../../utils";
 import * as ROUTES from "../../constants/routes";
 import AssignVolunteerDialog from "../AssignVolunteer";
 import Loader from "../Loader";
@@ -94,7 +94,6 @@ export default withAuthorization(
         setOpenPayModal,
     } = useGetRquestDetails(id);
 
-    console.log(request);
     if (!fetched) return <Loader />;
     else
         return Object.keys(request).length !== 0 ? (
@@ -119,7 +118,54 @@ export default withAuthorization(
                 </Box>
                 <Box className={classes.messageBox}>
                     <Typography variant="h6">{request.title}</Typography>
-                    <Typography variant="body2">
+                    <Typography variant="body3">
+                        Patient Name:&nbsp;
+                        {request.patientName ? `${request.patientName}` : ""}
+                    </Typography>
+                    <br />
+                    <Typography variant="body3">
+                        Patient Number:&nbsp;
+                        {request.patientNumber
+                            ? `${request.patientNumber}`
+                            : ""}
+                    </Typography>
+                    <br />
+                    <Typography variant="body3">
+                        SPO2 Level:&nbsp;
+                        {request.patientSpo2Level
+                            ? `${request.patientSpo2Level}`
+                            : ""}
+                    </Typography>
+                    <br />
+                    <Typography variant="body3">
+                        RT-PCR Test:&nbsp;
+                        {request.patientRTPCR ? `${request.patientRTPCR}` : ""}
+                        <br />
+                    </Typography>
+                    <Typography variant="body3">
+                        CT Severity/CORADS Index:&nbsp;
+                        {request.patientCTSeverityOrCoradsIndex
+                            ? `${request.patientCTSeverityOrCoradsIndex}`
+                            : ""}
+                    </Typography>
+                    <br />
+                    <Typography variant="body3">
+                        Caregiver Name:&nbsp;
+                        {request.caregiverName
+                            ? `${request.caregiverName}`
+                            : ""}
+                    </Typography>
+                    <br />
+                    <Typography variant="body3">
+                        Caregiver Number:&nbsp;
+                        {request.caregiverNumber
+                            ? `${request.caregiverNumber}`
+                            : ""}
+                    </Typography>
+                    <br />
+                    <br />
+
+                    <Typography variant="body1">
                         {request.description ? `${request.description}` : ""}
                     </Typography>
                 </Box>
@@ -130,7 +176,7 @@ export default withAuthorization(
                         alt=""
                     />
                 </Box>
-                {request.type === "Monetary" && (
+                {request.type === REQUEST_TYPE.Monetary && (
                     <Box
                         style={{
                             display: "flex",
@@ -203,7 +249,7 @@ export default withAuthorization(
                         open={openResolveRequestModal}
                         handleClose={handleClose}
                     />
-                    {request.type === "Monetary" && (
+                    {request.type === REQUEST_TYPE.Monetary && (
                         <PayDialog
                             request={request}
                             open={openPayModal}

@@ -2,7 +2,7 @@ import { debounce } from "@material-ui/core";
 import { useState, useEffect, useCallback } from "react";
 import { firestore } from "../contexts/firebase";
 
-const useGetRequestAssigned = (uid) => {
+const useGetRequestAssigned = (uid, type) => {
     const [requestsAssigned, setRequestsAssigned] = useState([]);
     const [fetched, setFetched] = useState(false);
     const [lastDoc, setLastDoc] = useState();
@@ -12,6 +12,7 @@ const useGetRequestAssigned = (uid) => {
             const requestsRef = firestore
                 .collection("requests")
                 .where("assignedTo", "==", uid)
+                .where("type", "==", type)
                 .orderBy("createdAt", "desc")
                 .limit(10)
                 .onSnapshot((snapshot) => {
@@ -30,7 +31,7 @@ const useGetRequestAssigned = (uid) => {
             setFetched(true);
             console.log("Error in getting request assigned", err);
         }
-    }, [uid]);
+    }, [uid, type]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadMore = useCallback(
@@ -40,6 +41,7 @@ const useGetRequestAssigned = (uid) => {
                     const nextDocuments = firestore
                         .collection("requests")
                         .where("assignedTo", "==", uid)
+                        .where("type", "==", type)
                         .orderBy("createdAt", "desc")
                         .startAfter(lastDoc)
                         .limit(5)

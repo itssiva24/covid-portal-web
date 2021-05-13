@@ -29,13 +29,8 @@ const useStyles = makeStyles((theme) => ({
 export default function AssignVolunteerDialog({ id, open, handleClose }) {
     const classes = useStyles();
 
-    const {
-        volunteer,
-        volunteers,
-        handleChange,
-        handleSubmit,
-        loading,
-    } = useAssignVolunteer(id, handleClose);
+    const { volunteer, volunteers, handleChange, handleSubmit, loading } =
+        useAssignVolunteer(id, handleClose);
 
     return (
         <div>
@@ -46,7 +41,7 @@ export default function AssignVolunteerDialog({ id, open, handleClose }) {
                         <FormControl className={classes.formControl}>
                             <InputLabel>Select Volunteer</InputLabel>
                             <Select
-                                value={volunteer}
+                                value={volunteer.id}
                                 onChange={handleChange}
                                 input={<Input />}
                             >

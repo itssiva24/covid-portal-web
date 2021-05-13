@@ -1,6 +1,6 @@
-import Request from "./Request";
 import MyRequests from "./MyRequests";
 import RequestsAssigned from "./RequestsAssigned";
 import ResolveRequestDialog from "./ResolveRequestDialog";
+import RequestsTable from "./RequestsTable";
 
-export { Request, MyRequests, RequestsAssigned, ResolveRequestDialog };
+export { MyRequests, RequestsAssigned, ResolveRequestDialog, RequestsTable };

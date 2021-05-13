@@ -1,6 +1,7 @@
 import firebase from "firebase";
 import { useReducer, useState } from "react";
 import { firestore } from "../contexts/firebase";
+import states from "../constants/states.json";
 
 const initialRequestFormState = {
     title: "",
@@ -78,7 +79,8 @@ const useUploadRequest = (authUser) => {
                 .put(requestForm.proofImage);
 
             const handleSuccess = async () => {
-                const proofImageDownloadURL = await proofUploadTask.snapshot.ref.getDownloadURL();
+                const proofImageDownloadURL =
+                    await proofUploadTask.snapshot.ref.getDownloadURL();
 
                 if (requestForm.requestType === "Monetary") {
                     const qrcodeUploadTask = firebase
@@ -91,7 +93,8 @@ const useUploadRequest = (authUser) => {
                     qrcodeUploadTask.on(
                         firebase.storage.TaskEvent.STATE_CHANGED,
                         ...handleUploadParams(async () => {
-                            const qrcodeImageDownloadURL = await qrcodeUploadTask.snapshot.ref.getDownloadURL();
+                            const qrcodeImageDownloadURL =
+                                await qrcodeUploadTask.snapshot.ref.getDownloadURL();
                             await createRequest(
                                 proofImageDownloadURL,
                                 qrcodeImageDownloadURL
@@ -108,13 +111,13 @@ const useUploadRequest = (authUser) => {
                 ...handleUploadParams(handleSuccess)
             );
             setRequestForm(initialRequestFormState);
-            setUploadResult("Success");
-            setUploading(false);
         } catch (err) {
             setUploadResult("Error");
             setUploading(false);
             console.log(err);
         } finally {
+            setUploading(false);
+            setUploadResult("Success");
             setOpenUploadResultModal(true);
         }
     };
@@ -133,9 +136,10 @@ const useUploadRequest = (authUser) => {
             email: authUser.email,
             createdBy: authUser.displayName,
             createdById: authUser.uid,
+            imageUrl: authUser.photoURL,
             createdAt: Date.now(),
             type: requestForm.requestType,
-            state: requestForm.state,
+            state: states[requestForm.state],
             city: requestForm.city,
             patientName: requestForm.patientName,
             patientNumber: requestForm.patientNumber,
