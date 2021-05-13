@@ -9,6 +9,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import SubjectIcon from "@material-ui/icons/Subject";
 import AddIcon from "@material-ui/icons/Add";
+import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import { useTheme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import useStyles from "./styles";
@@ -124,6 +125,17 @@ const drawer = (classes, history, authUser) => {
                 >
                     <CustomListIcon NavIcon={InfoOutlined} />
                     <ListItemText primary="How To Use" />
+                </ListItem>
+                <ListItem
+                    button
+                    key="Contact Us"
+                    selected={history.location.pathname === ROUTES.CONTACT_US}
+                    onClick={() => {
+                        history.push(ROUTES.CONTACT_US);
+                    }}
+                >
+                    <CustomListIcon NavIcon={ContactSupportIcon} />
+                    <ListItemText primary="Contact Us" />
                 </ListItem>
             </List>
 
