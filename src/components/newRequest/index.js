@@ -31,10 +31,16 @@ function NewRequest() {
         openUploadResultModal,
     } = useUploadRequest(authUser);
 
+    console.log(requestForm);
+
     return (
         <div>
             <Paper className={classes.root}>
-                <Typography variant="h5" component="h3">
+                <Typography
+                    variant="h5"
+                    component="h3"
+                    style={{ fontWeight: "bold" }}
+                >
                     New Request
                 </Typography>
                 <form className={classes.form} onSubmit={handleSubmit}>

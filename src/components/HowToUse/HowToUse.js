@@ -31,6 +31,7 @@ export default withAuthorization(
                 style={{
                     textAlign: "center",
                     margin: 20,
+                    fontWeight: "bold",
                 }}
             >
                 How To Use
