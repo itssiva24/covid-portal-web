@@ -35,8 +35,6 @@ export default function EditRequest(props) {
     });
     const [loading, setLoading] = useState(false);
 
-    console.log(recReq);
-
     const handleInput = (evt) => {
         const name = evt.target.name;
         const newValue = evt.target.value;

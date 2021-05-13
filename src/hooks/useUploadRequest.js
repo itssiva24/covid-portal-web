@@ -2,6 +2,7 @@ import firebase from "firebase";
 import { useReducer, useState } from "react";
 import { firestore } from "../contexts/firebase";
 import states from "../constants/states.json";
+import { REQUEST_TYPE } from "../utils";
 
 const initialRequestFormState = {
     title: "",
@@ -13,7 +14,7 @@ const initialRequestFormState = {
     recipientUPIID: "",
     recipientUPIName: "",
     QRCodeImage: "",
-    requirement:""
+    requirement: "",
 };
 
 const useUploadRequest = (authUser) => {
@@ -77,7 +78,7 @@ const useUploadRequest = (authUser) => {
                 .storage()
                 .ref()
                 .child(
-                    `requests/${authUser.email}/proof/${requestForm.proofImage.name}`
+                    `requests/${authUser.email}/${requestForm.proofImage.name}`
                 )
                 .put(requestForm.proofImage);
 
@@ -85,12 +86,12 @@ const useUploadRequest = (authUser) => {
                 const proofImageDownloadURL =
                     await proofUploadTask.snapshot.ref.getDownloadURL();
 
-                if (requestForm.requestType === "Monetary") {
+                if (requestForm.requestType === REQUEST_TYPE.Monetary) {
                     const qrcodeUploadTask = firebase
                         .storage()
                         .ref()
                         .child(
-                            `requests/${authUser.email}/qrcode/${requestForm.QRCodeImage.name}`
+                            `requests/${authUser.email}/${requestForm.QRCodeImage.name}`
                         )
                         .put(requestForm.QRCodeImage);
                     qrcodeUploadTask.on(
@@ -102,10 +103,18 @@ const useUploadRequest = (authUser) => {
                                 proofImageDownloadURL,
                                 qrcodeImageDownloadURL
                             );
+                            setUploading(false);
+                            setUploadResult("Success");
+                            setOpenUploadResultModal(true);
+                            setRequestForm(initialRequestFormState);
                         })
                     );
                 } else {
                     await createRequest(proofImageDownloadURL);
+                    setUploading(false);
+                    setUploadResult("Success");
+                    setOpenUploadResultModal(true);
+                    setRequestForm(initialRequestFormState);
                 }
             };
 
@@ -113,15 +122,10 @@ const useUploadRequest = (authUser) => {
                 firebase.storage.TaskEvent.STATE_CHANGED,
                 ...handleUploadParams(handleSuccess)
             );
-            setRequestForm(initialRequestFormState);
         } catch (err) {
             setUploadResult("Error");
             setUploading(false);
             console.log(err);
-        } finally {
-            setUploading(false);
-            setUploadResult("Success");
-            setOpenUploadResultModal(true);
         }
     };
 
@@ -142,7 +146,7 @@ const useUploadRequest = (authUser) => {
             imageUrl: authUser.photoURL,
             createdAt: Date.now(),
             type: requestForm.requestType,
-            requirement: requestForm.requirement|| "",
+            requirement: requestForm.requirement || "",
             state: states[requestForm.state],
             city: requestForm.city,
             patientName: requestForm.patientName,

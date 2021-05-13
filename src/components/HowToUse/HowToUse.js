@@ -41,7 +41,7 @@ export default withAuthorization(
                 <ListItem component="li">
                     <ListItemText>
                         <Typography component="span">
-                            1. All Requests will be visible on the{" "}
+                            1. All Requests will be visible on the&nbsp;
                         </Typography>
                         <Link className={classes.link} to={ROUTES.HOME}>
                             Home Page
@@ -52,15 +52,14 @@ export default withAuthorization(
                 <ListItem component="li">
                     <ListItemText>
                         <Typography component="span">
-                            2. To make a new Request, go to{" "}
+                            2. To make a new Request, go to&nbsp;
                         </Typography>
                         <Link className={classes.link} to={ROUTES.NEW_REQUEST}>
                             New Request Page
                         </Link>
                         <Typography component="span">
-                            {" "}
-                            and enter the necessary fields, upload necessary
-                            documents/images.
+                            &nbsp; and enter the necessary fields, upload
+                            necessary documents/images.
                         </Typography>
                     </ListItemText>
                 </ListItem>
@@ -68,7 +67,7 @@ export default withAuthorization(
                     <ListItemText>
                         <Typography component="span">
                             3. Once you have made a request it will be visible
-                            on the{" "}
+                            on the&nbsp;
                         </Typography>
                         <Link className={classes.link} to={ROUTES.MY_REQUESTS}>
                             My Requests page
@@ -92,6 +91,20 @@ export default withAuthorization(
                         <Typography component="span">
                             5. Once the request is resolved, it'll be be removed
                             from the Requests page.
+                        </Typography>
+                    </ListItemText>
+                </ListItem>
+                <ListItem component="li">
+                    <ListItemText>
+                        <Typography component="span">
+                            6. You can contribute by donating money or by
+                            becoming a volunteer!&nbsp;
+                        </Typography>
+                        <Link className={classes.link} to={ROUTES.CONTACT_US}>
+                            Contact us
+                        </Link>
+                        <Typography component="span">
+                            &nbsp;for more info.
                         </Typography>
                     </ListItemText>
                 </ListItem>

@@ -73,7 +73,7 @@ function NewRequest() {
                             </MenuItem>
                         </Select>
                     </div>
-                    {requestForm.requestType===REQUEST_TYPE.Medical && (
+                    {requestForm.requestType === REQUEST_TYPE.Medical && (
                         <div
                             style={{
                                 display: "flex",
@@ -101,7 +101,7 @@ function NewRequest() {
                                 }}
                                 onChange={handleInput}
                             >
-                                {Object.values(REQUIREMENT).map(v=>(
+                                {Object.values(REQUIREMENT).map((v) => (
                                     <MenuItem value={v}>{v}</MenuItem>
                                 ))}
                             </Select>
@@ -319,7 +319,6 @@ function NewRequest() {
                                 <input
                                     type="file"
                                     name="QRCodeImage"
-                                    required
                                     onChange={handleFile}
                                 />
                             </div>

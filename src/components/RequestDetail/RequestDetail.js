@@ -85,6 +85,7 @@ export const useStyles = makeStyles((theme) => ({
         "& button": {
             display: "block",
             marginLeft: 8,
+            marginTop: 6,
         },
     },
 }));
@@ -105,6 +106,7 @@ export default withAuthorization(
         openPayModal,
         openResolveRequestModal,
         openUpdateCollectedAmountModal,
+        moneyEntered,
         handleClose,
         fetched,
         toDateTime,
@@ -112,6 +114,7 @@ export default withAuthorization(
         setOpenResolveRequestModal,
         setOpenPayModal,
         setOpenUpdateCollectedAmountModal,
+        setMoneyEntered,
     } = useGetRquestDetails(id);
 
     const editRedirect = {
@@ -150,11 +153,9 @@ export default withAuthorization(
                             <LinearProgress
                                 value={
                                     request.amountNeeded &&
-                                    request.amountCollected
-                                        ? (request.amountCollected /
-                                              request.amountNeeded) *
-                                          100
-                                        : 50
+                                    (request.amountCollected /
+                                        request.amountNeeded) *
+                                        100
                                 }
                                 variant="determinate"
                                 style={{
@@ -165,13 +166,12 @@ export default withAuthorization(
                             />
                             <Typography align="right">
                                 &#x20B9;
-                                {request.amountNeeded && request.amountCollected
-                                    ? `${request.amountCollected.toLocaleString(
-                                          "en-IN"
-                                      )}/${request.amountNeeded.toLocaleString(
-                                          "en-IN"
-                                      )}`
-                                    : "2,50,000/5,00,000"}
+                                {request.amountNeeded &&
+                                    `${request.amountCollected.toLocaleString(
+                                        "en-IN"
+                                    )}/${request.amountNeeded.toLocaleString(
+                                        "en-IN"
+                                    )}`}
                             </Typography>
                             <Button
                                 variant="contained"
@@ -355,6 +355,8 @@ export default withAuthorization(
                                     request={request}
                                     open={openPayModal}
                                     handleClose={handleClose}
+                                    moneyEntered={moneyEntered}
+                                    setMoneyEntered={setMoneyEntered}
                                 />
                                 <UpdateCollectedAmountDialog
                                     id={id}

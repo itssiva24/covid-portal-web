@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     largeBox: {
         minWidth: 240,
     },
+    veryLargeBox: {
+        minWidth: 264,
+    },
     button: {
         [theme.breakpoints.down("xs")]: {
             fontSize: 12,
@@ -62,7 +65,7 @@ export default function ({
     useEffect(() => {
         setColumns(getColumns(type));
     }, [type]);
-    const head = [
+    const head1 = [
         {
             id: "title",
             label: "Title",
@@ -80,16 +83,29 @@ export default function ({
             label: "State",
         },
         { id: "volunteer", label: "Volunteer" },
-        { id: "status", label: "Status" },
         {
             id: "date",
             label: "Date",
         },
     ];
+    const head2 = [
+        {
+            id: "title",
+            label: "Title",
+        },
+        {
+            id: "amountCollected",
+            label: "Amount Collected",
+        },
+        { id: "volunteer", label: "Volunteer" },
+        {
+            id: "date",
+            label: "Date",
+        },
+    ];
+
     const getColumns = (type) => {
-        return type === REQUEST_TYPE.Medical
-            ? head
-            : head.filter((v) => v.id !== "requirement");
+        return type === REQUEST_TYPE.Medical ? head1 : head2;
     };
 
     const CustomTableHead = () => (
@@ -101,8 +117,6 @@ export default function ({
             </TableRow>
         </TableHead>
     );
-
-    console.log(type);
 
     if (!fetched)
         return (
@@ -166,36 +180,82 @@ export default function ({
                                             <TableCell
                                                 className={classes.mediumBox}
                                             >
-                                                <Button variant="outlined">
+                                                <Button
+                                                    variant="outlined"
+                                                    className={classes.button}
+                                                >
                                                     {req.requirement}
                                                 </Button>
                                             </TableCell>
                                         )}
-                                        <TableCell className={classes.smallBox}>
-                                            {`${req.description.slice(
-                                                0,
-                                                32
-                                            )}...`}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Button
-                                                variant="outlined"
-                                                color="primary"
-                                                size="small"
-                                                className={classes.button}
-                                            >
-                                                {req.state === ""
-                                                    ? "State N/A"
-                                                    : req.state}
-                                            </Button>
-                                        </TableCell>
-                                        <TableCell>
+                                        {req.type === REQUEST_TYPE.Medical ? (
+                                            <>
+                                                <TableCell
+                                                    className={
+                                                        classes.mediumBox
+                                                    }
+                                                >
+                                                    {`${req.description.slice(
+                                                        0,
+                                                        42
+                                                    )}...`}
+                                                </TableCell>
+                                                <TableCell
+                                                    className={classes.largeBox}
+                                                >
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="primary"
+                                                        size="small"
+                                                        className={
+                                                            classes.button
+                                                        }
+                                                    >
+                                                        {req.state === ""
+                                                            ? "State N/A"
+                                                            : req.state}
+                                                    </Button>
+                                                </TableCell>
+                                            </>
+                                        ) : (
+                                            <TableCell>
+                                                <LinearProgress
+                                                    value={
+                                                        req.amountNeeded &&
+                                                        (req.amountCollected /
+                                                            req.amountNeeded) *
+                                                            100
+                                                    }
+                                                    variant="determinate"
+                                                    style={{
+                                                        height: 6,
+                                                        borderRadius: 2,
+                                                    }}
+                                                />
+                                                <Typography
+                                                    align="right"
+                                                    style={{ fontSize: 14 }}
+                                                >
+                                                    &#x20B9;
+                                                    {req.amountNeeded &&
+                                                        `${req.amountCollected.toLocaleString(
+                                                            "en-IN"
+                                                        )}/${req.amountNeeded.toLocaleString(
+                                                            "en-IN"
+                                                        )}`}
+                                                </Typography>
+                                            </TableCell>
+                                        )}
+
+                                        <TableCell
+                                            className={classes.veryLargeBox}
+                                        >
                                             <Button
                                                 variant="outlined"
                                                 color={
                                                     req.assignedTo
                                                         ? "primary"
-                                                        : "default"
+                                                        : "secondary"
                                                 }
                                                 size="small"
                                                 className={classes.button}
@@ -206,7 +266,7 @@ export default function ({
                                             </Button>
                                         </TableCell>
 
-                                        <TableCell
+                                        {/* <TableCell
                                             className={classes.mediumBox}
                                         >
                                             <Button
@@ -223,7 +283,7 @@ export default function ({
                                                     ? "Resolved"
                                                     : "Not resolved"}
                                             </Button>
-                                        </TableCell>
+                                        </TableCell> */}
                                         <TableCell>
                                             {getDate(req.createdAt)}
                                         </TableCell>

@@ -10,6 +10,7 @@ const useGetRquestDetails = (id) => {
         useState(false);
     const [openResolveRequestModal, setOpenResolveRequestModal] =
         useState(false);
+    const [moneyEntered, setMoneyEntered] = useState(0);
     const [fetched, setFetched] = useState(false);
 
     useEffect(() => {
@@ -43,6 +44,7 @@ const useGetRquestDetails = (id) => {
         setOpenResolveRequestModal(false);
         setOpenPayModal(false);
         setOpenUpdateCollectedAmountModal(false);
+        setMoneyEntered(0);
     };
 
     return {
@@ -54,10 +56,12 @@ const useGetRquestDetails = (id) => {
         openResolveRequestModal,
         openPayModal,
         openUpdateCollectedAmountModal,
+        moneyEntered,
         setOpenAssignVolnteerModal,
         setOpenResolveRequestModal,
         setOpenPayModal,
         setOpenUpdateCollectedAmountModal,
+        setMoneyEntered,
     };
 };
 
