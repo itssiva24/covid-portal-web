@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../Loader";
@@ -14,8 +14,7 @@ import {
     LinearProgress,
     Typography,
 } from "@material-ui/core";
-import { getDate } from "../../utils";
-import { REQUEST_TYPE } from "../../utils";
+import { getDate, REQUEST_TYPE } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
     body: {
@@ -45,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ({
+    type,
     request,
     loadMore,
     lastDoc,
@@ -56,11 +56,18 @@ export default function ({
     const classes = useStyles();
 
     const history = useHistory();
-
-    const head1 = [
+    const [columns, setColumns] = useState([])
+    useEffect(() => {
+        setColumns(getColumns(type))
+    }, [type])
+    const head = [
         {
             id: "title",
             label: "Title",
+        },
+        {
+            id:"requirement",
+            label:"Requirement"
         },
         {
             id: "description",
@@ -77,40 +84,21 @@ export default function ({
             label: "Date",
         },
     ];
-    const head2 = [
-        {
-            id: "title",
-            label: "Title",
-        },
-        {
-            id: "amountCollected",
-            label: "Amount Collected",
-        },
-        { id: "volunteer", label: "Volunteer" },
-        { id: "status", label: "Status" },
-        {
-            id: "date",
-            label: "Date",
-        },
-    ];
+    const getColumns = (type)=>{
+        return type===REQUEST_TYPE.Medical?head:head.filter((v)=>v.id!=="requirement")
+    }
 
     const CustomTableHead = () => (
         <TableHead>
-            {type === REQUEST_TYPE.Medical ? (
-                <TableRow>
-                    {head1.map((headCell) => (
-                        <TableCell>{headCell.label}</TableCell>
-                    ))}
-                </TableRow>
-            ) : (
-                <TableRow>
-                    {head2.map((headCell) => (
-                        <TableCell>{headCell.label}</TableCell>
-                    ))}
-                </TableRow>
-            )}
+            <TableRow>
+                {columns.map((headCell) => (
+                    <TableCell>{headCell.label}</TableCell>
+                ))}
+            </TableRow>
         </TableHead>
     );
+
+    console.log(type);
 
     if (!fetched)
         return (
@@ -145,7 +133,7 @@ export default function ({
             >
                 <TableContainer>
                     <Table>
-                        <CustomTableHead />
+                        <CustomTableHead type={type} />
                         <TableBody className={classes.body}>
                             {request.map((req, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -160,7 +148,7 @@ export default function ({
                                         tabIndex={-1}
                                         key={req.name}
                                         className={classes.row}
-                                    >
+                                    >   
                                         <TableCell
                                             component="th"
                                             id={labelId}
@@ -170,72 +158,30 @@ export default function ({
                                                 ? `${req.title.slice(0, 24)}..`
                                                 : req.title}
                                         </TableCell>
-                                        {req.type === REQUEST_TYPE.Medical ? (
-                                            <>
-                                                <TableCell
-                                                    className={
-                                                        classes.mediumBox
-                                                    }
-                                                >
-                                                    {`${req.description.slice(
-                                                        0,
-                                                        42
-                                                    )}...`}
-                                                </TableCell>
-                                                <TableCell
-                                                    className={
-                                                        classes.mediumBox
-                                                    }
-                                                >
-                                                    <Button
-                                                        variant="outlined"
-                                                        color="primary"
-                                                        size="small"
-                                                        className={
-                                                            classes.button
-                                                        }
-                                                    >
-                                                        {req.state === ""
-                                                            ? "State N/A"
-                                                            : req.state}
-                                                    </Button>
-                                                </TableCell>
-                                            </>
-                                        ) : (
+                                        {type===REQUEST_TYPE.Medical &&(
                                             <TableCell>
-                                                <LinearProgress
-                                                    value={
-                                                        req.amountNeeded &&
-                                                        req.amountCollected
-                                                            ? (req.amountCollected /
-                                                                  req.amountNeeded) *
-                                                              100
-                                                            : 50
-                                                    }
-                                                    variant="determinate"
-                                                    style={{
-                                                        height: 6,
-                                                        borderRadius: 2,
-                                                    }}
-                                                />
-                                                <Typography
-                                                    align="right"
-                                                    style={{ fontSize: 14 }}
-                                                >
-                                                    &#x20B9;
-                                                    {req.amountNeeded &&
-                                                    req.amountCollected
-                                                        ? `${req.amountCollected.toLocaleString(
-                                                              "en-IN"
-                                                          )}/${req.amountNeeded.toLocaleString(
-                                                              "en-IN"
-                                                          )}`
-                                                        : "2,50,000/5,00,000"}
-                                                </Typography>
+                                                {req.requirement}
                                             </TableCell>
                                         )}
-
-                                        <TableCell className={classes.largeBox}>
+                                        <TableCell>
+                                            {`${req.description.slice(
+                                                0,
+                                                42
+                                            )}...`}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button
+                                                variant="outlined"
+                                                color="primary"
+                                                size="small"
+                                                className={classes.button}
+                                            >
+                                                {req.state === ""
+                                                    ? "State N/A"
+                                                    : req.state}
+                                            </Button>
+                                        </TableCell>
+                                        <TableCell>
                                             <Button
                                                 variant="outlined"
                                                 color={

@@ -11,4 +11,11 @@ export const REQUEST_TYPE = {
     Monetary: "MONETARY",
 };
 
+export const REQUIREMENT = {
+    Beds: "Hospital Beds",
+    Plasma: "Plasma",
+    Medicine:"Medicine",
+    Oxygen:"Oxygen"
+};
+
 export { getDate };
