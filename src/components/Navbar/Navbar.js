@@ -16,6 +16,7 @@ import * as ROUTES from "../../constants/routes";
 import AuthUserContext from "../../contexts";
 import { UserRole } from "../../utils";
 import { Typography } from "@material-ui/core";
+import InfoOutlined from "@material-ui/icons/InfoOutlined"
 
 const navLinks = [
     {
@@ -113,7 +114,29 @@ const drawer = (classes, history, authUser) => {
                         <ListItemText primary="Add Volunteer" />
                     </ListItem>
                 )}
+                <ListItem
+                    button
+                    key="How to use"
+                    selected={
+                        history.location.pathname === ROUTES.HOW_TO_USE
+                    }
+                    onClick={() => {
+                        history.push(ROUTES.HOW_TO_USE);
+                    }}
+                >
+                    <CustomListIcon NavIcon={InfoOutlined} />
+                    <ListItemText primary="How To Use" />
+                </ListItem>
             </List>
+
+            <footer style={{
+                marginTop:"auto",
+                padding:20
+            }}>
+                <Typography variant="body1" style={{
+                    textAlign:"center"
+                }}> Made with love by<br /> Institute Webops</Typography>
+            </footer>
         </>
     );
 };

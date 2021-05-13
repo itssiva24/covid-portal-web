@@ -9,11 +9,11 @@ import {
 import AuthUserContext from "../../contexts/authUserContext";
 import useUploadRequest from "../../hooks/useUploadRequest";
 import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import useStyles from "./styles";
 import states from "../../constants/states.json";
-import cities from "../../constants/cities.json";
 import UploadResultDialog from "./UploadResultDialog";
 import { REQUEST_TYPE } from "../../utils";
 
@@ -137,7 +137,7 @@ function NewRequest() {
                             >
                                 City
                             </InputLabel>
-                            <Select
+                            {/* <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 name="city"
@@ -147,10 +147,17 @@ function NewRequest() {
                                 style={{ flex: "1" }}
                             >
                                 {requestForm.state &&
-                                    cities[requestForm.state].map((city) => (
+                                    cities[states[requestForm.state]].map((city) => (
                                         <MenuItem value={city}>{city}</MenuItem>
                                     ))}
-                            </Select>
+                            </Select> */}
+                            <Input
+                                name="city"
+                                required
+                                value={requestForm.city}
+                                onChange={handleInput}
+                                style={{ flex: "1" }}
+                            ></Input>
                         </div>
                     </div>
                     {requestForm.requestType && (
