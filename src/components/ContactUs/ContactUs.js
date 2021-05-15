@@ -18,6 +18,7 @@ const details = [
     },
     {
         name: "Rahul Sundar",
+        pos: "Logistics and Operations Head",
         email: "rahulsundar@smail.iitm.ac.in",
     },
 ];
