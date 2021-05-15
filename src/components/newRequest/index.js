@@ -234,6 +234,7 @@ function NewRequest() {
                                 label="CT Severity or CORADS Index"
                                 id="outlined-basic"
                                 name="patientCTSeverityOrCoradsIndex"
+                                required
                                 value={
                                     requestForm.patientCTSeverityOrCoradsIndex
                                 }
@@ -244,6 +245,7 @@ function NewRequest() {
                                 label="RT-PCR/PCR Test(if any)"
                                 id="outlined-basic"
                                 name="patientRTPCR"
+                                required
                                 value={requestForm.patientRTPCR}
                                 className={classes.textField}
                                 onChange={handleInput}
@@ -315,7 +317,7 @@ function NewRequest() {
                                 required
                             />
                             <div className={classes.chooseFile}>
-                                <label>UPI QR code Image: </label>
+                                <label>UPI QR code Image*: </label>
                                 <input
                                     type="file"
                                     name="QRCodeImage"
@@ -327,8 +329,8 @@ function NewRequest() {
                     <div className={classes.chooseFile}>
                         <label>
                             {requestForm.requestType !== REQUEST_TYPE.Monetary
-                                ? "Image to support your request:"
-                                : "Hospital bill or other relevant document: "}
+                                ? "Image to support your request*:"
+                                : "Hospital bill or other relevant document*: "}
                         </label>
                         <input
                             type="file"
