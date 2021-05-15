@@ -234,7 +234,6 @@ function NewRequest() {
                                 label="CT Severity or CORADS Index"
                                 id="outlined-basic"
                                 name="patientCTSeverityOrCoradsIndex"
-                                
                                 value={
                                     requestForm.patientCTSeverityOrCoradsIndex
                                 }
@@ -245,7 +244,6 @@ function NewRequest() {
                                 label="RT-PCR/PCR Test(if any)"
                                 id="outlined-basic"
                                 name="patientRTPCR"
-                                
                                 value={requestForm.patientRTPCR}
                                 className={classes.textField}
                                 onChange={handleInput}
@@ -321,6 +319,7 @@ function NewRequest() {
                                 <input
                                     type="file"
                                     name="QRCodeImage"
+                                    required
                                     onChange={handleFile}
                                 />
                             </div>

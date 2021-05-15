@@ -78,7 +78,7 @@ const useUploadRequest = (authUser) => {
                 .storage()
                 .ref()
                 .child(
-                    `requests/${authUser.email}/${requestForm.proofImage.name}`
+                    `requests/${authUser.email}/proof/${requestForm.proofImage.name}`
                 )
                 .put(requestForm.proofImage);
 
@@ -91,7 +91,7 @@ const useUploadRequest = (authUser) => {
                         .storage()
                         .ref()
                         .child(
-                            `requests/${authUser.email}/${requestForm.QRCodeImage.name}`
+                            `requests/${authUser.email}/qr/${requestForm.QRCodeImage.name}`
                         )
                         .put(requestForm.QRCodeImage);
                     qrcodeUploadTask.on(
