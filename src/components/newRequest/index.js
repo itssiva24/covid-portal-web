@@ -234,7 +234,7 @@ function NewRequest() {
                                 label="CT Severity or CORADS Index"
                                 id="outlined-basic"
                                 name="patientCTSeverityOrCoradsIndex"
-                                required
+                                
                                 value={
                                     requestForm.patientCTSeverityOrCoradsIndex
                                 }
@@ -245,7 +245,7 @@ function NewRequest() {
                                 label="RT-PCR/PCR Test(if any)"
                                 id="outlined-basic"
                                 name="patientRTPCR"
-                                required
+                                
                                 value={requestForm.patientRTPCR}
                                 className={classes.textField}
                                 onChange={handleInput}

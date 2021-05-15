@@ -153,8 +153,8 @@ const useUploadRequest = (authUser) => {
             patientNumber: requestForm.patientNumber,
             patientSpo2Level: requestForm.patientSpo2Level,
             patientCTSeverityOrCoradsIndex:
-                requestForm.patientCTSeverityOrCoradsIndex,
-            patientRTPCR: requestForm.patientRTPCR,
+                requestForm.patientCTSeverityOrCoradsIndex || "",
+            patientRTPCR: requestForm.patientRTPCR || "",
             caregiverName: requestForm.caregiverName,
             caregiverNumber: requestForm.caregiverNumber,
             recipientUPIID: requestForm.recipientUPIID,
