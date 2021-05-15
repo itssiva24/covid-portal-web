@@ -5,49 +5,24 @@ import {
     TextField,
     Paper,
     Typography,
-    LinearProgress,
     Input,
     CircularProgress,
 } from "@material-ui/core";
-import AuthUserContext from "../../contexts/authUserContext";
-import useUploadRequest from "../../hooks/useUploadRequest";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import useStyles from "../newRequest/styles";
 import states from "../../constants/states.json";
-import cities from "../../constants/cities.json";
-import UploadResultDialog from "../newRequest/UploadResultDialog";
 import { REQUEST_TYPE } from "../../utils";
+import useEditRequest from "../../hooks/useEditRequest";
 
 export default function EditRequest(props) {
     const classes = useStyles();
 
     const initialRequestState = props.location.request;
 
-    const [recReq, setRecReq] = useState({
-        ...initialRequestState,
-        state:
-            Object.keys(states).filter(
-                (key) => states[key] === initialRequestState.state
-            )[0] || initialRequestState.state,
-        requestType: initialRequestState.type,
-    });
-    const [loading, setLoading] = useState(false);
-
-    const handleInput = (evt) => {
-        const name = evt.target.name;
-        const newValue = evt.target.value;
-        setRecReq({ ...recReq, [name]: newValue });
-    };
-
-    const handleSubmit = async (evt) => {
-        evt.preventDefault();
-        setLoading(true);
-        const requestRef = firestore.collection("requests").doc(recReq.id);
-        await requestRef.set({ ...recReq, state: states[recReq.state] });
-        setLoading(false);
-    };
+    const { recReq, handleInput, handleSubmit, uploading, handleFile } =
+        useEditRequest(initialRequestState);
 
     return (
         <div>
@@ -296,18 +271,18 @@ export default function EditRequest(props) {
                                 type="number"
                                 required
                             />
-                            {/* <div className={classes.chooseFile}>
+                            <div className={classes.chooseFile}>
                                 <label>UPI QR code Image: </label>
                                 <input
                                     type="file"
                                     name="QRCodeImage"
                                     required
-                                    // onChange={handleFile}
+                                    onChange={handleFile}
                                 />
-                            </div> */}
+                            </div>
                         </>
                     )}
-                    {/* <div className={classes.chooseFile}>
+                    <div className={classes.chooseFile}>
                         <label>
                             {recReq.type !== REQUEST_TYPE.Monetary
                                 ? "Image to support your request:"
@@ -316,17 +291,17 @@ export default function EditRequest(props) {
                         <input
                             type="file"
                             name="proofImage"
-                            // required
-                            // onChange={handleFile}
+                            required
+                            onChange={handleFile}
                         />
-                    </div> */}
+                    </div>
                     <Button
                         type="submit"
                         variant="contained"
                         color="primary"
                         className={classes.button}
                     >
-                        {loading ? (
+                        {uploading ? (
                             <CircularProgress color="secondary" />
                         ) : (
                             "Submit"
