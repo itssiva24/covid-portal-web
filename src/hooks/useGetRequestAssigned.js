@@ -9,6 +9,7 @@ const useGetRequestAssigned = (uid, type) => {
 
     useEffect(() => {
         try {
+            setFetched(false);
             const requestsRef = firestore
                 .collection("requests")
                 .where("assignedTo", "==", uid)

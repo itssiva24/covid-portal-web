@@ -9,6 +9,7 @@ const useFetchRequests = (type) => {
 
     useEffect(() => {
         try {
+            setFetched(false);
             const subscriber = firestore
                 .collection("requests")
                 .where("resolved", "==", false)
