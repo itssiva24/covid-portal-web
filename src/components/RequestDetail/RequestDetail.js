@@ -343,6 +343,7 @@ export default withAuthorization(
                             id={id}
                             open={openAssignVolunteerModal}
                             handleClose={handleClose}
+                            //type={request.type}
                         />
                         <ResolveRequestDialog
                             id={id}

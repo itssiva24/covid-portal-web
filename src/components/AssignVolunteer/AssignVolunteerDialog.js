@@ -26,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function AssignVolunteerDialog({ id, open, handleClose }) {
+export default function AssignVolunteerDialog({ id, open, handleClose, type }) {
     const classes = useStyles();
 
     const { volunteer, volunteers, handleChange, handleSubmit, loading } =
-        useAssignVolunteer(id, handleClose);
+        useAssignVolunteer(id, handleClose, type);
 
     return (
         <div>

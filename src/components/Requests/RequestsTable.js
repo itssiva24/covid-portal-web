@@ -105,7 +105,7 @@ export default function ({
     ];
 
     const getColumns = (type) => {
-        return type === REQUEST_TYPE.Medical ? head1 : head2;
+        return type.toUpperCase() === REQUEST_TYPE.Medical ? head1 : head2;
     };
 
     const CustomTableHead = () => (
@@ -164,7 +164,7 @@ export default function ({
                                         }}
                                         role="checkbox"
                                         tabIndex={-1}
-                                        key={req.name}
+                                        key={req.id}
                                         className={classes.row}
                                     >
                                         <TableCell
@@ -176,7 +176,8 @@ export default function ({
                                                 ? `${req.title.slice(0, 24)}..`
                                                 : req.title}
                                         </TableCell>
-                                        {type === REQUEST_TYPE.Medical && (
+                                        {type.toUpperCase() ===
+                                            REQUEST_TYPE.Medical && (
                                             <TableCell
                                                 className={classes.mediumBox}
                                             >
@@ -221,10 +222,11 @@ export default function ({
                                             <TableCell>
                                                 <LinearProgress
                                                     value={
-                                                        req.amountNeeded &&
-                                                        (req.amountCollected /
-                                                            req.amountNeeded) *
-                                                            100
+                                                        req.amountNeeded
+                                                            ? (req.amountCollected /
+                                                                  req.amountNeeded) *
+                                                              100
+                                                            : 0
                                                     }
                                                     variant="determinate"
                                                     style={{

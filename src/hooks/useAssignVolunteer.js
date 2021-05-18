@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { firestore } from "../contexts/firebase";
+import RequestsContexts from "../contexts/requestsContext";
 import { UserRole } from "../utils";
 
-const useAssignVolunteer = (id, handleClose) => {
+const useAssignVolunteer = (id, handleClose, type) => {
     const [volunteer, setVolunteer] = useState({ name: "", id: "" });
     const [volunteers, setVolunteers] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    // const { setFetched } = useContext(RequestsContexts);
 
     const assignVolunteer = async (id, name, requestId) => {
         if (!id) return null;
@@ -71,6 +74,7 @@ const useAssignVolunteer = (id, handleClose) => {
         setLoading(false);
         handleClose();
         setVolunteer("");
+        // setFetched((prev) => ({ ...prev, [type.toLowerCase()]: false }));
     };
     return { volunteer, volunteers, handleChange, handleSubmit, loading };
 };

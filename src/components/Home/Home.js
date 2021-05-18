@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { withAuthorization } from "../../contexts";
 import * as ROUTES from "../../constants/routes";
 import useFetchRequests from "../../hooks/useFetchRequest";
@@ -9,6 +9,7 @@ import { REQUEST_TYPE } from "../../utils";
 import { Paper, Tabs, Tab } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
+import RequestsContexts from "../../contexts/requestsContext";
 
 const condition = (authUser) => !!authUser;
 
@@ -24,16 +25,15 @@ export default withAuthorization(
 )(() => {
     const classes = useStyles();
     const [refresh, setRefresh] = useState(false);
-    const [type, setType] = useState(REQUEST_TYPE.Medical);
-    const { request, loadMore, lastDoc, fetched } = useFetchRequests(type);
+    const { request, loadMore, fetched, lastDoc, type, handleChange } =
+        useContext(RequestsContexts);
 
-    const requestType = [REQUEST_TYPE.Medical, REQUEST_TYPE.Monetary];
+    const requestType = [
+        REQUEST_TYPE.Medical.toLowerCase(),
+        REQUEST_TYPE.Monetary.toLowerCase(),
+    ];
 
-    const handleChange = (e, val) => {
-        setType(requestType[val]);
-    };
-
-    if (!fetched)
+    if (!fetched[type] && !request[type].length)
         return (
             <div>
                 <Loader />
@@ -57,10 +57,10 @@ export default withAuthorization(
                 </div>
                 <RequestsTable
                     {...{
-                        request,
+                        request: request[type],
                         loadMore,
-                        lastDoc,
-                        fetched,
+                        lastDoc: lastDoc[type],
+                        fetched: !!fetched[type] || !!request[type].length,
                         refresh,
                         setRefresh,
                         type,

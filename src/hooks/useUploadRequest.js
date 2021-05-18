@@ -30,7 +30,6 @@ const useUploadRequest = (authUser) => {
 
     const handleClose = () => {
         setOpenUploadResultModal(false);
-        setUploadResult("");
     };
 
     const handleUploadParams = (onSuccess) => {
