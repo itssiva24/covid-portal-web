@@ -19,26 +19,28 @@ export const firestore = firebase.firestore();
 export const signInWithGoogle = (domain) => {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({
-        hd: domain,
+        hd: "smail.iitm.ac.in",
     });
     return auth.signInWithPopup(provider);
 };
 
-export const createUser = async (cred) => {
-    const { user } = cred;
-
+export const createUser = async (user) => {
     const userRef = firestore.doc(`users/${user.uid}`);
     const snapshot = await userRef.get();
-    if (snapshot.exists) return;
+    if (snapshot.exists) return snapshot.data();
 
     const { email, displayName, photoURL } = user;
     try {
-        await userRef.set({
-            displayName,
-            email,
-            photoURL,
-            role: UserRole.Student,
-        });
+        await userRef.set(
+            {
+                displayName,
+                email,
+                photoURL,
+                role: UserRole.Student,
+            },
+            { merge: true }
+        );
+        return await getUser(user.uid);
     } catch (error) {
         console.error("Error creating user document", error);
     }

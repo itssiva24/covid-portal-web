@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import AuthUserContext from "./authUserContext";
-import { auth, getUser } from "./firebase";
+import { auth, createUser } from "./firebase";
 
 export default (Component) => (props) => {
     const [authUser, setAuthUser] = useState();
@@ -12,7 +12,7 @@ export default (Component) => (props) => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             setAuthUser(user);
             if (user) {
-                setAuthUser({ ...(await getUser(user.uid)), uid: user.uid });
+                setAuthUser({ ...(await createUser(user)), uid: user.uid });
             }
             setLoading(false);
         });

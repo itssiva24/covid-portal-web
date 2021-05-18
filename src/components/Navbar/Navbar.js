@@ -50,7 +50,11 @@ const drawer = (classes, history, authUser) => {
                         {authUser && authUser.displayName}
                     </Typography>
                     <Typography component="p" variant="caption">
-                        {authUser && authUser.role}
+                        {authUser
+                            ? authUser.role === UserRole.Student
+                                ? "MEMBER"
+                                : authUser.role
+                            : ""}
                     </Typography>
                 </div>
             </header>

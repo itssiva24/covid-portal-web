@@ -1,20 +1,23 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import * as ROUTES from "../../constants/routes";
-import { createUser, signInWithGoogle } from "../../contexts/firebase";
+import { signInWithGoogle } from "../../contexts/firebase";
 import { withAuthorization } from "../../contexts";
 import { useHistory } from "react-router";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Link from "@material-ui/core/Link";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Deer from "../../assets/images/deer.jpg";
 import Logo from "../../assets/images/logo.png";
-import { CircularProgress, InputLabel, MenuItem, Select } from "@material-ui/core";
-import {DomainMap} from "../../utils"
+import {
+    CircularProgress,
+    InputLabel,
+    MenuItem,
+    Select,
+} from "@material-ui/core";
+import { DomainMap } from "../../utils";
 const condition = (authUser) => !authUser;
 
 const useStyles = makeStyles((theme) => ({
@@ -59,25 +62,23 @@ export default withAuthorization(
 )(() => {
     const classes = useStyles();
     const history = useHistory();
-    const [domain, setDomain] = useState()
-    const [message, setMessage] = useState()
-    const [processing, setProcessing] = useState(false)
+    const [domain, setDomain] = useState();
+    const [message, setMessage] = useState();
+    const [processing, setProcessing] = useState(false);
     const googleSignIn = async () => {
-        setProcessing(true)
-        if(!domain) {
-            console.log("empty domain")
-            setMessage(true)
-            setProcessing(false)
-            return
+        setProcessing(true);
+        if (!domain) {
+            setMessage(true);
+            setProcessing(false);
+            return;
         }
         try {
             const cred = await signInWithGoogle(domain);
-            await createUser(cred);
             history.push(ROUTES.HOME);
         } catch (err) {
             console.log(err);
         }
-        setProcessing(false)
+        setProcessing(false);
     };
 
     return (
@@ -101,7 +102,7 @@ export default withAuthorization(
                     </Typography>
                     <div
                         style={{
-                            width:200,
+                            width: 200,
                             display: "flex",
                             alignItems: "center",
                             marginTop: 16,
@@ -114,7 +115,7 @@ export default withAuthorization(
                             }}
                             required
                         >
-                            Role
+                            Login in as
                         </InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -125,12 +126,12 @@ export default withAuthorization(
                             style={{
                                 flex: "1",
                             }}
-                            onChange={(e)=>{
-                                setDomain(e.target.value)
-                                setMessage()
+                            onChange={(e) => {
+                                setDomain(e.target.value);
+                                setMessage();
                             }}
                         >
-                            {Object.entries(DomainMap).map(([k, v])=>(
+                            {Object.entries(DomainMap).map(([k, v]) => (
                                 <MenuItem value={v}>{k}</MenuItem>
                             ))}
                         </Select>
@@ -142,13 +143,17 @@ export default withAuthorization(
                         style={{ marginTop: 8 }}
                         disabled={processing}
                     >
-                        {processing?(
+                        {processing ? (
                             <CircularProgress size="2em"></CircularProgress>
-                        ):"Login"}
+                        ) : (
+                            "Login"
+                        )}
                     </Button>
-                    {message && (<Typography variant="body2">
-                        Please select the role
-                    </Typography>)}
+                    {message && (
+                        <Typography variant="body2">
+                            Please select an option!
+                        </Typography>
+                    )}
                 </div>
             </Grid>
         </Grid>
