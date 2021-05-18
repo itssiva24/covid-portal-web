@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import * as ROUTES from "../../constants/routes";
 import { createUser, signInWithGoogle } from "../../contexts/firebase";
 import { withAuthorization } from "../../contexts";
@@ -13,7 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Deer from "../../assets/images/deer.jpg";
 import Logo from "../../assets/images/logo.png";
-
+import { CircularProgress, InputLabel, MenuItem, Select } from "@material-ui/core";
+import {DomainMap} from "../../utils"
 const condition = (authUser) => !authUser;
 
 const useStyles = makeStyles((theme) => ({
@@ -58,15 +59,25 @@ export default withAuthorization(
 )(() => {
     const classes = useStyles();
     const history = useHistory();
-
+    const [domain, setDomain] = useState()
+    const [message, setMessage] = useState()
+    const [processing, setProcessing] = useState(false)
     const googleSignIn = async () => {
+        setProcessing(true)
+        if(!domain) {
+            console.log("empty domain")
+            setMessage(true)
+            setProcessing(false)
+            return
+        }
         try {
-            const cred = await signInWithGoogle();
+            const cred = await signInWithGoogle(domain);
             await createUser(cred);
             history.push(ROUTES.HOME);
         } catch (err) {
             console.log(err);
         }
+        setProcessing(false)
     };
 
     return (
@@ -88,14 +99,56 @@ export default withAuthorization(
                     <Typography component="h1" variant="h5" align="center">
                         A portal for seeking covid related help
                     </Typography>
+                    <div
+                        style={{
+                            width:200,
+                            display: "flex",
+                            alignItems: "center",
+                            marginTop: 16,
+                        }}
+                    >
+                        <InputLabel
+                            id="demo-simple-select-label"
+                            style={{
+                                marginRight: 10,
+                            }}
+                            required
+                        >
+                            Role
+                        </InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            name="role"
+                            required
+                            value={domain}
+                            style={{
+                                flex: "1",
+                            }}
+                            onChange={(e)=>{
+                                setDomain(e.target.value)
+                                setMessage()
+                            }}
+                        >
+                            {Object.entries(DomainMap).map(([k, v])=>(
+                                <MenuItem value={v}>{k}</MenuItem>
+                            ))}
+                        </Select>
+                    </div>
                     <Button
                         variant="contained"
                         color="primary"
                         onClick={googleSignIn}
                         style={{ marginTop: 8 }}
+                        disabled={processing}
                     >
-                        Login with smail
+                        {processing?(
+                            <CircularProgress size="2em"></CircularProgress>
+                        ):"Login"}
                     </Button>
+                    {message && (<Typography variant="body2">
+                        Please select the role
+                    </Typography>)}
                 </div>
             </Grid>
         </Grid>

@@ -16,10 +16,10 @@ firebase.initializeApp(config);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-export const signInWithGoogle = () => {
+export const signInWithGoogle = (domain) => {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({
-        hd: "smail.iitm.ac.in",
+        hd: domain,
     });
     return auth.signInWithPopup(provider);
 };

@@ -18,4 +18,10 @@ export const REQUIREMENT = {
     Oxygen:"Oxygen"
 };
 
+export const DomainMap = {
+    Student :"smail.iitm.ac.in",
+    Faculty: "iitm.ac.in",
+    Alumni:"alumni.iitm.ac.in"
+}
+
 export { getDate };
