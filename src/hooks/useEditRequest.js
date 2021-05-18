@@ -16,19 +16,24 @@ const useEditRequest = (initialRequestState) => {
 
     const [uploading, setUploading] = useState(false);
     const [files, setFiles] = useState({ proofImage: "", QRCodeImage: "" });
+    const [uploadResult, setUploadResult] = useState("");
+    const [openUploadResultModal, setOpenUploadResultModal] = useState(false);
     const [percentage, setPercentageDone] = useState(0);
 
     const handleInput = (evt) => {
-        console.log(evt.target.name, evt.target.value);
         const name = evt.target.name;
         const newValue = evt.target.value;
-        setRecReq({ ...recReq, [name]: newValue });
+        setRecReq((prev) => ({ ...prev, [name]: newValue }));
     };
 
     const handleFile = (evt) => {
         const name = evt.target.name;
         const newValue = evt.target.files[0];
-        setFiles({ ...files, [name]: newValue });
+        setFiles((prev) => ({ ...prev, [name]: newValue }));
+    };
+
+    const handleClose = () => {
+        setOpenUploadResultModal(false);
     };
 
     const handleUploadParams = (onSuccess) => {
@@ -71,7 +76,7 @@ const useEditRequest = (initialRequestState) => {
                     .storage()
                     .ref()
                     .child(
-                        `requests/${recReq.email}/proof/${files.proofImage.name}`
+                        `requests/${recReq.id}/proof/${files.proofImage.name}`
                     )
                     .put(files.proofImage);
 
@@ -79,10 +84,10 @@ const useEditRequest = (initialRequestState) => {
                     const proofImageDownloadURL =
                         await proofUploadTask.snapshot.ref.getDownloadURL();
 
-                    setRecReq({
-                        ...recReq,
+                    setRecReq((prev) => ({
+                        ...prev,
                         proofImageURL: proofImageDownloadURL,
-                    });
+                    }));
 
                     if (
                         files.QRCodeImage &&
@@ -92,9 +97,9 @@ const useEditRequest = (initialRequestState) => {
                             .storage()
                             .ref()
                             .child(
-                                `requests/${recReq.email}/qr/${files.QRCodeImage.name}`
+                                `requests/${recReq.id}/qr/${files.QRCodeImage.name}`
                             )
-                            .put(recReq.QRCodeImage);
+                            .put(files.QRCodeImage);
 
                         qrcodeUploadTask.on(
                             firebase.storage.TaskEvent.STATE_CHANGED,
@@ -102,12 +107,25 @@ const useEditRequest = (initialRequestState) => {
                                 const qrcodeImageDownloadURL =
                                     await qrcodeUploadTask.snapshot.ref.getDownloadURL();
 
-                                setRecReq({
-                                    ...recReq,
+                                setRecReq((prev) => ({
+                                    ...prev,
                                     QRCodeURL: qrcodeImageDownloadURL,
-                                });
+                                }));
+
+                                await updateRequest(
+                                    proofImageDownloadURL,
+                                    qrcodeImageDownloadURL
+                                );
+                                setUploading(false);
+                                setUploadResult("Success");
+                                setOpenUploadResultModal(true);
                             })
                         );
+                    } else {
+                        await updateRequest(proofImageDownloadURL);
+                        setUploading(false);
+                        setUploadResult("Success");
+                        setOpenUploadResultModal(true);
                     }
                 };
 
@@ -116,26 +134,42 @@ const useEditRequest = (initialRequestState) => {
                     ...handleUploadParams(handleSuccess)
                 );
             }
-
-            await updateRequest();
-            setUploading(false);
         } catch (err) {
+            setUploadResult("Error");
+            setUploading(false);
             console.log("Error in updating request", err);
         }
     };
 
-    const updateRequest = async () => {
+    const updateRequest = async (
+        proofImageDownloadURL,
+        qrcodeImageDownloadURL = ""
+    ) => {
         await firestore
             .collection("requests")
             .doc(recReq.id)
-            .set({
-                ...recReq,
-                state: states[recReq.state],
-                type: recReq.requestType,
-            });
+            .set(
+                {
+                    ...recReq,
+                    proofImageURL: proofImageDownloadURL,
+                    QRCodeURL: qrcodeImageDownloadURL,
+                    state: states[recReq.state],
+                    type: recReq.requestType,
+                },
+                { merge: true }
+            );
     };
 
-    return { recReq, handleSubmit, handleInput, uploading, handleFile };
+    return {
+        recReq,
+        handleSubmit,
+        handleInput,
+        uploading,
+        handleFile,
+        uploadResult,
+        openUploadResultModal,
+        handleClose,
+    };
 };
 
 export default useEditRequest;

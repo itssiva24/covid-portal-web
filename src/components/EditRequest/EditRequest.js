@@ -15,14 +15,23 @@ import useStyles from "../newRequest/styles";
 import states from "../../constants/states.json";
 import { REQUEST_TYPE } from "../../utils";
 import useEditRequest from "../../hooks/useEditRequest";
+import UploadResultDialog from "../newRequest/UploadResultDialog";
 
 export default function EditRequest(props) {
     const classes = useStyles();
 
     const initialRequestState = props.location.request;
 
-    const { recReq, handleInput, handleSubmit, uploading, handleFile } =
-        useEditRequest(initialRequestState);
+    const {
+        recReq,
+        handleInput,
+        handleSubmit,
+        uploading,
+        handleFile,
+        uploadResult,
+        openUploadResultModal,
+        handleClose,
+    } = useEditRequest(initialRequestState);
 
     return (
         <div>
@@ -315,11 +324,11 @@ export default function EditRequest(props) {
                     )} */}
                 </form>
             </Paper>
-            {/* <UploadResultDialog
+            <UploadResultDialog
                 result={uploadResult}
                 open={openUploadResultModal}
                 handleClose={handleClose}
-            ></UploadResultDialog> */}
+            ></UploadResultDialog>
         </div>
     );
 }
