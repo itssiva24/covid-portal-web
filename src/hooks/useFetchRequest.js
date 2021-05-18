@@ -17,6 +17,7 @@ const useFetchRequests = (fetched, setFetched) => {
     };
 
     useEffect(() => {
+<<<<<<< HEAD
         if (!fetched[type]) {
             try {
                 const subscriber = firestore
@@ -27,6 +28,18 @@ const useFetchRequests = (fetched, setFetched) => {
                     .limit(10)
                     .onSnapshot((querySnapshot) => {
                         const localRequest = [];
+=======
+        try {
+            setFetched(false);
+            const subscriber = firestore
+                .collection("requests")
+                .where("resolved", "==", false)
+                .where("type", "==", type)
+                .orderBy("createdAt", "desc")
+                .limit(10)
+                .onSnapshot((querySnapshot) => {
+                    const localRequest = [];
+>>>>>>> 3cd4fc1968d8a415c85f5dbd5ebe216794b5ab46
 
                         for (const doc of querySnapshot.docs) {
                             doc.exists && localRequest.push(doc.data());

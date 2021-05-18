@@ -9,6 +9,7 @@ const useGetMyRequest = (uid, type) => {
 
     useEffect(() => {
         try {
+            setFetched(false);
             const requestsRef = firestore
                 .collection("requests")
                 .where("createdById", "==", uid)
