@@ -3,7 +3,7 @@ import getDate from "./getDate";
 export const UserRole = {
     Admin: "ADMIN",
     Volunteer: "VOLUNTEER",
-    Student: "STUDENT",
+    Student: "MEMBER",
 };
 
 export const REQUEST_TYPE = {
