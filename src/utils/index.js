@@ -3,7 +3,7 @@ import getDate from "./getDate";
 export const UserRole = {
     Admin: "ADMIN",
     Volunteer: "VOLUNTEER",
-    Student: "STUDENT",
+    Student: "MEMBER",
 };
 
 export const REQUEST_TYPE = {
@@ -17,5 +17,11 @@ export const REQUIREMENT = {
     Medicine:"Medicine",
     Oxygen:"Oxygen"
 };
+
+export const DomainMap = {
+    Student :"smail.iitm.ac.in",
+    Faculty: "iitm.ac.in",
+    Alumni:"alumni.iitm.ac.in"
+}
 
 export { getDate };
