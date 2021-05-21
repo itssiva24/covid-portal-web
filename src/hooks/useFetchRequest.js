@@ -52,7 +52,10 @@ const useFetchRequests = (fetched, setFetched) => {
                         }));
                     });
 
-                return () => subscriber();
+                return () => {
+                    console.log("Called");
+                    // return subscriber;
+                };
             } catch (err) {
                 console.log("Error in Fetching Request", err);
             }

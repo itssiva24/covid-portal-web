@@ -329,21 +329,33 @@ export default withAuthorization(
                                 </Button>
                             )}
                         {!request.resolved &&
-                            request.assignedTo &&
+                            request.assignedToVolunteer &&
                             request.assignedTo !== authUser.uid && (
                                 <Button
                                     variant="outlined"
-                                    color="success"
+                                    color="primary"
                                     size="small"
                                 >
-                                    ASSIGNED
+                                    {request.assignedToVolunteer}
+                                </Button>
+                            )}
+                        {request.assignedTo &&
+                            authUser.role === UserRole.Admin && (
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    size="small"
+                                    onClick={() =>
+                                        setOpenAssignVolnteerModal(true)
+                                    }
+                                >
+                                    Reassign Volunteer
                                 </Button>
                             )}
                         <AssignVolunteerDialog
                             id={id}
                             open={openAssignVolunteerModal}
                             handleClose={handleClose}
-                            //type={request.type}
                         />
                         <ResolveRequestDialog
                             id={id}

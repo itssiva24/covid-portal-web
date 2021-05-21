@@ -1,8 +1,9 @@
 import firebase from "firebase";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { firestore } from "../contexts/firebase";
 import states from "../constants/states.json";
 import { REQUEST_TYPE } from "../utils";
+import AuthUserContext from "../contexts";
 
 const useEditRequest = (initialRequestState) => {
     const [recReq, setRecReq] = useState({
@@ -19,6 +20,7 @@ const useEditRequest = (initialRequestState) => {
     const [uploadResult, setUploadResult] = useState("");
     const [openUploadResultModal, setOpenUploadResultModal] = useState(false);
     const [percentage, setPercentageDone] = useState(0);
+    const { authUser } = useContext(AuthUserContext);
 
     const handleInput = (evt) => {
         const name = evt.target.name;
@@ -76,7 +78,7 @@ const useEditRequest = (initialRequestState) => {
                     .storage()
                     .ref()
                     .child(
-                        `requests/${recReq.id}/proof/${files.proofImage.name}`
+                        `requests/${authUser.email}/proof/${files.proofImage.name}`
                     )
                     .put(files.proofImage);
 
@@ -97,7 +99,7 @@ const useEditRequest = (initialRequestState) => {
                             .storage()
                             .ref()
                             .child(
-                                `requests/${recReq.id}/qr/${files.QRCodeImage.name}`
+                                `requests/${authUser.email}/qr/${files.QRCodeImage.name}`
                             )
                             .put(files.QRCodeImage);
 
@@ -145,19 +147,17 @@ const useEditRequest = (initialRequestState) => {
         proofImageDownloadURL,
         qrcodeImageDownloadURL = ""
     ) => {
-        await firestore
-            .collection("requests")
-            .doc(recReq.id)
-            .set(
-                {
-                    ...recReq,
-                    proofImageURL: proofImageDownloadURL,
-                    QRCodeURL: qrcodeImageDownloadURL,
-                    state: states[recReq.state],
-                    type: recReq.requestType,
-                },
-                { merge: true }
-            );
+        await firestore.collection("requests").doc(recReq.id);
+        authUser.emailet(
+            {
+                ...recReq,
+                proofImageURL: proofImageDownloadURL,
+                QRCodeURL: qrcodeImageDownloadURL,
+                state: states[recReq.state],
+                type: recReq.requestType,
+            },
+            { merge: true }
+        );
     };
 
     return {
