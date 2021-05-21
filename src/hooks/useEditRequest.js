@@ -147,17 +147,19 @@ const useEditRequest = (initialRequestState) => {
         proofImageDownloadURL,
         qrcodeImageDownloadURL = ""
     ) => {
-        await firestore.collection("requests").doc(recReq.id);
-        authUser.emailet(
-            {
-                ...recReq,
-                proofImageURL: proofImageDownloadURL,
-                QRCodeURL: qrcodeImageDownloadURL,
-                state: states[recReq.state],
-                type: recReq.requestType,
-            },
-            { merge: true }
-        );
+        await firestore
+            .collection("requests")
+            .doc(recReq.id)
+            .set(
+                {
+                    ...recReq,
+                    proofImageURL: proofImageDownloadURL,
+                    QRCodeURL: qrcodeImageDownloadURL,
+                    state: states[recReq.state],
+                    type: recReq.requestType,
+                },
+                { merge: true }
+            );
     };
 
     return {

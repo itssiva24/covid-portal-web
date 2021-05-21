@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-import { firestore } from "../../contexts/firebase";
+import React from "react";
 import {
     Button,
     TextField,
@@ -13,7 +12,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import useStyles from "../newRequest/styles";
 import states from "../../constants/states.json";
-import { REQUEST_TYPE } from "../../utils";
+import { REQUEST_TYPE, REQUIREMENT } from "../../utils";
 import useEditRequest from "../../hooks/useEditRequest";
 import UploadResultDialog from "../newRequest/UploadResultDialog";
 
@@ -75,6 +74,40 @@ export default function EditRequest(props) {
                             </MenuItem>
                         </Select>
                     </div>
+                    {recReq.requestType === REQUEST_TYPE.Medical && (
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                marginTop: 16,
+                            }}
+                        >
+                            <InputLabel
+                                id="demo-simple-select-label"
+                                style={{
+                                    marginRight: 10,
+                                }}
+                                required
+                            >
+                                Requirement
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                name="requirement"
+                                required
+                                value={recReq.requirement}
+                                style={{
+                                    flex: "1",
+                                }}
+                                onChange={handleInput}
+                            >
+                                {Object.values(REQUIREMENT).map((v) => (
+                                    <MenuItem value={v}>{v}</MenuItem>
+                                ))}
+                            </Select>
+                        </div>
+                    )}
                     <Typography
                         component="h5"
                         variant="h6"
