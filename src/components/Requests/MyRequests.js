@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { REQUEST_TYPE } from "../../utils";
 import { Paper, Tabs, Tab } from "@material-ui/core";
+import RequestsTypeTab from "../layouts/RequestsTypeTab";
 
 const condition = (authUser) => !!authUser;
 
@@ -24,53 +25,55 @@ export default withAuthorization(
 )(() => {
     const { authUser } = useContext(AuthUserContext);
     const classes = useStyles();
-    const [refresh, setRefresh] = useState(false);
-    const [type, setType] = useState(REQUEST_TYPE.Medical);
-    const { myRequests, fetched, lastDoc, loadMore } = useGetMyRequest(
-        authUser.uid,
-        type
-    );
+    // const [refresh, setRefresh] = useState(false);
+    // const [type, setType] = useState(REQUEST_TYPE.Medical);
+    // const { myRequests, fetched, lastDoc, loadMore } = useGetMyRequest(
+    //     authUser.uid,
+    //     type
+    // );
 
-    const requestType = [REQUEST_TYPE.Medical, REQUEST_TYPE.Monetary];
+    // const requestType = [REQUEST_TYPE.Medical, REQUEST_TYPE.Monetary];
 
-    const handleChange = (e, val) => {
-        setType(requestType[val]);
-    };
+    // const handleChange = (e, val) => {
+    //     setType(requestType[val]);
+    // };
 
-    if (!fetched)
-        return (
-            <div className={classes.root}>
-                <Loader />
-            </div>
-        );
-    else {
-        return (
-            <Paper className={classes.root}>
-                <div style={{ marginBottom: 8 }}>
-                    <Tabs
-                        value={requestType.findIndex((t) => t === type)}
-                        onChange={handleChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="standard"
-                        centered={true}
-                    >
-                        <Tab label="Medical" />
-                        <Tab label="Monetary" />
-                    </Tabs>
-                </div>
-                <RequestsTable
-                    {...{
-                        request: myRequests,
-                        loadMore,
-                        lastDoc,
-                        fetched,
-                        refresh,
-                        setRefresh,
-                        type,
-                    }}
-                />
-            </Paper>
-        );
-    }
+    // if (!fetched)
+    //     return (
+    //         <div className={classes.root}>
+    //             <Loader />
+    //         </div>
+    //     );
+    // else {
+    //     return (
+    //         <Paper className={classes.root}>
+    //             <div style={{ marginBottom: 8 }}>
+    //                 <Tabs
+    //                     value={requestType.findIndex((t) => t === type)}
+    //                     onChange={handleChange}
+    //                     indicatorColor="primary"
+    //                     textColor="primary"
+    //                     variant="standard"
+    //                     centered={true}
+    //                 >
+    //                     <Tab label="Medical" />
+    //                     <Tab label="Monetary" />
+    //                 </Tabs>
+    //             </div>
+    //             <RequestsTable
+    //                 {...{
+    //                     request: myRequests,
+    //                     loadMore,
+    //                     lastDoc,
+    //                     fetched,
+    //                     refresh,
+    //                     setRefresh,
+    //                     type,
+    //                 }}
+    //             />
+    //         </Paper>
+    //     );
+    // }
+    const filters = [["createdById", "==", authUser.uid]];
+    <RequestsTypeTab filters={filters}></RequestsTypeTab>
 });

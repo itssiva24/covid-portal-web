@@ -1,35 +1,15 @@
-import React, { createContext, useState } from "react";
-import useFetchRequests from "../hooks/useFetchRequest";
+import React from "react";
+import useRequestsContext from "../hooks/useRequestsContext";
 
-const RequestsContexts = createContext({
-    request: { medical: [], monetary: [] },
-    fetched: { medical: false, monetary: [] },
-    lastDoc: { medical: null, monetary: null },
-    loadMore: null,
-});
+const RequestsContext = React.createContext(null);
 
-export const RequestsProvider = (props) => {
-    const [fetched, setFetched] = useState({ medical: false, monetary: false });
-    const { request, loadMore, lastDoc, type, handleChange } = useFetchRequests(
-        fetched,
-        setFetched
-    );
-
+export const RequestsProvider = ({ children }) => {
+    const { requests, fetchNextRequests } = useRequestsContext();
     return (
-        <RequestsContexts.Provider
-            value={{
-                request,
-                fetched,
-                lastDoc,
-                loadMore,
-                type,
-                handleChange,
-                setFetched,
-            }}
-        >
-            {props.children}
-        </RequestsContexts.Provider>
+        <RequestsContext.Provider value={{ requests, fetchNextRequests }}>
+            {children}
+        </RequestsContext.Provider>
     );
 };
 
-export default RequestsContexts;
+export default RequestsContext;
