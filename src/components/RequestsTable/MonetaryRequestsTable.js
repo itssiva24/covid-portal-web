@@ -41,7 +41,7 @@ const MonetaryRequestsTable = ({ filters }) => {
 
   const history = useHistory();
   const { docs, loading, handleScroll, error, hasMore } = useGetRequests(
-    filters.concat([["type", "==", REQUEST_TYPE.MONETARY]])
+    filters.concat([["type", "==", REQUEST_TYPE.Monetary]])
   );
 
   return (
@@ -70,7 +70,7 @@ const MonetaryRequestsTable = ({ filters }) => {
               <TableRow
                 hover
                 onClick={() => {
-                  history.push(`/requests/${doc.id}`);
+                  history.push(`/request/${doc.id}`);
                 }}
                 role="checkbox"
                 tabIndex={-1}

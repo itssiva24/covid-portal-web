@@ -24,7 +24,7 @@ export default withAuthorization(
     ROUTES.SIGNIN
 )(() => {
     const { authUser } = useContext(AuthUserContext);
-    const classes = useStyles();
+    // const classes = useStyles();
     // const [refresh, setRefresh] = useState(false);
     // const [type, setType] = useState(REQUEST_TYPE.Medical);
     // const { myRequests, fetched, lastDoc, loadMore } = useGetMyRequest(
@@ -75,5 +75,5 @@ export default withAuthorization(
     //     );
     // }
     const filters = [["createdById", "==", authUser.uid]];
-    <RequestsTypeTab filters={filters}></RequestsTypeTab>
+    return <RequestsTypeTab filters={filters}></RequestsTypeTab>
 });

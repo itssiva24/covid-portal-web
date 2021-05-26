@@ -43,7 +43,7 @@ const MedicalRequestsTable = ({ filters }) => {
 
   const history = useHistory();
   const { docs, loading, handleScroll, error, hasMore } = useGetRequests(
-    filters.concat([["type", "==", REQUEST_TYPE.MEDICAL]])
+    filters.concat([["type", "==", REQUEST_TYPE.Medical]])
   );
   // console.log({ docs, hasMore });
   return (
@@ -72,7 +72,7 @@ const MedicalRequestsTable = ({ filters }) => {
               <TableRow
                 hover
                 onClick={() => {
-                  history.push(`/requests/${doc.id}`);
+                  history.push(`/request/${doc.id}`);
                 }}
                 role="checkbox"
                 tabIndex={-1}

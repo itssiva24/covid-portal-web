@@ -5,7 +5,7 @@ import {MedicalRequestsTable, MonetaryRequestsTable} from "../RequestsTable"
 const RequestsTypeTab = ({filters}) => {
     const theme = useTheme();
 
-    const requestType = [REQUEST_TYPE.MEDICAL, REQUEST_TYPE.MONETARY];
+    const requestType = [REQUEST_TYPE.Medical, REQUEST_TYPE.Monetary];
     const [type, setType] = useState(requestType[0]);
     const handleChange = (e, val) => {
         setType(requestType[val]);
@@ -29,7 +29,7 @@ const RequestsTypeTab = ({filters}) => {
                     <Tab label="Monetary" />
                 </Tabs>
             </div>
-            {type === REQUEST_TYPE.MEDICAL ? (
+            {type === REQUEST_TYPE.Medical ? (
                 <MedicalRequestsTable filters={filters}></MedicalRequestsTable>
             ) : (
                 <MonetaryRequestsTable
