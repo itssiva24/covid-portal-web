@@ -6,7 +6,7 @@ const getRequestsQuery = (filters) => {
 };
 
 const timeInterval = 7 * 24 * 60 * 60 * 1000;
-const firstRequestTimestamp = 1620144223214;
+const firstRequestTimestamp = 1619864529217;
 
 export default function useRequestsContext() {
     const [requests, setRequests] = useState({});
@@ -56,9 +56,9 @@ export default function useRequestsContext() {
             });
     }, []);
 
-    // useEffect(() => {
-    //   console.log({ requests });
-    // }, [requests]);
+    useEffect(() => {
+      console.log({ requests });
+    }, [requests]);
 
     const fetchNextRequests = (filters) => {
         const result = requests[`${filters}`];
@@ -67,6 +67,8 @@ export default function useRequestsContext() {
         const endTimestamp = result?.lastTimestamp
             ? startTimestamp - timeInterval
             : Date.now() - timeInterval;
+        const hasMore = result?.hasMore;
+        if(hasMore===false) return
 
         setRequests((prev) => {
             const prevResult = prev[`${filters}`];
