@@ -34,12 +34,12 @@ const useGetRequestsQuery = (filters) => {
         }
         const { pages, hasMore } = result;
         const currentDocs = pages.flat();
-        if(pages[pages.length - 1].length!==0 || currentDocs.length>docs.length){
+        // if(pages[pages.length - 1].length!==0 || currentDocs.length>docs.length){
             setDocs(currentDocs);
             if(currentDocs.length<10){
                 fetchResult()
             }
-        }
+        // }
         sethasMore(hasMore)
         
     }, [requests]);

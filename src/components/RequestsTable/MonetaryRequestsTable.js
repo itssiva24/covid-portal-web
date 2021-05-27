@@ -117,7 +117,7 @@ const MonetaryRequestsTable = ({ filters }) => {
                     size="small"
                     className={classes.button}
                   >
-                    {doc.assignedTo ? doc.assignedTo : "Not assigned"}
+                    {doc.assignedTo ? doc.assignedToVolunteer : "Not assigned"}
                   </Button>
                 </TableCell>
                 <TableCell>{getDate(doc.createdAt)}</TableCell>
