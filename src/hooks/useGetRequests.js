@@ -24,26 +24,22 @@ const useGetRequestsQuery = (filters) => {
         fetchResult();
     }, 250);
 
-    
     useEffect(() => {
-        console.log("checking")
+        console.log("checking");
         const result = requests[`${filters}`];
         if (!result) {
             fetchResult();
-            return
+            return;
         }
         const { pages, hasMore } = result;
         const currentDocs = pages.flat();
-        // if(pages[pages.length - 1].length!==0 || currentDocs.length>docs.length){
-            setDocs(currentDocs);
-            if(currentDocs.length<10){
-                fetchResult()
-            }
-        // }
-        sethasMore(hasMore)
-        
+        setDocs(currentDocs);
+        if (currentDocs.length < 10) {
+            fetchResult();
+        }
+        sethasMore(hasMore);
     }, [requests]);
-    
+
     return {
         docs,
         hasMore,
