@@ -33,13 +33,15 @@ export default function useRequestsContext() {
                 setRequests((prev) => {
                     const prevResult = prev[`${filters}`];
                     const prevPages = prevResult?.pages;
+                    const nextPages = prevPages.map((page, i) => {
+                        return i === pageNo ? updatedPage : page;
+                    })
                     return {
                         ...prev,
                         [`${filters}`]: {
                             ...prevResult,
-                            pages: prevPages.map((page, i) => {
-                                return i === pageNo ? updatedPage : page;
-                            }),
+                            pages: nextPages,
+                            docs: nextPages.flat()
                         },
                     };
                 });
@@ -54,7 +56,7 @@ export default function useRequestsContext() {
             listeners.forEach((l) => {
                 l();
             });
-    }, [listeners]);
+    }, []);
 
     useEffect(() => {
         console.log({ requests });
