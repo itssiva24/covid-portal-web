@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { firestore } from "../contexts/firebase";
-import RequestsContexts from "../contexts/requestsContext";
 import { UserRole } from "../utils";
 
 const useAssignVolunteer = (id, handleClose) => {

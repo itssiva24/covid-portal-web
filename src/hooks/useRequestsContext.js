@@ -54,10 +54,10 @@ export default function useRequestsContext() {
             listeners.forEach((l) => {
                 l();
             });
-    }, []);
+    }, [listeners]);
 
     useEffect(() => {
-      console.log({ requests });
+        console.log({ requests });
     }, [requests]);
 
     const fetchNextRequests = (filters) => {
@@ -68,7 +68,7 @@ export default function useRequestsContext() {
             ? startTimestamp - timeInterval
             : Date.now() - timeInterval;
         const hasMore = result?.hasMore;
-        if(hasMore===false) return
+        if (hasMore === false) return;
 
         setRequests((prev) => {
             const prevResult = prev[`${filters}`];

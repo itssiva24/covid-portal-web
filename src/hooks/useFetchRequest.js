@@ -52,15 +52,12 @@ const useFetchRequests = (fetched, setFetched) => {
                         }));
                     });
 
-                return () => {
-                    console.log("Called");
-                    // return subscriber;
-                };
+                return () => subscriber();
             } catch (err) {
                 console.log("Error in Fetching Request", err);
             }
         }
-    }, [type]);
+    }, [type, fetched, setFetched]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadMore = useCallback(

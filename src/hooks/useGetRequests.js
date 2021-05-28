@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 
 import RequestsContext from "../contexts/requestsContext";
 import { debounce } from "@material-ui/core";
@@ -10,7 +10,7 @@ const useGetRequestsQuery = (filters) => {
     const [error, setError] = useState(null);
     const [hasMore, sethasMore] = useState(true);
 
-    const fetchResult = () => {
+    const fetchResult = useCallback(() => {
         setLoading(true);
         try {
             fetchNextRequests(filters);
@@ -18,14 +18,13 @@ const useGetRequestsQuery = (filters) => {
             setError(error);
         }
         setLoading(false);
-    };
+    }, [filters, fetchNextRequests]);
 
     const handleScroll = debounce(() => {
         fetchResult();
     }, 250);
 
     useEffect(() => {
-        console.log("checking");
         const result = requests[`${filters}`];
         if (!result) {
             fetchResult();
@@ -38,7 +37,7 @@ const useGetRequestsQuery = (filters) => {
             fetchResult();
         }
         sethasMore(hasMore);
-    }, [requests]);
+    }, [requests, fetchResult, filters]);
 
     return {
         docs,
