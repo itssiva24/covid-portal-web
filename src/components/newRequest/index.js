@@ -101,8 +101,10 @@ function NewRequest() {
                                 }}
                                 onChange={handleInput}
                             >
-                                {Object.values(REQUIREMENT).map((v) => (
-                                    <MenuItem value={v}>{v}</MenuItem>
+                                {Object.values(REQUIREMENT).map((v, index) => (
+                                    <MenuItem value={v} key={index}>
+                                        {v}
+                                    </MenuItem>
                                 ))}
                             </Select>
                         </div>
@@ -155,8 +157,8 @@ function NewRequest() {
                                 onChange={handleInput}
                                 style={{ flex: "1" }}
                             >
-                                {Object.keys(states).map((key) => (
-                                    <MenuItem value={key}>
+                                {Object.keys(states).map((key, index) => (
+                                    <MenuItem value={key} key={index}>
                                         {states[key]}
                                     </MenuItem>
                                 ))}

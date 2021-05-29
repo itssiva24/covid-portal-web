@@ -18,12 +18,12 @@ export default function useRequestsContext() {
         startTimestamp,
         endTimestamp
     ) => {
-        console.log("attaching listener", {
-            filters,
-            pageNo,
-            startTimestamp,
-            endTimestamp,
-        });
+        // console.log("attaching listener", {
+        //     filters,
+        //     pageNo,
+        //     startTimestamp,
+        //     endTimestamp,
+        // });
         const listener = getRequestsQuery(filters)
             .orderBy("createdAt", "desc")
             .startAfter(startTimestamp)
@@ -35,18 +35,18 @@ export default function useRequestsContext() {
                     const prevPages = prevResult?.pages;
                     const nextPages = prevPages.map((page, i) => {
                         return i === pageNo ? updatedPage : page;
-                    })
+                    });
                     return {
                         ...prev,
                         [`${filters}`]: {
                             ...prevResult,
                             pages: nextPages,
-                            docs: nextPages.flat()
+                            docs: nextPages.flat(),
                         },
                     };
                 });
             });
-        console.log("attached listener");
+        // console.log("attached listener");
         return listener;
     };
 
@@ -56,11 +56,11 @@ export default function useRequestsContext() {
             listeners.forEach((l) => {
                 l();
             });
-    }, []);
+    }, [listeners]);
 
-    useEffect(() => {
-        console.log({ requests });
-    }, [requests]);
+    // useEffect(() => {
+    //     console.log({ requests });
+    // }, [requests]);
 
     const fetchNextRequests = (filters) => {
         const result = requests[`${filters}`];

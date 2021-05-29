@@ -42,7 +42,7 @@ const MedicalRequestsTable = ({ filters }) => {
     const classes = useStyles();
 
     const history = useHistory();
-    const { docs, loading, handleScroll, error, hasMore } = useGetRequests(
+    const { docs, handleScroll, hasMore } = useGetRequests(
         filters.concat([["type", "==", REQUEST_TYPE.Medical]])
     );
 

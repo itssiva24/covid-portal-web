@@ -17,7 +17,7 @@ import useStyles from "./styles";
 import * as ROUTES from "../../constants/routes";
 import AuthUserContext from "../../contexts";
 import { UserRole } from "../../utils";
-import { Typography } from "@material-ui/core";
+import { Avatar, Divider, Typography } from "@material-ui/core";
 import InfoOutlined from "@material-ui/icons/InfoOutlined";
 
 const navLinks = [
@@ -46,7 +46,16 @@ const drawer = (classes, history, authUser) => {
         <>
             <header>
                 <div className={classes.toolbar}>
-                    <Typography variant="h6" component="h6">
+                    <Avatar
+                        alt="Remy Sharp"
+                        src={authUser.photoURL}
+                        className={classes.image}
+                    />
+                    <Typography
+                        variant="h6"
+                        component="h6"
+                        className={classes.name}
+                    >
                         {authUser && authUser.displayName}
                     </Typography>
                     <Typography component="p" variant="caption">
@@ -58,6 +67,7 @@ const drawer = (classes, history, authUser) => {
                     </Typography>
                 </div>
             </header>
+            <Divider variant="middle" />
             <List style={{ padding: 0 }}>
                 {navLinks.map((navLink) => (
                     <ListItem
