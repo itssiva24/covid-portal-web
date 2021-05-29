@@ -18,7 +18,7 @@ const useGetRequestsQuery = (filters) => {
             setError(error);
         }
         setLoading(false);
-    }, [filters]);
+    }, [filters, fetchNextRequests]);
 
     const handleScroll = debounce(() => {
         fetchResult();
@@ -30,9 +30,9 @@ const useGetRequestsQuery = (filters) => {
             fetchResult();
             return;
         }
-        const { pages, hasMore, docs } = result;
+        const { hasMore, docs } = result;
 
-        console.log({ pages, docs });
+        // console.log({ pages, docs });
         if (!docs) {
             return;
         }
@@ -41,10 +41,10 @@ const useGetRequestsQuery = (filters) => {
         if (hasMore && docs.length < 10) {
             fetchResult();
         }
-    }, [requests]);
+    }, [requests, filters, fetchResult]);
 
     return {
-        docs:currentDocs,
+        docs: currentDocs,
         hasMore,
         loading,
         handleScroll,
