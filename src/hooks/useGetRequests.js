@@ -5,7 +5,7 @@ import { debounce } from "@material-ui/core";
 
 const useGetRequestsQuery = (filters) => {
     const { requests, fetchNextRequests } = useContext(RequestsContext);
-    const [docs, setDocs] = useState([]);
+    const [currentDocs, setCurrentDocs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [hasMore, sethasMore] = useState(true);
@@ -18,7 +18,7 @@ const useGetRequestsQuery = (filters) => {
             setError(error);
         }
         setLoading(false);
-    }, [filters, fetchNextRequests]);
+    }, [filters]);
 
     const handleScroll = debounce(() => {
         fetchResult();
@@ -30,17 +30,21 @@ const useGetRequestsQuery = (filters) => {
             fetchResult();
             return;
         }
-        const { pages, hasMore } = result;
-        const currentDocs = pages.flat();
-        setDocs(currentDocs);
-        if (currentDocs.length < 10) {
+        const { pages, hasMore, docs } = result;
+
+        console.log({ pages, docs });
+        if (!docs) {
+            return;
+        }
+        setCurrentDocs(docs);
+        sethasMore(hasMore);
+        if (hasMore && docs.length < 10) {
             fetchResult();
         }
-        sethasMore(hasMore);
-    }, [requests, fetchResult, filters]);
+    }, [requests]);
 
     return {
-        docs,
+        docs:currentDocs,
         hasMore,
         loading,
         handleScroll,
