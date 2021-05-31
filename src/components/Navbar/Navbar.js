@@ -48,7 +48,7 @@ const drawer = (classes, history, authUser) => {
                 <div className={classes.toolbar}>
                     <Avatar
                         alt="Remy Sharp"
-                        src={authUser.photoURL}
+                        src={authUser && authUser.photoURL}
                         className={classes.image}
                     />
                     <Typography
