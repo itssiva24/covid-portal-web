@@ -21,7 +21,7 @@ const getFileDownloadURL = (file, user) => {
     return firebase
         .storage()
         .ref()
-        .child(`${user.email}/${file.name}_${Date.now()}`)
+        .child(`requests/${user.email}/proof/${file.name}_${Date.now()}`)
         .put(file)
         .then((snapshot) => snapshot.ref.getDownloadURL())
         .then((url) => url);
