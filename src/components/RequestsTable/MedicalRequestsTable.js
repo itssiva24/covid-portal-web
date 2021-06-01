@@ -106,7 +106,7 @@ const MedicalRequestsTable = ({ filters }) => {
                                         size="small"
                                         className={classes.button}
                                     >
-                                        {doc.state ? "N/A" : doc.state}
+                                        {doc.state ? doc.state : "N/A"}
                                     </Button>
                                 </TableCell>
                                 <TableCell className={classes.veryLargeBox}>
