@@ -16,10 +16,10 @@ import { RequestsProvider } from "../contexts/requestsContext";
 export default withAuthUserProvider(({ Component, pageProps }) => {
     return (
         <Router basename="/iitmhelps">
-            <Switch>
-                <Route path={ROUTES.SIGNIN} component={SignIn} />
-                <RootLayout>
-                    <RequestsProvider>
+            <RequestsProvider>
+                <Switch>
+                    <Route path={ROUTES.SIGNIN} component={SignIn} />
+                    <RootLayout>
                         <Route
                             exact
                             path={ROUTES.HOME}
@@ -69,9 +69,9 @@ export default withAuthUserProvider(({ Component, pageProps }) => {
                             path={ROUTES.REGISTER_AS_A_VOLUNTEER}
                             component={RegisterAsAVolunteer}
                         ></Route>
-                    </RequestsProvider>
-                </RootLayout>
-            </Switch>
+                    </RootLayout>
+                </Switch>
+            </RequestsProvider>
         </Router>
     );
 });
