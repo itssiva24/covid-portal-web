@@ -7,18 +7,30 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
-export default function UploadResultDialog({ result, open, handleClose }) {
+export default function UploadResultDialog({
+    result,
+    open,
+    handleClose,
+    newRequestId,
+}) {
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Upload Result</DialogTitle>
                 <DialogContent>
                     <Typography component="h5"> {result}</Typography>
-                    <Typography variant="body1">{
-                      result === "Success"? "We have received your request."
-                      :"Something went wrong! Try Submitting Again"
-                    }</Typography>
-                    {/* maybe add link to the newly created request (if successful) */}
+                    <Typography variant="body1">
+                        {result === "Success"
+                            ? "We have received your request."
+                            : "Something went wrong! Try Submitting Again"}
+                    </Typography>
+                    {result === "Success" && (
+                        <Typography variant="body2">
+                            Click{" "}
+                            <Link to={`/request/${newRequestId}`}>here</Link> to
+                            view it.
+                        </Typography>
+                    )}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="secondary">

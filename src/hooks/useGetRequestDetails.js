@@ -26,7 +26,7 @@ const useGetRquestDetails = (id) => {
                     setFetched(true);
                 });
 
-            return () => requestsRef;
+            return () => requestsRef();
         } catch (err) {
             setFetched(true);
             console.log("Error in getting request assigned", err);

@@ -70,11 +70,9 @@ export const useStyles = makeStyles((theme) => ({
         margin: 8,
     },
     image: {
-        maxWidth: 480,
+        margin: 4,
+        maxWidth: "100%",
         height: "auto",
-        [theme.breakpoints.down("xs")]: {
-            maxWidth: 270,
-        },
     },
 
     footer: {
@@ -133,14 +131,14 @@ export default withAuthorization(
                             src={request.imageUrl}
                         ></Avatar>
                         <Typography
-                            variant="body3"
+                            variant="body2"
                             className={classes.headerText}
                         >
                             {request.createdBy}
                         </Typography>
                         <div>
                             <Typography
-                                variant="body3"
+                                variant="body2"
                                 className={classes.headerText}
                             >
                                 {toDateTime(request.createdAt)}
@@ -190,54 +188,54 @@ export default withAuthorization(
                             {request.title}
                         </Typography>
 
-                        <Typography variant="body3">
+                        <Typography variant="body2">
                             Patient Name:&nbsp;
                             {request.patientName
                                 ? `${request.patientName}`
                                 : ""}
                         </Typography>
                         <br />
-                        <Typography variant="body3">
+                        <Typography variant="body2">
                             Patient Number:&nbsp;
                             {request.patientNumber
                                 ? `${request.patientNumber}`
                                 : ""}
                         </Typography>
                         <br />
-                        <Typography variant="body3">
+                        <Typography variant="body2">
                             City:&nbsp;
                             {request.city ? `${request.city}` : ""}
                         </Typography>
                         <br />
-                        <Typography variant="body3">
+                        <Typography variant="body2">
                             SPO2 Level:&nbsp;
                             {request.patientSpo2Level
                                 ? `${request.patientSpo2Level}`
                                 : ""}
                         </Typography>
                         <br />
-                        <Typography variant="body3">
+                        <Typography variant="body2">
                             RT-PCR Test:&nbsp;
                             {request.patientRTPCR
                                 ? `${request.patientRTPCR}`
                                 : ""}
                             <br />
                         </Typography>
-                        <Typography variant="body3">
+                        <Typography variant="body2">
                             CT Severity/CORADS Index:&nbsp;
                             {request.patientCTSeverityOrCoradsIndex
                                 ? `${request.patientCTSeverityOrCoradsIndex}`
                                 : ""}
                         </Typography>
                         <br />
-                        <Typography variant="body3">
+                        <Typography variant="body2">
                             Caregiver Name:&nbsp;
                             {request.caregiverName
                                 ? `${request.caregiverName}`
                                 : ""}
                         </Typography>
                         <br />
-                        <Typography variant="body3">
+                        <Typography variant="body2">
                             Caregiver Number:&nbsp;
                             {request.caregiverNumber
                                 ? `${request.caregiverNumber}`
@@ -256,11 +254,21 @@ export default withAuthorization(
                         </Typography>
                     </Box>
                     <Box className={classes.imageBox}>
-                        <img
-                            src={request.proofImageURL}
-                            className={classes.image}
-                            alt=""
-                        />
+                        {request.proofImageURL ? (
+                            <img
+                                src={request.proofImageURL}
+                                className={classes.image}
+                                alt=""
+                            />
+                        ) : (
+                            request.proofImageURLs.map((url) => (
+                                <img
+                                    src={url}
+                                    className={classes.image}
+                                    alt=""
+                                />
+                            ))
+                        )}
                     </Box>
                     <Box className={classes.footer}>
                         <Button variant="outlined" color="primary" size="small">

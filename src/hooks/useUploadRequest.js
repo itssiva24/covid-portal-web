@@ -9,12 +9,22 @@ const initialRequestFormState = {
     description: "",
     city: "",
     state: "",
-    proofImage: "",
+    proofImages: undefined,
     requestType: "",
     recipientUPIID: "",
     recipientUPIName: "",
     QRCodeImage: "",
     requirement: "",
+};
+
+const getFileDownloadURL = (file, user) => {
+    return firebase
+        .storage()
+        .ref()
+        .child(`requests/${user.email}/proof/${file.name}_${Date.now()}`)
+        .put(file)
+        .then((snapshot) => snapshot.ref.getDownloadURL())
+        .then((url) => url);
 };
 
 const useUploadRequest = (authUser) => {
@@ -27,39 +37,10 @@ const useUploadRequest = (authUser) => {
     const [uploadResult, setUploadResult] = useState("");
     const [openUploadResultModal, setOpenUploadResultModal] = useState(false);
     const [percentageDone, setPercentageDone] = useState(0);
+    const [newRequestId, setNewRequestId] = useState();
 
     const handleClose = () => {
         setOpenUploadResultModal(false);
-    };
-
-    const handleUploadParams = (onSuccess) => {
-        return [
-            (snapshot) => {
-                // Observe state change events such as progress, pause, and resume
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                var progress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                setPercentageDone(progress);
-                switch (snapshot.state) {
-                    case firebase.storage.TaskState.PAUSED: // or 'paused'
-                        console.log("Upload is paused");
-                        break;
-                    case firebase.storage.TaskState.RUNNING: // or 'running'
-                        console.log("Upload is running");
-                        break;
-                    default:
-                        console.log("Error");
-                }
-            },
-            (error) => {
-                // Handle unsuccessful uploads
-                console.log("Unsuccessful upload", error);
-                throw Error();
-            },
-            async () => {
-                await onSuccess();
-            },
-        ];
     };
 
     const handleInput = (evt) => {
@@ -67,71 +48,28 @@ const useUploadRequest = (authUser) => {
         const newValue = evt.target.value;
         setRequestForm({ [name]: newValue });
     };
-
-    const handleSubmit = async (evt) => {
-        try {
-            setUploading(true);
-            evt.preventDefault();
-
-            const proofUploadTask = firebase
-                .storage()
-                .ref()
-                .child(
-                    `requests/${authUser.email}/proof/${requestForm.proofImage.name}`
-                )
-                .put(requestForm.proofImage);
-
-            const handleSuccess = async () => {
-                const proofImageDownloadURL =
-                    await proofUploadTask.snapshot.ref.getDownloadURL();
-
-                if (requestForm.requestType === REQUEST_TYPE.Monetary) {
-                    const qrcodeUploadTask = firebase
-                        .storage()
-                        .ref()
-                        .child(
-                            `requests/${authUser.email}/qr/${requestForm.QRCodeImage.name}`
-                        )
-                        .put(requestForm.QRCodeImage);
-                    qrcodeUploadTask.on(
-                        firebase.storage.TaskEvent.STATE_CHANGED,
-                        ...handleUploadParams(async () => {
-                            const qrcodeImageDownloadURL =
-                                await qrcodeUploadTask.snapshot.ref.getDownloadURL();
-                            await createRequest(
-                                proofImageDownloadURL,
-                                qrcodeImageDownloadURL
-                            );
-                            setUploading(false);
-                            setUploadResult("Success");
-                            setOpenUploadResultModal(true);
-                            setRequestForm(initialRequestFormState);
-                        })
-                    );
-                } else {
-                    await createRequest(proofImageDownloadURL);
-                    setUploading(false);
-                    setUploadResult("Success");
-                    setOpenUploadResultModal(true);
-                    setRequestForm(initialRequestFormState);
-                }
-            };
-
-            proofUploadTask.on(
-                firebase.storage.TaskEvent.STATE_CHANGED,
-                ...handleUploadParams(handleSuccess)
-            );
-        } catch (err) {
-            setUploadResult("Error");
-            setUploading(false);
-            console.log(err);
-        }
+    const handleFile = (evt) => {
+        const name = evt.target.name;
+        const newValue = evt.target.files;
+        console.log({ name, newValue });
+        setRequestForm({ [name]: newValue });
     };
+    const handleFileUpload = (file, i, n) => {
+        return getFileDownloadURL(file, authUser).then((url) => {
+            setPercentageDone((i / (n + 1)) * 100);
+            return url;
+        });
+    };
+    const getArrayFromFileList = (fileList) => {
+        const n = fileList.length;
+        const array = [];
 
-    const createRequest = async (
-        proofImageDownloadURL,
-        qrcodeImageDownloadURL = ""
-    ) => {
+        for (let i = 0; i < n; i++) {
+            array.push(fileList.item(i));
+        }
+        return array;
+    };
+    const createRequest = async (proofImageDownloadURLs) => {
         const requestRef = firestore.collection("requests").doc();
 
         await requestRef.set({
@@ -160,19 +98,41 @@ const useUploadRequest = (authUser) => {
             recipientUPIName: requestForm.recipientUPIName,
             amountNeeded: parseInt(requestForm.amountNeeded),
             amountCollected: 0,
-            QRCodeURL: qrcodeImageDownloadURL,
-            proofImageURL: proofImageDownloadURL,
+            // QRCodeURL: qrcodeImageDownloadURL,
+            proofImageURLs: proofImageDownloadURLs,
             resolved: false,
         });
+        return requestRef.id;
     };
 
-    const handleFile = (evt) => {
-        const name = evt.target.name;
-        const newValue = evt.target.files[0];
-        setRequestForm({ [name]: newValue });
+    const handleSubmit = async (evt) => {
+        try {
+            setUploading(true);
+            evt.preventDefault();
+            const n = requestForm.proofImages.length;
+            const proofImageURLs = await Promise.all(
+                new Array(n)
+                    .fill(null)
+                    .map((_, i) =>
+                        handleFileUpload(requestForm.proofImages.item(i), i, n)
+                    )
+            );
+            const id = await createRequest(proofImageURLs);
+            setNewRequestId(id);
+            setUploading(false);
+            setUploadResult("Success");
+            setOpenUploadResultModal(true);
+            setRequestForm(initialRequestFormState);
+        } catch (err) {
+            setUploadResult("Error");
+            setUploading(false);
+            console.log(err);
+        }
     };
 
     return {
+        newRequestId,
+        getArrayFromFileList,
         requestForm,
         setRequestForm,
         handleFile,

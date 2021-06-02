@@ -5,6 +5,7 @@ import {
     Paper,
     Typography,
     LinearProgress,
+    Container,
 } from "@material-ui/core";
 import AuthUserContext from "../../contexts/authUserContext";
 import useUploadRequest from "../../hooks/useUploadRequest";
@@ -29,6 +30,8 @@ function NewRequest() {
         handleClose,
         uploadResult,
         openUploadResultModal,
+        newRequestId,
+        getArrayFromFileList,
     } = useUploadRequest(authUser);
 
     return (
@@ -172,20 +175,6 @@ function NewRequest() {
                             >
                                 City
                             </InputLabel>
-                            {/* <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                name="city"
-                                required
-                                value={requestForm.city}
-                                onChange={handleInput}
-                                style={{ flex: "1" }}
-                            >
-                                {requestForm.state &&
-                                    cities[states[requestForm.state]].map((city) => (
-                                        <MenuItem value={city}>{city}</MenuItem>
-                                    ))}
-                            </Select> */}
                             <Input
                                 name="city"
                                 required
@@ -316,15 +305,6 @@ function NewRequest() {
                                 type="number"
                                 required
                             />
-                            <div className={classes.chooseFile}>
-                                <label>UPI QR code Image*: </label>
-                                <input
-                                    type="file"
-                                    name="QRCodeImage"
-                                    required
-                                    onChange={handleFile}
-                                />
-                            </div>
                         </>
                     )}
                     <div className={classes.chooseFile}>
@@ -335,11 +315,47 @@ function NewRequest() {
                         </label>
                         <input
                             type="file"
-                            name="proofImage"
+                            name="proofImages"
                             required
+                            multiple
+                            accept="image/*"
                             onChange={handleFile}
                         />
                     </div>
+                    {requestForm.proofImages && (
+                        <Container>
+                            {getArrayFromFileList(requestForm.proofImages).map(
+                                (image, i) => (
+                                    <div
+                                        key={i}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+                                        <img
+                                            src={URL.createObjectURL(image)}
+                                            style={{
+                                                display: "block",
+                                                width: 64,
+                                                height: 64,
+                                                margin: 10,
+                                                objectFit: "cover",
+                                            }}
+                                        ></img>
+                                        <p
+                                            style={{
+                                                flex: "1",
+                                            }}
+                                        >
+                                            {image.name}
+                                        </p>
+                                    </div>
+                                )
+                            )}
+                        </Container>
+                    )}
                     <Button
                         type="submit"
                         variant="contained"
@@ -360,6 +376,7 @@ function NewRequest() {
                 result={uploadResult}
                 open={openUploadResultModal}
                 handleClose={handleClose}
+                newRequestId={newRequestId}
             ></UploadResultDialog>
         </div>
     );

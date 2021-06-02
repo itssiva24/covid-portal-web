@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { firestore } from "../contexts/firebase";
 const getRequestsQuery = (filters) => {
     const q = firestore.collection("requests");
@@ -10,7 +10,21 @@ const firstRequestTimestamp = 1620923249680;
 
 export default function useRequestsContext() {
     const [requests, setRequests] = useState({});
-    const [listeners, setListeners] = useState([]);
+    const listeners = useRef([]);
+
+    //  clears all listeners when provider unmounts
+    useEffect(
+        () => () => {
+            listeners.current.forEach((l) => {
+                l();
+            });
+            // console.log(
+            //     "unsubscribing all listeners",
+            //     listeners.current.length
+            // );
+        },
+        []
+    );
 
     const attachRequestsListener = (
         filters,
@@ -50,14 +64,6 @@ export default function useRequestsContext() {
         return listener;
     };
 
-    //  clears all listeners when provider unmounts
-    useEffect(() => {
-        return () =>
-            listeners.forEach((l) => {
-                l();
-            });
-    }, []);
-
     // useEffect(() => {
     //     console.log({ requests });
     // }, [requests]);
@@ -86,13 +92,14 @@ export default function useRequestsContext() {
             };
         });
         // console.log({ startTimestamp, endTimestamp, pageNo });
-        const listener = attachRequestsListener(
+        const lstnr = attachRequestsListener(
             filters,
             pageNo,
             startTimestamp,
             endTimestamp
         );
-        setListeners((prev) => [...prev, listener]);
+        listeners.current = listeners.current.concat([lstnr]);
+        // setListeners((prev) => [...prev, listener]);
     };
 
     return { requests, fetchNextRequests };

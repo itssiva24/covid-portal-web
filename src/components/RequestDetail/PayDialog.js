@@ -10,7 +10,6 @@ import {
     FormControl,
     TextField,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import useIncrementDonation from "../../hooks/useIncrementDonation";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -29,8 +28,8 @@ export default function PayDialog({
     setMoneyEntered,
 }) {
     const classes = useStyles();
-    const { handleSubmit, loading, success } = useIncrementDonation(
-        request.id,
+    const { handleSubmit, loading, success, UPIURL, imageDataURL } = useIncrementDonation(
+        request,
         moneyEntered
     );
 
@@ -46,9 +45,10 @@ export default function PayDialog({
                         Name : {request.recipientUPIName}
                     </Typography>
                     <img
-                        src={request.QRCodeURL}
+                        src={imageDataURL}
                         style={{
-                            width: "300px",
+                            margin:"20px auto",
+                            display:"block"
                         }}
                     />
                     <br />
@@ -122,7 +122,7 @@ export default function PayDialog({
                                     width: "100%",
                                     height: "100%",
                                 }}
-                                href={`upi://pay?pa=${request.recipientUPIID}&pn=${request.recipientUPIName}&cu=INR`}
+                                href={UPIURL}
                             >
                                 pay in App
                             </a>
